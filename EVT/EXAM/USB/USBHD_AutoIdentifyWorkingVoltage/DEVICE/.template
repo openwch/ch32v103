@@ -1,0 +1,11 @@
+Vendor=WCH
+Toolchain=
+Series=
+Description=
+Mcu Type=CH32V10x
+Address=0x08000000
+Target Path=obj\DEVICE.hex
+Erase All=true
+Program=true
+Verify=true
+Reset=true
