@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : This file provides all the BKP firmware functions.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 #include "ch32v10x_bkp.h"
 #include "ch32v10x_rcc.h"

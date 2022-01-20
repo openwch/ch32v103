@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 /*
@@ -134,8 +136,7 @@ int main(void)
     }
 
     printf("RxData:\r\n");
-    for(i = 0; i < 6; i++)
-    {
+    for(i = 0; i < 6; i++){
         printf("%02x\r\n", RxData[i]);
     }
 

@@ -1,12 +1,11 @@
-/* 2014.09.09
-*****************************************
-**   Copyright  (C)  W.ch  1999-2019   **
-**   Web:      http://wch.cn           **
-*****************************************
-**  USB-flash File Interface for CHRV3 **
-**  KEIL423, gcc 8.20          **
-*****************************************
-*/
+/********************************** (C) COPYRIGHT *******************************
+ * File Name          : CH32V103UFI.c
+ * Author             : WCH
+ * Version            : V1.0.0
+ * Date               : 2014/09/09
+ * Description        : USB-flash File Interface for CHRV3.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ *******************************************************************************/
 /* CHRV3 U盘主机文件系统接口, 支持: FAT12/FAT16/FAT32 */
 
 //#define DISK_BASE_BUF_LEN		512	/* 默认的磁盘数据缓冲区大小为512字节(可以选择为2048甚至4096以支持某些大扇区的U盘),为0则禁止在本文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */

@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 /*
@@ -179,21 +181,17 @@ int main(void)
     DMA_Tx_Init(DMA1_Channel6, (u32)&I2C1->DATAR, (u32)TxData, Tize);
     IIC_Init(80000, TxAdderss);
 
-    while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY) != RESET)
-        ;
+    while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY) != RESET) ;
     I2C_GenerateSTART(I2C1, ENABLE);
 
-    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT))
-        ;
+    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));
     I2C_Send7bitAddress(I2C1, 0x02, I2C_Direction_Transmitter);
 
-    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-        ;
+    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
 
     DMA_Cmd(DMA1_Channel6, ENABLE);
 
-    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-        ;
+    while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED)) ;
     I2C_GenerateSTOP(I2C1, ENABLE);
 
 #elif(I2C_MODE == SLAVE_MODE)
@@ -201,21 +199,17 @@ int main(void)
     DMA_Rx_Init(DMA1_Channel7, (u32)&I2C1->DATAR, (u32)RxData, Tize);
     IIC_Init(80000, RXAdderss);
 
-    while(!I2C_CheckEvent(I2C1, I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED))
-        ;
+    while(!I2C_CheckEvent(I2C1, I2C_EVENT_SLAVE_RECEIVER_ADDRESS_MATCHED)) ;
     DMA_Cmd(DMA1_Channel7, ENABLE);
 
-    while((!DMA_GetFlagStatus(DMA1_FLAG_TC7)))
-        ;
+    while((!DMA_GetFlagStatus(DMA1_FLAG_TC7))) ;
 
     printf("RxData:\r\n");
-    for(i = 0; i < 6; i++)
-    {
+    for(i = 0; i < 6; i++){
         printf("%02x\r\n", RxData[i]);
     }
 
 #endif
 
-    while(1)
-        ;
+    while(1);
 }

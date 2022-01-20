@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : This file provides all the USB firmware functions.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 #include "ch32v10x_usb_host.h"
 #include "debug.h"
@@ -371,8 +373,7 @@ UINT8 HostCtrlTransfer(PUINT8 DataBuf, PUINT8 RetLen)
                 if(pLen)
                     *pLen += RxLen;
 
-                for(RxCnt = 0; RxCnt != RxLen; RxCnt++)
-                {
+                for(RxCnt = 0; RxCnt != RxLen; RxCnt++) {
                     *pBuf = pHOST_RX_RAM_Addr[RxCnt];
                     pBuf++;
                 }
@@ -389,8 +390,7 @@ UINT8 HostCtrlTransfer(PUINT8 DataBuf, PUINT8 RetLen)
                 Delay_Us(200);
                 R8_UH_TX_LEN = RemLen >= UsbDevEndp0Size ? UsbDevEndp0Size : RemLen;
 
-                for(TxCnt = 0; TxCnt != R8_UH_TX_LEN; TxCnt++)
-                {
+                for(TxCnt = 0; TxCnt != R8_UH_TX_LEN; TxCnt++){
                     pHOST_TX_RAM_Addr[TxCnt] = *pBuf;
                     pBuf++;
                 }
@@ -430,8 +430,7 @@ void CopySetupReqPkg(const UINT8 *pReqPkt)
 {
     UINT8 i;
 
-    for(i = 0; i != sizeof(USB_SETUP_REQ); i++)
-    {
+    for(i = 0; i != sizeof(USB_SETUP_REQ); i++) {
         ((PUINT8)pSetupReq)[i] = *pReqPkt;
         pReqPkt++;
     }

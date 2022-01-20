@@ -1,17 +1,19 @@
 /********************************** (C) COPYRIGHT *******************************
-* File Name          : ch32v10x_pwr.c
-* Author             : WCH
-* Version            : V1.0.0
-* Date               : 2020/04/30
-* Description        : This file provides all the PWR firmware functions.
-********************************************************************************/
+ * File Name          : ch32v10x_pwr.c
+ * Author             : WCH
+ * Version            : V1.0.0
+ * Date               : 2020/04/30
+ * Description        : This file provides all the PWR firmware functions.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
 #include "ch32v10x_pwr.h"
 #include "ch32v10x_rcc.h"
 
 /* PWR registers bit mask */
 /* CTLR register bit mask */
-#define CTLR_DS_MASK             ((uint32_t)0xFFFFFFFC)
-#define CTLR_PLS_MASK            ((uint32_t)0xFFFFFF1F)
+#define CTLR_DS_MASK     ((uint32_t)0xFFFFFFFC)
+#define CTLR_PLS_MASK    ((uint32_t)0xFFFFFF1F)
 
 /*********************************************************************
  * @fn      PWR_DeInit
@@ -23,10 +25,9 @@
  */
 void PWR_DeInit(void)
 {
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE);
-  RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_PWR, DISABLE);
 }
-
 
 /*********************************************************************
  * @fn      PWR_BackupAccessCmd
@@ -40,15 +41,15 @@ void PWR_DeInit(void)
  */
 void PWR_BackupAccessCmd(FunctionalState NewState)
 {
-	if(NewState)
-	{
-		PWR->CTLR |= (1<<8);
-	}
-	else{
-		PWR->CTLR &= ~(1<<8);		
-	}
+    if(NewState)
+    {
+        PWR->CTLR |= (1 << 8);
+    }
+    else
+    {
+        PWR->CTLR &= ~(1 << 8);
+    }
 }
-
 
 /*********************************************************************
  * @fn      PWR_PVDCmd
@@ -61,15 +62,15 @@ void PWR_BackupAccessCmd(FunctionalState NewState)
  */
 void PWR_PVDCmd(FunctionalState NewState)
 {
-	if(NewState)
-	{
-		PWR->CTLR |= (1<<4);
-	}
-	else{
-		PWR->CTLR &= ~(1<<4);		
-	}
+    if(NewState)
+    {
+        PWR->CTLR |= (1 << 4);
+    }
+    else
+    {
+        PWR->CTLR &= ~(1 << 4);
+    }
 }
-
 
 /*********************************************************************
  * @fn      PWR_PVDLevelConfig
@@ -91,13 +92,12 @@ void PWR_PVDCmd(FunctionalState NewState)
  */
 void PWR_PVDLevelConfig(uint32_t PWR_PVDLevel)
 {
-  uint32_t tmpreg = 0;
-  tmpreg = PWR->CTLR;
-  tmpreg &= CTLR_PLS_MASK;
-  tmpreg |= PWR_PVDLevel;
-  PWR->CTLR = tmpreg;
+    uint32_t tmpreg = 0;
+    tmpreg = PWR->CTLR;
+    tmpreg &= CTLR_PLS_MASK;
+    tmpreg |= PWR_PVDLevel;
+    PWR->CTLR = tmpreg;
 }
-
 
 /*********************************************************************
  * @fn      PWR_WakeUpPinCmd
@@ -111,15 +111,15 @@ void PWR_PVDLevelConfig(uint32_t PWR_PVDLevel)
  */
 void PWR_WakeUpPinCmd(FunctionalState NewState)
 {
-	if(NewState)
-	{
-		PWR->CSR |= (1<<8);
-	}
-	else{
-		PWR->CSR &= ~(1<<8);		
-	}
+    if(NewState)
+    {
+        PWR->CSR |= (1 << 8);
+    }
+    else
+    {
+        PWR->CSR &= ~(1 << 8);
+    }
 }
-
 
 /*********************************************************************
  * @fn      PWR_EnterSTOPMode
@@ -137,24 +137,24 @@ void PWR_WakeUpPinCmd(FunctionalState NewState)
  */
 void PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry)
 {
-  uint32_t tmpreg = 0;
-  tmpreg = PWR->CTLR;
-  tmpreg &= CTLR_DS_MASK;
-  tmpreg |= PWR_Regulator;
-  PWR->CTLR = tmpreg;
+    uint32_t tmpreg = 0;
+    tmpreg = PWR->CTLR;
+    tmpreg &= CTLR_DS_MASK;
+    tmpreg |= PWR_Regulator;
+    PWR->CTLR = tmpreg;
 
-  NVIC->SCTLR |= (1<<2);
-  
-  if(PWR_STOPEntry == PWR_STOPEntry_WFI)
-  {   
-    __WFI();
-  }
-  else
-  {
-    __WFE();
-  }
+    NVIC->SCTLR |= (1 << 2);
 
-  NVIC->SCTLR &=~ (1<<2);
+    if(PWR_STOPEntry == PWR_STOPEntry_WFI)
+    {
+        __WFI();
+    }
+    else
+    {
+        __WFE();
+    }
+
+    NVIC->SCTLR &= ~(1 << 2);
 }
 
 /*********************************************************************
@@ -166,13 +166,12 @@ void PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry)
  */
 void PWR_EnterSTANDBYMode(void)
 {
-  PWR->CTLR |= PWR_CTLR_CWUF;
-  PWR->CTLR |= PWR_CTLR_PDDS;
-	NVIC->SCTLR |= (1<<2);
+    PWR->CTLR |= PWR_CTLR_CWUF;
+    PWR->CTLR |= PWR_CTLR_PDDS;
+    NVIC->SCTLR |= (1 << 2);
 
-  __WFI();
+    __WFI();
 }
-
 
 /*********************************************************************
  * @fn      PWR_GetFlagStatus
@@ -188,19 +187,18 @@ void PWR_EnterSTANDBYMode(void)
  */
 FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
 {
-  FlagStatus bitstatus = RESET;
-  
-  if ((PWR->CSR & PWR_FLAG) != (uint32_t)RESET)
-  {
-    bitstatus = SET;
-  }
-  else
-  {
-    bitstatus = RESET;
-  }
-  return bitstatus;
-}
+    FlagStatus bitstatus = RESET;
 
+    if((PWR->CSR & PWR_FLAG) != (uint32_t)RESET)
+    {
+        bitstatus = SET;
+    }
+    else
+    {
+        bitstatus = RESET;
+    }
+    return bitstatus;
+}
 
 /*********************************************************************
  * @fn      PWR_ClearFlag
@@ -214,10 +212,6 @@ FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG)
  * @return  none
  */
 void PWR_ClearFlag(uint32_t PWR_FLAG)
-{        
-  PWR->CTLR |=  PWR_FLAG << 2;
+{
+    PWR->CTLR |= PWR_FLAG << 2;
 }
-
-
-
-
