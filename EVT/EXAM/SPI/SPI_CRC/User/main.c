@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 /*
@@ -192,8 +194,7 @@ int main(void)
         crcval = SPI_GetCRC(SPI1, SPI_CRC_Rx);
         printf("CRC:%02x\r\n", crcval);
 
-        for(i = 0; i < 4; i++)
-        {
+        for(i = 0; i < 4; i++){
             printf("Rxdata:%02x\r\n", RxData[i]);
         }
 

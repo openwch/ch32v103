@@ -1,12 +1,11 @@
-/* 2014.09.09
-*****************************************
-**   Copyright  (C)  W.ch  1999-2019   **
-**   Web:      http://wch.cn           **
-*****************************************
-**  USB-flash File Interface for CHRV3 **
-**  KEIL423, gcc 8.20          **
-*****************************************
-*/
+/********************************** (C) COPYRIGHT *******************************
+ * File Name          : CH32V103UFI.h
+ * Author             : WCH
+ * Version            : V1.0.0
+ * Date               : 2014/09/09
+ * Description        : USB-flash File Interface for CHRV3.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ *******************************************************************************/
 /* CHRV3 U盘主机文件系统接口, 支持: FAT12/FAT16/FAT32 */
 
 //#include "CHRV3BAS.H"

@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
 /*
@@ -207,8 +209,7 @@ int main(void)
     Delay_Ms(50);
     ADC_SoftwareStartConvCmd(ADC1, DISABLE);
 
-    for(i = 0; i < 1024; i++)
-    {
+    for(i = 0; i < 1024; i++){
         printf("%04d\r\n", Get_ConversionVal_3_3V(TxBuf[i]));
         Delay_Ms(10);
     }

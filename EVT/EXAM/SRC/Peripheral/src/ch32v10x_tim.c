@@ -4,6 +4,8 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : This file provides all the TIM firmware functions.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 #include "ch32v10x_tim.h"
 #include "ch32v10x_rcc.h"
@@ -493,16 +495,16 @@ void TIM_Cmd(TIM_TypeDef *TIMx, FunctionalState NewState)
  *
  * @return  none
  */
-void TIM_CtrlPWMOutputs(TIM_TypeDef* TIMx, FunctionalState NewState)
+void TIM_CtrlPWMOutputs(TIM_TypeDef *TIMx, FunctionalState NewState)
 {
-  if (NewState != DISABLE)
-  {
-    TIMx->BDTR |= TIM_MOE;
-  }
-  else
-  {
-    TIMx->BDTR &= (uint16_t)(~((uint16_t)TIM_MOE));
-  }
+    if(NewState != DISABLE)
+    {
+        TIMx->BDTR |= TIM_MOE;
+    }
+    else
+    {
+        TIMx->BDTR &= (uint16_t)(~((uint16_t)TIM_MOE));
+    }
 }
 
 /*********************************************************************

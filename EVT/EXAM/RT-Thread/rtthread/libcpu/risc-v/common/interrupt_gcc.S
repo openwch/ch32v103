@@ -52,8 +52,9 @@ SW_handler:
 
     addi sp, sp, -32 * REGBYTES
     STORE x5,   5 * REGBYTES(sp)
-    /* saved mstatus */
-    csrr t0,    mstatus
+
+    /* saved MPIE */
+ 	li    t0,   0x80
     STORE t0,   2 * REGBYTES(sp)
 
     STORE x1,   1 * REGBYTES(sp)
@@ -97,10 +98,9 @@ SW_handler:
     /* if rt_thread_switch_interrupt_flag=1,then clear it  */
     la    s0, rt_thread_switch_interrupt_flag
     lw    s2, 0(s0)
-    beqz  s2, spurious_interrupt
+    beqz  s2, 1f
     sw    zero, 0(s0)
-
-spurious_interrupt:
+#1:
     csrr  a0, mepc
     STORE a0, 0 * REGBYTES(sp)
 
@@ -115,9 +115,12 @@ spurious_interrupt:
     LOAD  a0,  0 * REGBYTES(sp)
     csrw  mepc, a0
 
-    LOAD  x1,   1 * REGBYTES(sp)
-    LOAD  t0,   2 * REGBYTES(sp)
-	csrw   mstatus, t0
+1:  LOAD  x1,   1 * REGBYTES(sp)
+
+	li t0,0x1800
+	csrs mstatus, t0
+	LOAD t0, 2*REGBYTES(sp)
+	csrs mstatus, t0
 
     LOAD  x4,   4 * REGBYTES(sp)
     LOAD  x5,   5 * REGBYTES(sp)

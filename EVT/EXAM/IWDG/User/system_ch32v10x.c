@@ -1,10 +1,12 @@
 /********************************** (C) COPYRIGHT *******************************
-* File Name          : system_ch32v10x.c
-* Author             : WCH
-* Version            : V1.0.0
-* Date               : 2020/04/30
-* Description        : CH32V10x Device Peripheral Access Layer System Source File.
-*********************************************************************************/
+ * File Name          : system_ch32v10x.c
+ * Author             : WCH
+ * Version            : V1.0.0
+ * Date               : 2020/04/30
+ * Description        : CH32V10x Device Peripheral Access Layer System Source File.
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * SPDX-License-Identifier: Apache-2.0
+ *********************************************************************************/
 #include "ch32v10x.h" 
 
 /* 
