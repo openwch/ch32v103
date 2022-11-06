@@ -13,21 +13,20 @@
 #ifndef __CHRV3UFI_H__
 #define __CHRV3UFI_H__
 
-#define CHRV3_LIB_VER		0x10
+#define CHRV3_LIB_VER                0x10
 
 //#define DISK_BASE_BUF_LEN		512	/* 默认的磁盘数据缓冲区大小为512字节(可以选择为2048甚至4096以支持某些大扇区的U盘),为0则禁止在本文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
 /* 如果需要复用磁盘数据缓冲区以节约RAM,那么可将DISK_BASE_BUF_LEN定义为0以禁止在本文件中定义缓冲区,而由应用程序在调用CHRV3LibInit之前将与其它程序合用的缓冲区起始地址置入pDISK_BASE_BUF变量 */
 
-//#define NO_DEFAULT_ACCESS_SECTOR	1		/* 禁止默认的磁盘扇区读写子程序,下面用自行编写的程序代替它 */
+//#define NO_DEFAULT_ACCESS_SECTOR	    1		/* 禁止默认的磁盘扇区读写子程序,下面用自行编写的程序代替它 */
 //#define NO_DEFAULT_DISK_CONNECT		1		/* 禁止默认的检查磁盘连接子程序,下面用自行编写的程序代替它 */
 //#define NO_DEFAULT_FILE_ENUMER		1		/* 禁止默认的文件名枚举回调程序,下面用自行编写的程序代替它 */
-
+#define FOR_ROOT_UDISK_ONLY           1
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* ********************************************************************************************************************* */
-
 /* FILE: CHRV3UF.H */
 
 /* 错误码 */
@@ -84,7 +83,8 @@ extern "C" {
 #endif
 
 /* FAT数据区中文件目录信息 */
-typedef struct _FAT_DIR_INFO {
+typedef struct _FAT_DIR_INFO
+{
 	UINT8	DIR_Name[11];				/* 00H,文件名,共11字节,不足处填空格 */
 	UINT8	DIR_Attr;					/* 0BH,文件属性,参考下面的说明 */
 	UINT8	DIR_NTRes;					/* 0CH */
@@ -260,11 +260,9 @@ extern	PUINT16	pRX_LEN_REG;				/* 指向接收长度寄存器,由应用程序初始化 */
 
 extern	CMD_PARAM_I	mCmdParam;				/* 命令参数 */
 
-extern	UINT8	RxBuffer[ MAX_PACKET_SIZE ];  // IN, must even address
-extern	UINT8	TxBuffer[ MAX_PACKET_SIZE ];  // OUT, must even address
+extern	__attribute__((aligned(4))) uint8_t RxBuffer[ MAX_PACKET_SIZE ];  // IN, must even address
+extern	__attribute__((aligned(4))) uint8_t	TxBuffer[ MAX_PACKET_SIZE ];  // OUT, must even address
 
-//#define		PXUDISK_BOC_CBW	PUDISK_BOC_CBW
-//#define		PXUDISK_BOC_CSW	PUDISK_BOC_CSW
 
 #ifndef	pSetupReq
 #define	pSetupReq	((PUSB_SETUP_REQ)TxBuffer)
@@ -325,16 +323,16 @@ extern	void	mDelayuS( UINT16 n );		// 以uS为单位延时
 extern	void	mDelaymS( UINT16 n );		// 以mS为单位延时
 extern	UINT8	USBHostTransact( UINT8 endp_pid, UINT8 tog, UINT32 timeout );	// CHRV3传输事务,输入目的端点地址/PID令牌,同步标志,NAK重试时间,返回0成功,超时/出错重试
 extern	UINT8	HostCtrlTransfer( PUINT8 DataBuf, PUINT8 RetLen );	// 执行控制传输,8字节请求码在pSetupReq中,DataBuf为可选的收发缓冲区,实际收发长度返回在ReqLen指向的变量中
-//extern	void	CopySetupReqPkg( PCCHAR pReqPkt );  // 复制控制传输的请求包
-//extern	UINT8	CtrlGetDeviceDescrTB( void );  // 获取设备描述符,返回在TxBuffer中
+extern	void	CopySetupReqPkg( PCCHAR pReqPkt );  // 复制控制传输的请求包
+extern	UINT8	CtrlGetDeviceDescrTB( void );  // 获取设备描述符,返回在TxBuffer中
 extern	UINT8	CtrlGetConfigDescrTB( void );  // 获取配置描述符,返回在TxBuffer中
-//extern	UINT8	CtrlSetUsbAddress( UINT8 addr );  // 设置USB设备地址
+extern	UINT8	CtrlSetUsbAddress( UINT8 addr );  // 设置USB设备地址
 extern	UINT8	CtrlSetUsbConfig( UINT8 cfg );  // 设置USB设备配置
 extern	UINT8	CtrlClearEndpStall( UINT8 endp );  // 清除端点STALL
 #ifndef	FOR_ROOT_UDISK_ONLY
-//extern	UINT8	CtrlGetHubDescr( void );  // 获取HUB描述符,返回在TxBuffer中
+extern	UINT8	CtrlGetHubDescr( void );  // 获取HUB描述符,返回在TxBuffer中
 extern	UINT8	HubGetPortStatus( UINT8 HubPortIndex );  // 查询HUB端口状态,返回在TxBuffer中
-//extern	UINT8	HubSetPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt );  // 设置HUB端口特性
+extern	UINT8	HubSetPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt );  // 设置HUB端口特性
 extern	UINT8	HubClearPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt );  // 清除HUB端口特性
 #endif
 

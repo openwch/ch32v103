@@ -11,22 +11,99 @@
 //#define DISK_BASE_BUF_LEN		512	/* 默认的磁盘数据缓冲区大小为512字节(可以选择为2048甚至4096以支持某些大扇区的U盘),为0则禁止在本文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
 /* 如果需要复用磁盘数据缓冲区以节约RAM,那么可将DISK_BASE_BUF_LEN定义为0以禁止在本文件中定义缓冲区,而由应用程序在调用CHRV3LibInit之前将与其它程序合用的缓冲区起始地址置入pDISK_BASE_BUF变量 */
 
-//#define NO_DEFAULT_ACCESS_SECTOR	1		/* 禁止默认的磁盘扇区读写子程序,下面用自行编写的程序代替它 */
+//#define NO_DEFAULT_ACCESS_SECTOR	    1		/* 禁止默认的磁盘扇区读写子程序,下面用自行编写的程序代替它 */
 //#define NO_DEFAULT_DISK_CONNECT		1		/* 禁止默认的检查磁盘连接子程序,下面用自行编写的程序代替它 */
 //#define NO_DEFAULT_FILE_ENUMER		1		/* 禁止默认的文件名枚举回调程序,下面用自行编写的程序代替它 */
 
-//#include "CHRV3SFR.H"
-
-
-#include "ch32v10x_usb_host.h"
 #include "debug.h"
 #include "CHRV3UFI.h"
+#include "ch32v10x_usbhd_host.h"
+#include "usb_host_config.h"
 
-
-UINT8	CtrlGetConfigDescrTB( void )  // 获取配置描述符,返回在TxBuffer中
+UINT8 USBHostTransact( UINT8 endp_pid, UINT8 tog, UINT32 timeout )
 {
-	return( CtrlGetConfigDescr( TxBuffer ) );
+    uint8_t ret;
+    ret = USBHDH_Transact( endp_pid, tog, timeout );
+    return ret;
 }
+
+UINT8 HostCtrlTransfer( PUINT8 DataBuf, PUINT8 RetLen )
+{
+    uint8_t  ret;
+    uint16_t retlen;
+    retlen = (uint16_t)(*RetLen);
+    ret = USBHDH_CtrlTransfer( RootHubDev.bEp0MaxPks, DataBuf, &retlen );
+    return ret;
+}
+
+void CopySetupReqPkg( PCCHAR pReqPkt )
+{
+    uint8_t i;
+
+    for(i = 0; i != sizeof(USB_SETUP_REQ); i++)
+    {
+        ((char *)pUSBHD_SetupRequest)[i] = *pReqPkt;
+        pReqPkt++;
+    }
+}
+
+UINT8 CtrlGetDeviceDescrTB( void )
+{
+    uint8_t ret;
+    ret = USBHDH_GetDeviceDescr( &RootHubDev.bEp0MaxPks, TxBuffer );
+    return ret;
+}
+
+UINT8 CtrlGetConfigDescrTB( void )
+{
+    uint16_t len;
+    uint8_t  ret;
+    ret = USBHDH_GetConfigDescr( RootHubDev.bEp0MaxPks, TxBuffer, 256, &len );
+    return ret;
+}
+
+UINT8 CtrlSetUsbConfig( UINT8 cfg )
+{
+    uint8_t ret;
+    ret = USBHDH_SetUsbConfig( RootHubDev.bEp0MaxPks, cfg );
+    return ret;
+}
+
+UINT8 CtrlSetUsbAddress( UINT8 addr )
+{
+    uint8_t ret;
+    ret = USBHDH_SetUsbAddress( RootHubDev.bEp0MaxPks, addr );
+    return ret;
+}
+
+UINT8 CtrlClearEndpStall( UINT8 endp )
+{
+    uint8_t ret;
+    ret = USBHDH_ClearEndpStall( RootHubDev.bEp0MaxPks, endp );
+    return ret;
+}
+
+#ifndef FOR_ROOT_UDISK_ONLY
+UINT8 CtrlGetHubDescr( void )
+{
+
+}
+
+UINT8 HubGetPortStatus( UINT8 HubPortIndex )
+{
+
+}
+
+UINT8 HubSetPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt )
+{
+
+}
+
+UINT8 HubClearPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt )
+{
+
+}
+#endif
 
 CMD_PARAM_I	mCmdParam;						/* 命令参数 */
 #if		DISK_BASE_BUF_LEN > 0
@@ -36,11 +113,11 @@ UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* 外部RA
 #endif
 
 /* 以下程序可以根据需要修改 */
-
 #ifndef	NO_DEFAULT_ACCESS_SECTOR		/* 在应用程序中定义NO_DEFAULT_ACCESS_SECTOR可以禁止默认的磁盘扇区读写子程序,然后用自行编写的程序代替它 */
-//if ( use_external_interface ) {  // 替换U盘扇区底层读写子程序
-//    CHRV3vSectorSize=512;  // 设置实际的扇区大小,必须是512的倍数,该值是磁盘的扇区大小
-//    CHRV3vSectorSizeB=9;   // 设置实际的扇区大小的位移数,512则对应9,1024对应10,2048对应11
+//if ( use_external_interface ) // 替换U盘扇区底层读写子程序
+//{
+//    CHRV3vSectorSize=512;     // 设置实际的扇区大小,必须是512的倍数,该值是磁盘的扇区大小
+//    CHRV3vSectorSizeB=9;      // 设置实际的扇区大小的位移数,512则对应9,1024对应10,2048对应11
 //    CHRV3DiskStatus=DISK_MOUNTED;  // 强制块设备连接成功(只差分析文件系统)
 //}
 
@@ -121,10 +198,6 @@ UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的多个扇
 0x2x    内置Root-HUB1下的外部HUB的端口x下的USB设备,x为1~n
 */
 
-//#define		UHUB_DEV_ADDR	( CHRV3vRootPort ? R8_USB1_DEV_AD : R8_USB0_DEV_AD )
-//#define		UHUB_MIS_STAT	( CHRV3vRootPort ? R8_USB1_MIS_ST : R8_USB0_MIS_ST )
-//#define		UHUB_HOST_CTRL	( CHRV3vRootPort ? R8_UHOST1_CTRL : R8_UHOST0_CTRL )
-//#define		UHUB_INT_FLAG	( CHRV3vRootPort ? R8_USB1_INT_FG : R8_USB0_INT_FG )
 #define		UHUB_DEV_ADDR	R8_USB_DEV_AD
 #define		UHUB_MIS_STAT	R8_USB_MIS_ST
 #define		UHUB_HOST_CTRL	R8_UHOST_CTRL
@@ -133,86 +206,38 @@ UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的多个扇
 #define		bUMS_SUSPEND	RB_UMS_SUSPEND
 
 /* 检查磁盘是否连接 */
-UINT8	CHRV3DiskConnect( void )
+UINT8 CHRV3DiskConnect( void )
 {
 	UINT8	ums, devaddr;
 	UHUB_DEV_ADDR = UHUB_DEV_ADDR & 0x7F;
 	ums = UHUB_MIS_STAT;
 	devaddr = UHUB_DEV_ADDR;
-	if ( devaddr == USB_DEVICE_ADDR ) {  /* 内置Root-HUB下的USB设备 */
-//		if ( UHUB_HOST_CTRL & RB_UH_PORT_EN ) {  /* 内置Root-HUB下的USB设备存在且未插拔 */
-		if ( ums & bUMS_ATTACH ) {  /* 内置Root-HUB下的USB设备存在 */
-//			if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) {  /* 内置Root-HUB下的USB设备存在且未插拔 */
-			if ( ( ums & bUMS_SUSPEND ) == 0 ) {  /* 内置Root-HUB下的USB设备存在且未插拔 */
+	if ( devaddr == USB_DEVICE_ADDR )
+	{  /* 内置Root-HUB下的USB设备 */
+		if ( ums & bUMS_ATTACH )
+		{  /* 内置Root-HUB下的USB设备存在 */
+			if ( ( ums & bUMS_SUSPEND ) == 0 )
+			{
+			    /* 内置Root-HUB下的USB设备存在且未插拔 */
 				return( ERR_SUCCESS );  /* USB设备已经连接且未插拔 */
 			}
-			else {  /* 内置Root-HUB下的USB设备存在 */
+			else
+			{  /* 内置Root-HUB下的USB设备存在 */
 mDiskConnect:
 				CHRV3DiskStatus = DISK_CONNECT;  /* 曾经断开过 */
 				return( ERR_SUCCESS );  /* 外部HUB或USB设备已经连接或者断开后重新连接 */
 			}
 		}
-		else {  /* USB设备断开 */
+		else
+		{
+		    /* USB设备断开 */
 mDiskDisconn:
 			CHRV3DiskStatus = DISK_DISCONNECT;
 			return( ERR_USB_DISCON );
 		}
 	}
-#ifndef	FOR_ROOT_UDISK_ONLY
-	else if ( devaddr > 0x10 && devaddr <= 0x14 ) {  /* 外部HUB的端口下的USB设备 */
-//		if ( UHUB_HOST_CTRL & RB_UH_PORT_EN ) {  /* 内置Root-HUB下的外部HUB存在且未插拔 */
-		if ( ums & bUMS_ATTACH ) {  /* 内置Root-HUB下的USB设备存在 */
-//			if ( ( UHUB_INT_FLAG & UIF_DETECT ) == 0 ) {  /* 内置Root-HUB下的USB设备存在且未插拔 */
-			if ( ( ums & bUMS_SUSPEND ) == 0 ) {  /* 内置Root-HUB下的USB设备存在且未插拔 */
-				TxBuffer[ MAX_PACKET_SIZE - 1 ] = devaddr;  /* 备份 */
-				UHUB_DEV_ADDR = USB_DEVICE_ADDR - 1 + ( UHUB_DEV_ADDR >> 4 );  /* 设置USB主机端的USB地址指向HUB */
-				CHRV3IntStatus = HubGetPortStatus( TxBuffer[ MAX_PACKET_SIZE - 1 ] & 0x0F );  /* 查询HUB端口状态,返回在TxBuffer中 */
-				if ( CHRV3IntStatus == ERR_SUCCESS ) {
-					if ( TxBuffer[2] & (1<<(HUB_C_PORT_CONNECTION-0x10)) ) {  /* 检测到HUB端口上的插拔事件 */
-						CHRV3DiskStatus = DISK_DISCONNECT;  /* 假定为HUB端口上的USB设备断开 */
-						HubClearPortFeature( TxBuffer[ MAX_PACKET_SIZE - 1 ] & 0x0F, HUB_C_PORT_CONNECTION );  /* 清除HUB端口连接事件状态 */
-					}
-					UHUB_DEV_ADDR = TxBuffer[ MAX_PACKET_SIZE - 1 ];  /* 设置USB主机端的USB地址指向USB设备 */
-					if ( TxBuffer[0] & (1<<HUB_PORT_CONNECTION) ) {  /* 连接状态 */
-						if ( CHRV3DiskStatus < DISK_CONNECT ) {
-							CHRV3DiskStatus = DISK_CONNECT;  /* 曾经断开过 */
-						}
-						return( ERR_SUCCESS );  /* USB设备已经连接或者断开后重新连接 */
-					}
-					else {
-//						CHRV3DiskStatus = DISK_DISCONNECT;
-//						return( ERR_USB_DISCON );
-						CHRV3DiskStatus = DISK_CONNECT;
-						return( ERR_HUB_PORT_FREE );  /* HUB已经连接但是HUB端口尚未连接磁盘 */
-					}
-				}
-				else {
-					UHUB_DEV_ADDR = TxBuffer[ MAX_PACKET_SIZE - 1 ];  /* 设置USB主机端的USB地址指向USB设备 */
-					if ( CHRV3IntStatus == ERR_USB_DISCON ) {
-//						CHRV3DiskStatus = DISK_DISCONNECT;
-//						return( ERR_USB_DISCON );
-						goto mDiskDisconn;
-					}
-					else {
-						CHRV3DiskStatus = DISK_CONNECT;  /* HUB操作失败 */
-						return( CHRV3IntStatus );
-					}
-				}
-			}
-			else {  /* 内置Root-HUB下的USB设备存在,外部HUB或USB设备已经连接或者断开后重新连接 */
-//				CHRV3DiskStatus = DISK_CONNECT;  /* 曾经断开过 */
-//				return( ERR_SUCCESS );  /* 外部HUB或USB设备已经连接或者断开后重新连接 */
-				goto mDiskConnect;
-			}
-		}
-		else {  /* 外部HUB断开 */
-			CHRV3DiskStatus = DISK_DISCONNECT;
-		}
-	}
-#endif
-	else {
-//		CHRV3DiskStatus = DISK_DISCONNECT;
-//		return( ERR_USB_DISCON );
+	else
+	{
 		goto mDiskDisconn;
 	}
 }
@@ -261,7 +286,7 @@ UINT8	CHRV3LibInit( void )  /* 初始化CHRV3程序库,操作成功返回0 */
 	pTX_DMA_A_REG = (PUINT32)&R16_UH_TX_DMA;  /* 指向发送DMA地址寄存器,由应用程序初始化 */
 	pRX_DMA_A_REG = (PUINT32)&R16_UH_RX_DMA;  /* 指向接收DMA地址寄存器,由应用程序初始化 */
 	pTX_LEN_REG = (PUINT16)&R8_UH_TX_LEN;  /* 指向发送长度寄存器,由应用程序初始化 */
-	pRX_LEN_REG = (PUINT16)&R8_USB_RX_LEN;  /* 指向接收长度寄存器,由应用程序初始化 */
+	pRX_LEN_REG = (PUINT16)&R16_USB_RX_LEN;  /* 指向接收长度寄存器,由应用程序初始化 */
 
 //CHRV3vRootPort = 0;  /* USB主机选择(类似Root-hub根集线器选端口) */
 	return( ERR_SUCCESS );

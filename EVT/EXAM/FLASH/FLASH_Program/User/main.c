@@ -34,10 +34,9 @@ uint16_t              Data = 0xAAAA;
 uint32_t              WRPR_Value = 0xFFFFFFFF, ProtectedPages = 0x0;
 uint32_t              NbrOfPage;
 volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
-
 volatile TestStatus MemoryProgramStatus = PASSED;
 volatile TestStatus MemoryEraseStatus = PASSED;
-
+u32 buf[32];
 /*********************************************************************
  * @fn      Flash_Test
  *
@@ -135,7 +134,6 @@ void Flash_Test(void)
 void Flash_Test_Fast(void)
 {
     u8  i, Verity_Flag = 0;
-    u32 buf[32];
 
     for(i = 0; i < 32; i++){
         buf[i] = i;

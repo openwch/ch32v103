@@ -44,7 +44,7 @@ _vector_base:
     .word   0
         j   SysTick_Handler            /* SysTick Handler */
     .word   0
-        j   SW_handler                 /* SW Handler */
+        j   SW_Handler                 /* SW Handler */
     .word   0
     /* External Interrupts */
         j   WWDG_IRQHandler            /* Window Watchdog */
@@ -98,7 +98,7 @@ _vector_base:
     .weak   NMI_Handler
     .weak   HardFault_Handler
     .weak   SysTick_Handler
-    .weak   SW_handler
+    .weak   SW_Handler
     .weak   WWDG_IRQHandler
     .weak   PVD_IRQHandler
     .weak   TAMPER_IRQHandler
@@ -143,7 +143,7 @@ _vector_base:
 NMI_Handler:  1:  j 1b
 HardFault_Handler:  1:  j 1b
 SysTick_Handler:  1:  j 1b
-SW_handler:  1:  j 1b
+SW_Handler:  1:  j 1b
 WWDG_IRQHandler:  1:  j 1b
 PVD_IRQHandler:  1:  j 1b
 TAMPER_IRQHandler:  1:  j 1b

@@ -132,9 +132,9 @@ HalStartToRun:
 
 .extern HalTaskSwitch
 .section    .text.vector_handler, "ax", @progbits
-.global SW_handler
+.global SW_Handler
 .align 2
-SW_handler:
+SW_Handler:
     addi sp, sp, -portCONTEXT_SIZE
     STORE x1,  1  * REGBYTES(sp)    /* RA */
     STORE x5,  2  * REGBYTES(sp)

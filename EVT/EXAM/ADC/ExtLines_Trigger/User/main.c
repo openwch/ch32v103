@@ -120,7 +120,7 @@ u16 Get_ConversionVal_3_3V(s16 val)
     {
         if((val + Calibrattion_Val - y) < 0)
             return 0;
-        if((Calibrattion_Val + val - y) > 4095)
+        if((Calibrattion_Val + val - y) > 4095||val==4095)
             return 4095;
         return (val + Calibrattion_Val);
     }
@@ -145,7 +145,7 @@ u16 Get_ConversionVal_5V(s16 val)
     {
         if((val + Calibrattion_Val - y) < 0)
             return 0;
-        if((Calibrattion_Val + val - y) > 4095)
+        if((Calibrattion_Val + val - y) > 4095||val==4095)
             return 4095;
         return (val + Calibrattion_Val);
     }

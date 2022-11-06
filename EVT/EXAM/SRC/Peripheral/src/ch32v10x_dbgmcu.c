@@ -9,6 +9,33 @@
  ****************************************************************************************/
 #include "ch32v10x_dbgmcu.h"
 
+#define IDCODE_DEVID_MASK    ((uint32_t)0x0000FFFF)
+
+/*********************************************************************
+ * @fn      DBGMCU_GetREVID
+ *
+ * @brief   Returns the device revision identifier.
+ *
+ * @return  Revision identifier.
+ */
+uint32_t DBGMCU_GetREVID(void)
+{
+    return ((*(uint32_t *)0x1FFFF884) >> 16);
+}
+
+/*********************************************************************
+ * @fn      DBGMCU_GetDEVID
+ *
+ * @brief   Returns the device identifier.
+ *
+ * @return  Device identifier.
+ */
+uint32_t DBGMCU_GetDEVID(void)
+{
+    return ((*(uint32_t *)0x1FFFF884) & IDCODE_DEVID_MASK);
+}
+
+
 /*********************************************************************
  * @fn      DBGMCU_Config
  *
@@ -55,10 +82,4 @@ void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState)
             DBGMCU->CFGR0 &= ~DBGMCU_Periph;
         }
     }
-
-
-
-
-
-
 }
