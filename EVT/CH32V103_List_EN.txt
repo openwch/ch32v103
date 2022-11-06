@@ -83,15 +83,19 @@ Directory
   |      |      |      |      |-- USART_SynchronousMode£ºsynchronous mode, master / slave mode, transceiver routine
   |      |      |      |-- USB
   |      |      |      |      |-- USBHD
-  |      |      |      |      |      |-- DEVICE£ºsimulate custom USB device (CH372 device) routine, provides eight non-zero channels (upload + download)£¬implements that data is downloaded first and then the data content is reversed and uploaded
-  |      |      |      |      |      |-- HOST£ºa simple enumeration procedure routine for USB devices
-  |      |      |      |      |      |-- HOST_Udisk£ºU disk file system exam
-  |      |      |      |      |      |      |-- EXAM1£ºC Programming Language exam, read/write file in bytes, including creating file, deleting file, modifying file attribute, and modifying file name
-  |      |      |      |      |      |      |-- EXAM11£ºC Programming Language exam, enumerates files in the root directory and specifies directory
-  |      |      |      |      |      |      |-- EXAM13£ºC Programming Language exam, creates a file with long file name
-  |      |      |      |      |      |      |-- Udisk_Lib£ºU disk file system library file   
-  |      |      |      |      |-- USBHD_AutoIdentifyWorkingVoltage 
-  |      |      |      |      |      |-- DEVICE£ºautomatically identify the operating voltage of the chip, routines for USB function configuration under different system power supply voltages
+  |      |      |      |      |      |-- DEVICE
+  |      |      |      |      |      |      |-- CH372£ºSimulates a custom USB device (CH372 device) with endpoints 1, 3 down and 2, 4 up. Data down from endpoint 1 is uploaded from endpoint 3 and not reversed, and data down from endpoint 2 is uploaded from endpoint 4 and reversed.
+  |      |      |      |      |      |      |-- Compatibility_HID£ºSimulates HID devices, with data transmitted up and down through the serial port.
+  |      |      |      |      |      |      |-- CompositeKM£ºSimulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
+  |      |      |      |      |      |      |-- MSC_U-Disk: Smulates a simple USB flash drive, optionally using on-chip Flash or external SPI-Flash
+  |      |      |      |      |      |      |-- SimulateCDC£ºSimulate a CDC serial port and use serial port 1 to send and receive.
+  |      |      |      |      |      |      |-- SimulateCDC-HID£ºSimulate a CDC serial port, use serial port 1 to send and receive, HID interrupt endpoints to send and receive data to reverse and upload.  
+  |      |      |      |      |      |-- HOST_IAP
+  |      |      |      |      |      |      |-- APP: APP used with HOST_IAP, the project has modified the starting location of the program, after compilation, you need to convert the file into a bin file and rename it to APP.bin
+  |      |      |      |      |      |      |-- HOST_IAP:  The host U disk IAP routine based on the U disk read file routine finishing, read the file with the name bit APP.bin from the U disk, write it to the internal flash, check it and jump automatically.
+  |      |      |      |      |      |-- HOST_KM: The host operates the keypad, gets the data of the endpoints uploaded by the keypad and prints it, supports U-port under level 1 hub
+  |      |      |      |      |      |-- HOST_MTP_FileSystem£ºEnumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
+  |      |      |      |      |      |-- Udisk_Lib£ºU disk file system library file  
   |      |      |      |-- WWDG£ºwindow watchdog routine
 
 

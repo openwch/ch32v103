@@ -32,6 +32,9 @@ extern "C" {
 #define DBGMCU_STOP                  ((uint32_t)0x00000002)
 #define DBGMCU_STANDBY               ((uint32_t)0x00000004)
 
+
+uint32_t DBGMCU_GetREVID(void);
+uint32_t DBGMCU_GetDEVID(void);
 void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState);
 
 #ifdef __cplusplus

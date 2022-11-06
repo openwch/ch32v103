@@ -29,93 +29,6 @@
 #endif
 
 /*********************************************************************
- * @fn      __get_FFLAGS
- *
- * @brief   Return the Floating-Point Accrued Exceptions
- *
- * @return  fflags value
- */
-uint32_t __get_FFLAGS(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0,""fflags": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_FFLAGS
- *
- * @brief   Set the Floating-Point Accrued Exceptions
- *
- * @param   value  - set FFLAGS value
- *
- * @return  none
- */
-void __set_FFLAGS(uint32_t value)
-{
-    __ASM volatile("csrw fflags, %0":: "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_FRM
- *
- * @brief   Return the Floating-Point Dynamic Rounding Mode
- *
- * @return  frm value
- */
-uint32_t __get_FRM(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0,""frm": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_FRM
- *
- * @brief   Set the Floating-Point Dynamic Rounding Mode
- *
- * @param   value  - set frm value
- *
- * @return  none
- */
-void __set_FRM(uint32_t value)
-{
-    __ASM volatile("csrw frm, %0" :: "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_FCSR
- *
- * @brief   Return the Floating-Point Control and Status Register
- *
- * @return  fcsr value
- */
-uint32_t __get_FCSR(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0," "fcsr" : "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_FCSR
- *
- * @brief   Set the Floating-Point Dynamic Rounding Mode
- *
- * @param   value  - set fcsr value
- *
- * @return  none
- */
-void __set_FCSR(uint32_t value)
-{
-    __ASM volatile("csrw fcsr, %0" : : "r"(value));
-}
-
-/*********************************************************************
  * @fn      __get_MSTATUS
  *
  * @brief   Return the Machine Status Register
@@ -232,7 +145,7 @@ void __set_MTVEC(uint32_t value)
 }
 
 /*********************************************************************
- * @fn      __get_MTVEC
+ * @fn      __get_MSCRATCH
  *
  * @brief   Return the Machine Seratch Register
  *
@@ -247,7 +160,7 @@ uint32_t __get_MSCRATCH(void)
 }
 
 /*********************************************************************
- * @fn      __set_MTVEC
+ * @fn      __set_MSCRATCH
  *
  * @brief   Set the Machine Seratch Register
  *
@@ -342,141 +255,6 @@ void __set_MTVAL(uint32_t value)
 }
 
 /*********************************************************************
- * @fn      __get_MIP
- *
- * @brief   Return the Machine Interrupt Pending Register
- *
- * @return  mip value
- */
-uint32_t __get_MIP(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0," "mip": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_MIP
- *
- * @brief   Set the Machine Interrupt Pending Register
- *
- * @return  mip value
- */
-void __set_MIP(uint32_t value)
-{
-    __ASM volatile("csrw mip, %0":: "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_MCYCLE
- *
- * @brief   Return Lower 32 bits of Cycle counter
- *
- * @return  mcycle value
- */
-uint32_t __get_MCYCLE(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0," "mcycle": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_MCYCLE
- *
- * @brief   Set Lower 32 bits of Cycle counter
- *
- * @return  mcycle value
- */
-void __set_MCYCLE(uint32_t value)
-{
-    __ASM volatile("csrw mcycle, %0" : : "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_MCYCLEH
- *
- * @brief   Return Upper 32 bits of Cycle counter
- *
- * @return  mcycleh value
- */
-uint32_t __get_MCYCLEH(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0,""mcycleh" : "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_MCYCLEH
- *
- * @brief   Set Upper 32 bits of Cycle counter
- *
- * @return  mcycleh value
- */
-void __set_MCYCLEH(uint32_t value)
-{
-    __ASM volatile("csrw mcycleh, %0":: "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_MINSTRET
- *
- * @brief   Return Lower 32 bits of Instructions-retired counter
- *
- * @return  mcause value
- */
-uint32_t __get_MINSTRET(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0,""minstret": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_MINSTRET
- *
- * @brief   Set Lower 32 bits of Instructions-retired counter
- *
- * @return  minstret value
- */
-void __set_MINSTRET(uint32_t value)
-{
-    __ASM volatile("csrw minstret, %0":: "r"(value));
-}
-
-/*********************************************************************
- * @fn      __get_MINSTRETH
- *
- * @brief   Return Upper 32 bits of Instructions-retired counter
- *
- * @return  minstreth value
- */
-uint32_t __get_MINSTRETH(void)
-{
-    uint32_t result;
-
-    __ASM volatile("csrr %0,""minstreth": "=r"(result));
-    return (result);
-}
-
-/*********************************************************************
- * @fn      __set_MINSTRETH
- *
- * @brief   Set Upper 32 bits of Instructions-retired counter
- *
- * @return  minstreth value
- */
-void __set_MINSTRETH(uint32_t value)
-{
-    __ASM volatile("csrw minstreth, %0":: "r"(value));
-}
-
-/*********************************************************************
  * @fn      __get_MVENDORID
  *
  * @brief   Return Vendor ID Register
@@ -547,6 +325,6 @@ uint32_t __get_SP(void)
 {
     uint32_t result;
 
-    asm volatile("mv %0,""sp": "=r"(result):);
+    __ASM volatile("mv %0,""sp": "=r"(result):);
     return (result);
 }

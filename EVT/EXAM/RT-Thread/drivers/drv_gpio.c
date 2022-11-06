@@ -60,7 +60,7 @@ static void GPIOE_CLK_ENABLE(void)
 
 
 
-/* STM32 GPIO driver */
+/* GPIO driver */
 struct pin_index
 {
     int index;

@@ -2235,7 +2235,7 @@ static void TI2_Config(TIM_TypeDef *TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_
     tmpccmr1 &= (uint16_t)(((uint16_t) ~((uint16_t)TIM_CC2S)) & ((uint16_t) ~((uint16_t)TIM_IC2F)));
 
     TIMx->CHCTLR1 |= (uint16_t)(TIM_ICSelection << 8);
-    tmpccmr1 |= (uint16_t)(TIM_ICFilter << 12);
+    tmpccmr1 |= (uint16_t)(TIM_ICSelection << 8) | (uint16_t)(TIM_ICFilter << 12);
 
     if((TIMx == TIM1) || (TIMx == TIM2) || (TIMx == TIM3) || (TIMx == TIM4))
     {
@@ -2335,7 +2335,7 @@ static void TI4_Config(TIM_TypeDef *TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_
     tmpccmr2 &= (uint16_t)((uint16_t)(~(uint16_t)TIM_CC4S) & ((uint16_t) ~((uint16_t)TIM_IC4F)));
 
     TIMx->CHCTLR2 |= (uint16_t)(TIM_ICSelection << 8);
-    tmpccmr2 |= (uint16_t)(TIM_ICFilter << 12);
+    tmpccmr2 |= (uint16_t)(TIM_ICSelection << 8) | (uint16_t)(TIM_ICFilter << 12);
 
     if((TIMx == TIM1) || (TIMx == TIM2) || (TIMx == TIM3) || (TIMx == TIM4))
     {

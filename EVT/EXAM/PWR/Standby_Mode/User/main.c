@@ -14,7 +14,7 @@
  WKUP(PA0)
  本例程演示 WFI 进入待机模式，WKUP(PA0)引脚上升沿，退出待机模式，
  唤醒后程序复位。
- 注：为尽可能的降低功耗，建议将不用的GPIO设置成上拉、下拉、模拟输入或设置成输出模式。
+ 注：为尽可能的降低功耗，建议将不用的GPIO设置成下拉模式。
 
 */
 
@@ -40,7 +40,7 @@ int main(void)
                                RCC_APB2Periph_GPIOC,
                            ENABLE);
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
 
     GPIO_Init(GPIOA, &GPIO_InitStructure);
     GPIO_Init(GPIOB, &GPIO_InitStructure);

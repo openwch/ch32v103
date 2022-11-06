@@ -368,7 +368,7 @@ UINT8 HostCtrlTransfer(PUINT8 DataBuf, PUINT8 RetLen)
                 s = USBHostTransact(USB_PID_IN << 4 | 0x00, R8_UH_RX_CTRL, 200000 / 20);
                 if(s != ERR_SUCCESS)
                     return (s);
-                RxLen = R8_USB_RX_LEN < RemLen ? R8_USB_RX_LEN : RemLen;
+                RxLen = R16_USB_RX_LEN < RemLen ? R16_USB_RX_LEN : RemLen;
                 RemLen -= RxLen;
                 if(pLen)
                     *pLen += RxLen;
@@ -378,7 +378,7 @@ UINT8 HostCtrlTransfer(PUINT8 DataBuf, PUINT8 RetLen)
                     pBuf++;
                 }
 
-                if(R8_USB_RX_LEN == 0 || (R8_USB_RX_LEN & (UsbDevEndp0Size - 1)))
+                if(R16_USB_RX_LEN == 0 || (R16_USB_RX_LEN & (UsbDevEndp0Size - 1)))
                     break;
             }
             R8_UH_TX_LEN = 0x00;
@@ -411,7 +411,7 @@ UINT8 HostCtrlTransfer(PUINT8 DataBuf, PUINT8 RetLen)
         return (s);
     if(R8_UH_TX_LEN == 0)
         return (ERR_SUCCESS);
-    if(R8_USB_RX_LEN == 0)
+    if(R16_USB_RX_LEN == 0)
         return (ERR_SUCCESS);
 
     return (ERR_USB_BUF_OVER);
@@ -716,7 +716,6 @@ UINT8 InitRootDevice(PUINT8 DataBuf)
                         return (ERR_SUCCESS);
                     }
                 }
-
 #endif
             }
         }

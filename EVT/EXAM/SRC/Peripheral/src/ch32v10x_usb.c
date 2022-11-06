@@ -73,9 +73,9 @@ void USB_DeviceInit(void)
  *
  * @return  none
  */
-void DevEP1_IN_Deal(UINT8 l)
+void DevEP1_IN_Deal(UINT16 l)
 {
-    R8_UEP1_T_LEN = l;
+    R16_UEP1_T_LEN = l;
     R8_UEP1_CTRL = (R8_UEP1_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -88,9 +88,9 @@ void DevEP1_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP2_IN_Deal(UINT8 l)
+void DevEP2_IN_Deal(UINT16 l)
 {
-    R8_UEP2_T_LEN = l;
+    R16_UEP2_T_LEN = l;
     R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -103,9 +103,9 @@ void DevEP2_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP3_IN_Deal(UINT8 l)
+void DevEP3_IN_Deal(UINT16 l)
 {
-    R8_UEP3_T_LEN = l;
+    R16_UEP3_T_LEN = l;
     R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -118,9 +118,9 @@ void DevEP3_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP4_IN_Deal(UINT8 l)
+void DevEP4_IN_Deal(UINT16 l)
 {
-    R8_UEP4_T_LEN = l;
+    R16_UEP4_T_LEN = l;
     R8_UEP4_CTRL = (R8_UEP4_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -133,9 +133,9 @@ void DevEP4_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP5_IN_Deal(UINT8 l)
+void DevEP5_IN_Deal(UINT16 l)
 {
-    R8_UEP5_T_LEN = l;
+    R16_UEP5_T_LEN = l;
     R8_UEP5_CTRL = (R8_UEP5_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -148,9 +148,9 @@ void DevEP5_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP6_IN_Deal(UINT8 l)
+void DevEP6_IN_Deal(UINT16 l)
 {
-    R8_UEP6_T_LEN = l;
+    R16_UEP6_T_LEN = l;
     R8_UEP6_CTRL = (R8_UEP6_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }
 
@@ -163,8 +163,8 @@ void DevEP6_IN_Deal(UINT8 l)
  *
  * @return  none
  */
-void DevEP7_IN_Deal(UINT8 l)
+void DevEP7_IN_Deal(UINT16 l)
 {
-    R8_UEP7_T_LEN = l;
+    R16_UEP7_T_LEN = l;
     R8_UEP7_CTRL = (R8_UEP7_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_ACK;
 }

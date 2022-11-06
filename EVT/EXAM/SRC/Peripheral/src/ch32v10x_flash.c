@@ -19,15 +19,15 @@
 
 /* Flash Control Register bits */
 #define CR_PG_Set                  ((uint32_t)0x00000001)
-#define CR_PG_Reset                ((uint32_t)0x00001FFE)
+#define CR_PG_Reset                ((uint32_t)0xFFFFFFFE)
 #define CR_PER_Set                 ((uint32_t)0x00000002)
-#define CR_PER_Reset               ((uint32_t)0x00001FFD)
+#define CR_PER_Reset               ((uint32_t)0xFFFFFFFD)
 #define CR_MER_Set                 ((uint32_t)0x00000004)
-#define CR_MER_Reset               ((uint32_t)0x00001FFB)
+#define CR_MER_Reset               ((uint32_t)0xFFFFFFFB)
 #define CR_OPTPG_Set               ((uint32_t)0x00000010)
-#define CR_OPTPG_Reset             ((uint32_t)0x00001FEF)
+#define CR_OPTPG_Reset             ((uint32_t)0xFFFFFFEF)
 #define CR_OPTER_Set               ((uint32_t)0x00000020)
-#define CR_OPTER_Reset             ((uint32_t)0x00001FDF)
+#define CR_OPTER_Reset             ((uint32_t)0xFFFFFFDF)
 #define CR_STRT_Set                ((uint32_t)0x00000040)
 #define CR_LOCK_Set                ((uint32_t)0x00000080)
 #define CR_PAGE_PG                 ((uint32_t)0x00010000)
@@ -200,8 +200,6 @@ FLASH_Status FLASH_ErasePage(uint32_t Page_Address)
         FLASH->CTLR &= CR_PER_Reset;
     }
 
-    *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Page_Address & 0xFFFFFFFC) ^ 0x00001000);
-
     return status;
 }
 
@@ -344,8 +342,6 @@ FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data)
         }
     }
 
-    *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Address & 0xFFFFFFFC) ^ 0x00001000);
-
     return status;
 }
 
@@ -372,8 +368,6 @@ FLASH_Status FLASH_ProgramHalfWord(uint32_t Address, uint16_t Data)
         status = FLASH_WaitForLastOperation(ProgramTimeout);
         FLASH->CTLR &= CR_PG_Reset;
     }
-
-    *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Address & 0xFFFFFFFC) ^ 0x00001000);
 
     return status;
 }
@@ -405,8 +399,6 @@ FLASH_Status FLASH_ProgramOptionByteData(uint32_t Address, uint8_t Data)
             FLASH->CTLR &= CR_OPTPG_Reset;
         }
     }
-
-    *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Address & 0xFFFFFFFC) ^ 0x00001000);
 
     return status;
 }
@@ -914,8 +906,6 @@ void FLASH_BufLoad(uint32_t Address, uint32_t Data0, uint32_t Data1, uint32_t Da
         while(FLASH->STATR & SR_BSY)
             ;
         FLASH->CTLR &= ~CR_PAGE_PG;
-
-        *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Address & 0xFFFFFFFC) ^ 0x00001000);
     }
 }
 
@@ -938,8 +928,6 @@ void FLASH_ErasePage_Fast(uint32_t Page_Address)
         while(FLASH->STATR & SR_BSY)
             ;
         FLASH->CTLR &= ~CR_PAGE_ER;
-
-        *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Page_Address & 0xFFFFFFFC) ^ 0x00001000);
     }
 }
 
@@ -962,7 +950,5 @@ void FLASH_ProgramPage_Fast(uint32_t Page_Address)
         while(FLASH->STATR & SR_BSY)
             ;
         FLASH->CTLR &= ~CR_PAGE_PG;
-
-        *(__IO uint32_t *)0x40022034 = *(__IO uint32_t *)((Page_Address & 0xFFFFFFFC) ^ 0x00001000);
     }
 }

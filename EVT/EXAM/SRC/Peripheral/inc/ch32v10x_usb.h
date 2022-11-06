@@ -194,7 +194,8 @@ typedef volatile unsigned long *PUINT32V;
 #define MASK_UIS_ENDP        0x0F           // RO, bit mask of current transfer endpoint number for USB device mode
 #define MASK_UIS_H_RES       0x0F           // RO, bit mask of current transfer handshake response for USB host mode: 0000=no response, time out from device, others=handshake response PID received
 
-#define R8_USB_RX_LEN        (*((PUINT8V)(0x40023408)))  // USB receiving length
+#define R16_USB_RX_LEN       (*((PUINT16V)(0x40023408))) // USB receiving length
+#define MASK_UIS_RX_LEN      0x3FF                       // RO, bit mask of current receive length(10 bits for ch32v10x)
 #define R32_USB_BUF_MODE     (*((PUINT32V)(0x4002340c))) // USB endpoint buffer mode
 #define R8_UEP4_1_MOD        (*((PUINT8V)(0x4002340c)))  // endpoint 4/1 mode
 #define RB_UEP1_RX_EN        0x80                        // enable USB endpoint 1 receiving (OUT)
@@ -268,7 +269,7 @@ typedef volatile unsigned long *PUINT32V;
 #define R8_UEP0_T_LEN        (*((PUINT8V)(0x40023430)))  // endpoint 0 transmittal length
 #define R8_UEP0_CTRL         (*((PUINT8V)(0x40023432)))  // endpoint 0 control
 #define R32_USB_EP1_CTRL     (*((PUINT32V)(0x40023434))) // endpoint 1 control & transmittal length
-#define R8_UEP1_T_LEN        (*((PUINT8V)(0x40023434)))  // endpoint 1 transmittal length
+#define R16_UEP1_T_LEN       (*((PUINT16V)(0x40023434))) // endpoint 1 transmittal length(16-bits for ch32v10x)
 #define R8_UEP1_CTRL         (*((PUINT8V)(0x40023436)))  // endpoint 1 control
 #define RB_UEP_R_TOG         0x80                        // expected data toggle flag of USB endpoint X receiving (OUT): 0=DATA0, 1=DATA1
 #define RB_UEP_T_TOG         0x40                        // prepared data toggle flag of USB endpoint X transmittal (IN): 0=DATA0, 1=DATA1
@@ -303,10 +304,10 @@ typedef volatile unsigned long *PUINT32V;
 #define RB_UH_SOF_EN         0x40           // USB host automatic SOF enable
 
 #define R32_USB_EP2_CTRL     (*((PUINT32V)(0x40023438))) // endpoint 2 control & transmittal length
-#define R8_UEP2_T_LEN        (*((PUINT8V)(0x40023438)))  // endpoint 2 transmittal length
+#define R16_UEP2_T_LEN       (*((PUINT16V)(0x40023438))) // endpoint 2 transmittal length(16-bits for ch32v10x)
 #define R8_UEP2_CTRL         (*((PUINT8V)(0x4002343a)))  // endpoint 2 control
 
-#define R8_UH_EP_PID         R8_UEP2_T_LEN  // host endpoint and PID
+#define R8_UH_EP_PID         (*((PUINT8V)(0x40023438)))  // host endpoint and PID
 #define MASK_UH_TOKEN        0xF0           // bit mask of token PID for USB host transfer
 #define MASK_UH_ENDP         0x0F           // bit mask of endpoint number for USB host transfer
 
@@ -316,7 +317,7 @@ typedef volatile unsigned long *PUINT32V;
 #define RB_UH_R_RES          0x04           // prepared handshake response type for host receiving (IN): 0=ACK (ready), 1=no response, time out to device, for isochronous transactions
 
 #define R32_USB_EP3_CTRL     (*((PUINT32V)(0x4002343c))) // endpoint 3 control & transmittal length
-#define R8_UEP3_T_LEN        (*((PUINT16V)(0x4002343c))) // endpoint 3 transmittal length
+#define R16_UEP3_T_LEN       (*((PUINT16V)(0x4002343c))) // endpoint 3 transmittal length(16-bits for ch32v10x)
 #define R8_UEP3_CTRL         (*((PUINT8V)(0x4002343e)))  // endpoint 3 control
 #define R8_UH_TX_LEN         (*((PUINT16V)(0x4002343c))) //R8_UEP3_T_LEN				// host transmittal endpoint transmittal length
 
@@ -326,19 +327,19 @@ typedef volatile unsigned long *PUINT32V;
 #define RB_UH_T_RES          0x01           // expected handshake response type for host transmittal (SETUP/OUT): 0=ACK (ready), 1=no response, time out from device, for isochronous transactions
 
 #define R32_USB_EP4_CTRL     (*((PUINT32V)(0x40023440))) // endpoint 4 control & transmittal length
-#define R8_UEP4_T_LEN        (*((PUINT8V)(0x40023440)))  // endpoint 4 transmittal length
+#define R16_UEP4_T_LEN       (*((PUINT16V)(0x40023440))) // endpoint 4 transmittal length(16-bits for ch32v10x)
 #define R8_UEP4_CTRL         (*((PUINT8V)(0x40023442)))  // endpoint 4 control
 
 #define R32_USB_EP5_CTRL     (*((PUINT32V)(0x40023444))) // endpoint 5 control & transmittal length
-#define R8_UEP5_T_LEN        (*((PUINT8V)(0x40023444)))  // endpoint 5 transmittal length
+#define R16_UEP5_T_LEN       (*((PUINT16V)(0x40023444))) // endpoint 5 transmittal length(16-bits for ch32v10x)
 #define R8_UEP5_CTRL         (*((PUINT8V)(0x40023446)))  // endpoint 5 control
 
 #define R32_USB_EP6_CTRL     (*((PUINT32V)(0x40023448))) // endpoint 6 control & transmittal length
-#define R8_UEP6_T_LEN        (*((PUINT8V)(0x40023448)))  // endpoint 6 transmittal length
+#define R16_UEP6_T_LEN       (*((PUINT16V)(0x40023448))) // endpoint 6 transmittal length(16-bits for ch32v10x)
 #define R8_UEP6_CTRL         (*((PUINT8V)(0x4002344a)))  // endpoint 6 control
 
 #define R32_USB_EP7_CTRL     (*((PUINT32V)(0x4002344c))) // endpoint 7 control & transmittal length
-#define R8_UEP7_T_LEN        (*((PUINT8V)(0x4002344c)))  // endpoint 7 transmittal length
+#define R16_UEP7_T_LEN       (*((PUINT16V)(0x4002344c))) // endpoint 7 transmittal length(16-bits for ch32v10x)
 #define R8_UEP7_CTRL         (*((PUINT8V)(0x4002344e)))  // endpoint 7 control
 
 #ifdef __cplusplus
@@ -406,6 +407,14 @@ extern "C" {
   #define HID_SET_PROTOCOL    0x0B
 #endif
 
+/* USB CDC Class request code */
+#ifndef CDC_GET_LINE_CODING
+#define CDC_GET_LINE_CODING   0X21      /* This request allows the host to find out the currently configured line coding */
+#define CDC_SET_LINE_CODING   0x20      /* Configures DTE rate, stop-bits, parity, and number-of-character */
+#define CDC_SET_LINE_CTLSTE   0X22      /* This request generates RS-232/V.24 style control signals */
+#define CDC_SEND_BREAK        0X23      /* Sends special carrier modulation used to specify RS-232 style break */
+#endif
+
 /* Bit define for USB request type */
 #ifndef USB_REQ_TYP_MASK
   #define USB_REQ_TYP_IN          0x80  /* control IN, device to host */
@@ -422,6 +431,8 @@ extern "C" {
   #define USB_REQ_RECIP_INTERF    0x01
   #define USB_REQ_RECIP_ENDP      0x02
   #define USB_REQ_RECIP_OTHER     0x03
+  #define USB_REQ_FEAT_REMOTE_WAKEUP  0x01
+  #define USB_REQ_FEAT_ENDP_HALT      0x00
 #endif
 
 /* USB request type for hub class request */
@@ -481,7 +492,7 @@ extern "C" {
   #define USB_DEV_CLASS_HID          0x03
   #define USB_DEV_CLASS_MONITOR      0x04
   #define USB_DEV_CLASS_PHYSIC_IF    0x05
-  #define USB_DEV_CLASS_POWER        0x06
+  #define USB_DEV_CLASS_IMAGE        0x06
   #define USB_DEV_CLASS_PRINTER      0x07
   #define USB_DEV_CLASS_STORAGE      0x08
   #define USB_DEV_CLASS_HUB          0x09
@@ -503,7 +514,7 @@ extern "C" {
   #define USB_DEVICE_ADDR    0x02
 #endif
 #ifndef DEFAULT_ENDP0_SIZE
-  #define DEFAULT_ENDP0_SIZE    8  /* default maximum packet size for endpoint 0 */
+  #define DEFAULT_ENDP0_SIZE 8  /* default maximum packet size for endpoint 0 */
 #endif
 #ifndef MAX_PACKET_SIZE
   #define MAX_PACKET_SIZE    64  /* maximum packet size */
@@ -522,6 +533,11 @@ extern "C" {
   #define USB_BO_CSW_SIG2    0x42
   #define USB_BO_CSW_SIG3    0x53
 #endif
+
+#define DEF_STRING_DESC_LANG 0x00
+#define DEF_STRING_DESC_MANU 0x01
+#define DEF_STRING_DESC_PROD 0x02
+#define DEF_STRING_DESC_SERN 0x03
 
 #ifndef __PACKED
   #define __PACKED    __attribute__((packed))
@@ -669,21 +685,21 @@ extern PUINT8 pEP7_RAM_Addr; //ep7_out(64)+ep7_in(64)
 void USB_DeviceInit(void);
 void USB_DevTransProcess(void);
 
-void DevEP1_OUT_Deal(UINT8 l);
-void DevEP2_OUT_Deal(UINT8 l);
-void DevEP3_OUT_Deal(UINT8 l);
-void DevEP4_OUT_Deal(UINT8 l);
-void DevEP5_OUT_Deal(UINT8 l);
-void DevEP6_OUT_Deal(UINT8 l);
-void DevEP7_OUT_Deal(UINT8 l);
+void DevEP1_OUT_Deal(UINT16 l);
+void DevEP2_OUT_Deal(UINT16 l);
+void DevEP3_OUT_Deal(UINT16 l);
+void DevEP4_OUT_Deal(UINT16 l);
+void DevEP5_OUT_Deal(UINT16 l);
+void DevEP6_OUT_Deal(UINT16 l);
+void DevEP7_OUT_Deal(UINT16 l);
 
-void DevEP1_IN_Deal(UINT8 l);
-void DevEP2_IN_Deal(UINT8 l);
-void DevEP3_IN_Deal(UINT8 l);
-void DevEP4_IN_Deal(UINT8 l);
-void DevEP5_IN_Deal(UINT8 l);
-void DevEP6_IN_Deal(UINT8 l);
-void DevEP7_IN_Deal(UINT8 l);
+void DevEP1_IN_Deal(UINT16 l);
+void DevEP2_IN_Deal(UINT16 l);
+void DevEP3_IN_Deal(UINT16 l);
+void DevEP4_IN_Deal(UINT16 l);
+void DevEP5_IN_Deal(UINT16 l);
+void DevEP6_IN_Deal(UINT16 l);
+void DevEP7_IN_Deal(UINT16 l);
 
 #define EP1_GetINSta()    (R8_UEP1_CTRL & UEP_T_RES_NAK)
 #define EP2_GetINSta()    (R8_UEP2_CTRL & UEP_T_RES_NAK)

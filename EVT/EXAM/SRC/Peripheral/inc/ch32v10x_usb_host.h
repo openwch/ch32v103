@@ -66,6 +66,7 @@ extern const UINT8 SetupSetUsbConfig[];
 extern const UINT8 SetupSetUsbInterface[];
 extern const UINT8 SetupClrEndpStall[];
 
+#if 0
 void  DisableRootHubPort(void);
 UINT8 AnalyzeRootHub(void);
 void  SetHostUsbAddr(UINT8 addr);
@@ -89,6 +90,8 @@ UINT8 InitRootDevice(PUINT8 DataBuf);
 UINT8 HubGetPortStatus(UINT8 HubPortIndex);                       // 查询HUB端口状态,返回在TxBuffer中
 UINT8 HubSetPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt);   // 设置HUB端口特性
 UINT8 HubClearPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt); // 清除HUB端口特性
+#endif
+
 #ifdef __cplusplus
 }
 #endif
