@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/08/20
  * Description        : IAP
- *  Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 #include "usb_host_iap.h"
 
@@ -80,7 +82,7 @@ void FLASH_ReadWordAdd(uint32_t address, u32* buff, uint16_t length)
 
     for(i = 0; i < length; i++)
     {
-        buff[i] = *(__IO uint32_t*)address;//¶ÁÖ¸¶¨µØÖ·µÄÒ»¸ö×ÖµÄÊý¾Ý
+        buff[i] = *(__IO uint32_t*)address;//è¯»æŒ‡å®šåœ°å€çš„ä¸€ä¸ªå­—çš„æ•°æ®
         address += 4;
     }
 }
@@ -150,7 +152,7 @@ uint8_t IAP_Flash_Read(uint32_t address, uint8_t* buff, uint32_t length)
  */
 uint8_t mFLASH_ProgramPage_Fast(uint32_t addr, uint32_t* buffer)
 {
-    /* ¸ù¾ÝÐ¾Æ¬µÄflash±à³ÌÁ÷³ÌÐÞ¸Ä´Ë´¦´úÂë */
+    /* æ ¹æ®èŠ¯ç‰‡çš„flashç¼–ç¨‹æµç¨‹ä¿®æ”¹æ­¤å¤„ä»£ç  */
     uint32_t adr = addr;
     uint32_t* buf = buffer;
 
@@ -522,9 +524,9 @@ void IAP_Jump_APP(void)
     /* .... */
     /* Jump Code */
 #if DEF_CORE_TYPE == DEF_CORE_CM3
-    jump2app = (iapfun) * (vu32*)(DEF_APP_CODE_START_ADDR + 4);		//ÓÃ»§´úÂëÇøµÚ¶þ¸ö×ÖÎª³ÌÐò¿ªÊ¼µØÖ·(¸´Î»µØÖ·)
-    MSR_MSP(*(vu32*)DEF_APP_CODE_START_ADDR);					//³õÊ¼»¯ÓÃ»§´úÂëÇø¶ÑÕ»Ö¸Õë(ÓÃ»§´úÂëÇøµÄµÚÒ»¸ö×ÖÓÃÓÚ´æ·ÅÕ»¶¥µØÖ·)
-    jump2app();									             //Ìø×ªµ½APP.
+    jump2app = (iapfun) * (vu32*)(DEF_APP_CODE_START_ADDR + 4);		//ç”¨æˆ·ä»£ç åŒºç¬¬äºŒä¸ªå­—ä¸ºç¨‹åºå¼€å§‹åœ°å€(å¤ä½åœ°å€)
+    MSR_MSP(*(vu32*)DEF_APP_CODE_START_ADDR);					//åˆå§‹åŒ–ç”¨æˆ·ä»£ç åŒºå †æ ˆæŒ‡é’ˆ(ç”¨æˆ·ä»£ç åŒºçš„ç¬¬ä¸€ä¸ªå­—ç”¨äºŽå­˜æ”¾æ ˆé¡¶åœ°å€)
+    jump2app();									             //è·³è½¬åˆ°APP.
 #elif DEF_CORE_TYPE == DEF_CORE_RV
     /* Code for Jump, Enable Chip soft reset interrupt, jump to application code in soft reset interrupt */
     Delay_Ms(500);
@@ -585,21 +587,6 @@ void IAP_Check_Verify_Code(void)
 }
 
 /*********************************************************************
- * @fn      USBHD_ClockCmd
- *
- * @brief   Set USB clock.
- *
- * @return  none
- */
-void USBHD_ClockCmd(UINT32 RCC_USBCLKSource, FunctionalState NewState)
-{
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, NewState);
-    EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
-    RCC_USBCLKConfig(RCC_USBCLKSource);             //USBclk=PLLclk/1.5=48Mhz
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBHD, NewState);
-}
-
-/*********************************************************************
  * @fn      IAP_Initialization
  *
  * @brief   IAP process Initialization, include usb-host initialization
@@ -616,7 +603,7 @@ void IAP_Initialization( void )
 
     /* USB Host Initialization */
     DUG_PRINTF( "USB Host Initialization. \r\n" );
-    USBHD_ClockCmd(RCC_USBCLKSource_PLLCLK_1Div5, ENABLE);
+    USBHD_RCC_Init( );
 //    pHOST_RX_RAM_Addr = USBHD_RX_Buf;
 //    pHOST_TX_RAM_Addr = USBHD_TX_Buf;
     USBHD_Host_Init( ENABLE );

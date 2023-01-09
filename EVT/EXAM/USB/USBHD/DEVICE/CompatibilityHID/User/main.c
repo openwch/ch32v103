@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /* @Note
  * Compatibility HID Example:
@@ -15,8 +17,8 @@
  *  the data sent by the last Set_Report request.Speed of UART1/2 is 115200bps.
  *
  * Interrupt Transfers:
- *   UART2_RX   ---> Endpoint1
- *   Endpoint2  ---> UART2_TX
+ *   UART2_RX   ---> Endpoint2
+ *   Endpoint1  ---> UART2_TX
  *
  *   Note that the first byte is the valid data length and the remaining bytes are
  *   the transmission data for interrupt Transfers.

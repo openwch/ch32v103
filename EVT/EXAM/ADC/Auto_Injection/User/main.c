@@ -4,15 +4,17 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 自动注入模式例程：
- ADC通道2(PA2)-规则组通道，通道3(PA3)-注入组通道
-  注：以3.3V为例。
+Automatic injection mode routine:
+ ADC channel 2 (PA2) - regular group channel, channel 3 (PA3) - injection group channel
+  Note: Take 3.3V as an example.
 */
 
 #include "debug.h"
@@ -178,6 +180,7 @@ int main(void)
     {
         ADC_SoftwareStartConvCmd(ADC1, ENABLE);
         while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
+        while( !ADC_GetFlagStatus( ADC1, ADC_FLAG_JEOC ) );
         adc_val = ADC_GetConversionValue(ADC1);
         adc_jval = ADC_GetInjectedConversionValue(ADC1, ADC_InjectedChannel_1);
         Delay_Ms(500);

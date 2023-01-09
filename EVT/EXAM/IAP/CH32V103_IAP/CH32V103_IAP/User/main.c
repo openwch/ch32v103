@@ -4,18 +4,21 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- /*******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
-用于IAP实验例程：
-可支持串口与USB进行FLASH烧录
-注：
-1. 用IAP下载工具，实现下载 PA0悬空(默认上拉输入)
-2. 在下载完APP后，PA0接地（低电平输入），按复位键即可运行APP程序。
-3. 例程需安装CH372驱动。
+IAP upgrade routine：
+Support serial port and USB for FLASH burning
+
+1. Use the IAP download tool to realize the download PA0 floating (default pull-up input)
+2. After downloading the APP, connect PA0 to ground (low level input), and press the
+reset button to run the APP program.
+3. The routine needs to install the CH372 driver.
 
 */
 

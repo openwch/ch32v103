@@ -4,14 +4,16 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- TouchKey检测例程：
- 本例程演示 通道2(PA2)，做 Touchkey 应用。
+ TouchKey detection routine:
+ This example demonstrates channel 2 (PA2), which is a Touchkey application.
 
 */
 

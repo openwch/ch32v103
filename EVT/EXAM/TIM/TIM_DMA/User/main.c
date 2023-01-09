@@ -4,15 +4,17 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 定时器使用DMA例程：
+ the timer uses DMA routines:
  TIM1_CH1(PA8)
- 本例程演示 使用 DMA 通过 TIM1_CH1(PA8) 引脚输出 PWM。
+ This example demonstrates using DMA to output PWM through TIM1_CH1(PA8) pin.
 
 */
 

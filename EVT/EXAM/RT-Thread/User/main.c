@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 #include "ch32v10x.h"
 #include <rtthread.h>
 #include <rthw.h>
@@ -16,12 +18,12 @@
 
 /* Global define */
 
-/* LED0通过rt的pin驱动接口驱动  */
+/* LED0 is driven by the pin driver interface of rt  */
 #define LED0_PIN    15  //PA1
 
 /* Global Variable */
 
-/* LED1通过直接调用底层驱动 */
+/* LED1 directly calls the underlying driver */
 void LED1_BLINK_INIT(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
@@ -32,9 +34,10 @@ void LED1_BLINK_INIT(void)
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
-/* main只是一个线程之一，除此之外还有tshell,idle
- *    本main只是一个LED闪烁，main线程的注册在rtthread_startup
- *   中
+/* main is just one of the threads, in addition to tshell,idle
+ * This main is just an LED flashing, the main thread is registered
+ * in rtthread_startup middle
+ *   
  * */
 int main(void)
 {
@@ -54,7 +57,7 @@ int main(void)
     }
 }
 
-/* 使用驱动接口操作I/O口 */
+/* Use the driver interface to operate the I/O port */
 int led(void)
 {
     rt_uint8_t count;

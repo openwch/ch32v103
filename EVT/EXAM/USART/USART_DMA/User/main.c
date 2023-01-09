@@ -4,20 +4,21 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- USART使用DMA，Master/Slave 模式收发例程：
- Master：USART2_Tx(PA2)、USART2_Rx(PA3)。
- Slave：USART3_Tx(PB10)、USART3_Rx(PB11)。
-
- 本例程演示 UART2 和 USART3 使用 DAM 数据收发。
- 注：
-     硬件连线：PA2 —— PB11
-               PA3 —— PB10
+ USART uses DMA, master / slave mode transceiver routine:
+ Master:USART2_Tx(PA2)\USART2_Rx(PA3).
+ Slave:USART3_Tx(PB10)\USART3_Rx(PB11).
+ This example demonstrates UART2 and USART3 use DAM data to send and receive.
+     Hardware connection:
+               PA2 -- PB11
+               PA3 -- PB10
 
 */
 

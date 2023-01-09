@@ -4,15 +4,17 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- MCO引脚时钟输出例程：
+ MCO pin clock output routine:
  MCO(PA8)
- 本例程演示 MCO(PA8) 引脚输出系统时钟。
+ This example demonstrates that the MCO(PA8) pin outputs the system clock.
 
 */
 

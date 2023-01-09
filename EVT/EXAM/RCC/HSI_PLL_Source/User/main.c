@@ -4,17 +4,20 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- HSI或HSI/2作为PLL输入时钟例程：
- 本例程演示，HSI或HSI/2作为PLL输入时钟，系统时钟以PLL作为时钟源。
- 参考system_ch32v10x.c、system_ch32v10x.h。
- HSI作为PLL输入时钟，演示系统时钟为 24MHz、48MHz、72MHz。
- HSI/2作为PLL输入时钟，演示系统时钟为 24MHz、48MHz
+ HSI or HSI/2 as PLL input clock routine:
+ This example demonstrates that HSI or HSI/2 is used as the PLL input clock,
+ and the system clock uses the PLL as the clock source.
+ Refer to system_ch32v10x.c, system_ch32v10x.h.
+ HSI is used as the PLL input clock, and the demonstration system clocks are 24MHz, 48MHz, and 72MHz.
+ HSI/2 is used as the PLL input clock, and the demonstration system clock is 24MHz, 48MHz
 
 */
 #include "debug.h"

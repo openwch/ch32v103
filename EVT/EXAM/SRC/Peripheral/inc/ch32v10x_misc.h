@@ -5,9 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for the 
  *                      miscellaneous firmware library functions.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/   
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/   
 #ifndef __CH32V10X_MISC_H
 #define __CH32V10X_MISC_H
 

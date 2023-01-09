@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/09/01
  * Description        :
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 
 /*******************************************************************************/
@@ -34,7 +36,6 @@ void USBHD_RCC_Init( void )
 {
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE );
     EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
-    
     if( SystemCoreClock == 72000000 )
     {
         RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_1Div5 );

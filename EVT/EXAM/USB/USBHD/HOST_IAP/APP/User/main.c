@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/08/20
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
@@ -78,7 +80,7 @@ int main( )
         ret = PA0_Check( );
         if( ret )
         {
-            //»Áπ˚–Ë“™
+            //Â¶ÇÊûúÈúÄË¶Å
             printf( "Reset Chip, prepare to Jump To IAP\r\n" );
             printf( "Erase Verify-Code\r\n" );
             IAP_VerifyCode_Erase( );

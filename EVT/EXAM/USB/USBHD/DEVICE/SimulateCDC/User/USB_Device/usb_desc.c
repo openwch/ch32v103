@@ -5,9 +5,11 @@
  * Date               : 2022/08/20
  * Description        : usb device descriptor,configuration descriptor,
  *                      string descriptors and other descriptors.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 #include "usb_desc.h"
 
@@ -17,9 +19,9 @@ const uint8_t  MyDevDescr[] =
     0x12,       // bLength
     0x01,       // bDescriptorType (Device)
     0x10, 0x01, // bcdUSB 1.10
-    0xFF,       // bDeviceClass
-    0xFF,       // bDeviceSubClass
-    0xFF,       // bDeviceProtocol
+    0x02,       // bDeviceClass
+    0x00,       // bDeviceSubClass
+    0x00,       // bDeviceProtocol
     DEF_USBD_UEP0_SIZE,   // bMaxPacketSize0 64
     (uint8_t)DEF_USB_VID, (uint8_t)(DEF_USB_VID >> 8),  // idVendor 0x1A86
     (uint8_t)DEF_USB_PID, (uint8_t)(DEF_USB_PID >> 8),  // idProduct 0x5537
@@ -57,7 +59,7 @@ const uint8_t  MyCfgDescr[] =
     0x07, 0x05, 0x02, 0x02, (uint8_t)DEF_USBD_ENDP2_SIZE, (uint8_t)( DEF_USBD_ENDP2_SIZE >> 8 ), 0x00,
 
     /* Endpoint descriptor */
-    0x07, 0x05, 0x82, 0x02, (uint8_t)DEF_USBD_ENDP2_SIZE, (uint8_t)( DEF_USBD_ENDP2_SIZE >> 8 ), 0x00,
+    0x07, 0x05, 0x83, 0x02, (uint8_t)DEF_USBD_ENDP3_SIZE, (uint8_t)( DEF_USBD_ENDP3_SIZE >> 8 ), 0x00,
 };
 
 /* Language Descriptor */

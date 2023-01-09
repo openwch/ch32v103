@@ -4,17 +4,20 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 低功耗，待机模式例程：
+ low power consumption, standby mode routine:
  WKUP(PA0)
- 本例程演示 WFI 进入待机模式，WKUP(PA0)引脚上升沿，退出待机模式，
- 唤醒后程序复位。
- 注：为尽可能的降低功耗，建议将不用的GPIO设置成下拉模式。
+ This routine demonstrates that WFI enters the standby mode, the rising edge of the
+ WKUP (PA0) pin exits the standby mode,Program reset after wake-up.
+ Note: In order to reduce power consumption as much as possible, it is recommended
+ to set the unused GPIO to pull-down mode.
 
 */
 
@@ -35,7 +38,9 @@ int main(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
-    /* 为降低功耗，需将不用的GPIO设置成上拉或下拉输入 */
+    /* To reduce power consumption, unused GPIO should be set as 
+	 * pull-up or pull-down input. 
+	 */
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB |
                                RCC_APB2Periph_GPIOC,
                            ENABLE);
