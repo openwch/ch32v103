@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/08/20
  * Description        : ch32v10x series usb interrupt Processing.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 #include "ch32v10x_usbfs_device.h"
 #include "SW_UDISK.h"
@@ -53,7 +55,14 @@ void USBHD_RCC_Init( void )
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
-    RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
+    if( SystemCoreClock == 72000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_1Div5 );
+    }
+    else if( SystemCoreClock == 48000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_Div1 );
+    }
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBHD,ENABLE);
 }
 
@@ -230,7 +239,7 @@ uint8_t USBHD_Endp_DataUp(uint8_t endp, uint8_t *pbuf, uint16_t len, uint8_t mod
 void USBHD_IRQHandler( void )
 {
     uint8_t  intflag, intst, errflag;
-    uint16_t len, i;
+    uint16_t len;
 
     intflag = R8_USB_INT_FG;
     intst = R8_USB_INT_ST;
@@ -485,11 +494,21 @@ void USBHD_IRQHandler( void )
                                         case ( DEF_UEP_IN | DEF_UEP2 ):
                                             /* Set End-point 2 IN NAK */
                                             R8_UEP2_CTRL = ( R8_UEP2_CTRL & ~( RB_UEP_T_TOG | MASK_UEP_T_RES ) ) | UEP_T_RES_NAK;
+                                            /* upload CSW */
+                                            if( Udisk_Transfer_Status & DEF_UDISK_CSW_UP_FLAG )
+                                            {
+                                                UDISK_Up_CSW( );
+                                            }
                                             break;
 
                                         case ( DEF_UEP_OUT | DEF_UEP3 ):
                                             /* Set End-point 3 OUT ACK */
                                             R8_UEP3_CTRL = ( R8_UEP3_CTRL & ~( RB_UEP_R_TOG | MASK_UEP_R_RES ) ) | UEP_R_RES_ACK;
+                                            /* upload CSW */
+                                            if( Udisk_Transfer_Status & DEF_UDISK_CSW_UP_FLAG )
+                                            {
+                                                UDISK_Up_CSW( );
+                                            }
                                             break;
 
                                         default:

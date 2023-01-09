@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/08/20
  * Description        : ch32v10x series usb interrupt Processing.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 #include "ch32v10x_usbfs_device.h"
 
@@ -31,7 +33,7 @@ volatile uint8_t  USBHD_DevEnumStatus;
 /* Endpoint Buffer */
 __attribute__ ((aligned(4))) uint8_t USBHD_EP0_Buf[ DEF_USBD_UEP0_SIZE ];
 __attribute__ ((aligned(4))) uint8_t USBHD_EP1_Buf[ DEF_USBD_ENDP1_SIZE ];
-__attribute__ ((aligned(4))) uint8_t USBHD_EP2_Buf[ DEF_USBD_ENDP2_SIZE*2 ];
+//__attribute__ ((aligned(4))) uint8_t USBHD_EP2_Buf[ DEF_USBD_ENDP2_SIZE*2 ];
 
 /* USB IN Endpoint Busy Flag */
 volatile uint8_t  USBHD_Endp_Busy[ DEF_UEP_NUM ];
@@ -51,7 +53,14 @@ void USBHD_RCC_Init( void )
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
-    RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
+    if( SystemCoreClock == 72000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_1Div5 );
+    }
+    else if( SystemCoreClock == 48000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_Div1 );
+    }
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBHD,ENABLE);
 }
 
@@ -67,17 +76,19 @@ void USBHD_Device_Endp_Init(void)
     uint8_t i;
 
     R8_UEP4_1_MOD = RB_UEP1_TX_EN;
-    R8_UEP2_3_MOD = RB_UEP2_TX_EN | RB_UEP2_RX_EN;
+    R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP3_TX_EN;
 
     pEP0_RAM_Addr = USBHD_EP0_Buf;
     R16_UEP0_DMA = (uint16_t)(uint32_t)USBHD_EP0_Buf;
     R16_UEP1_DMA = (uint16_t)(uint32_t)USBHD_EP1_Buf;
-    R16_UEP2_DMA = (uint16_t)(uint32_t)USBHD_EP2_Buf;
+    R16_UEP2_DMA = (uint16_t)(uint32_t)UART2_Tx_Buf;
+    R16_UEP3_DMA = (uint16_t)(uint32_t)UART2_Rx_Buf;
 
     R8_UEP0_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
 
     R8_UEP1_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
     R8_UEP2_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
+    R8_UEP3_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
 
     /* Clear End-points Busy Status */
     for( i=0; i<DEF_UEP_NUM; i++ )
@@ -281,10 +292,10 @@ void USBHD_IRQHandler( void )
                             break;
 
                         /* end-point 2 data in interrupt */
-                        case UIS_TOKEN_IN | DEF_UEP2:
-                            R8_UEP2_CTRL = (R8_UEP2_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
-                            R8_UEP2_CTRL ^= RB_UEP_T_TOG;
-                            USBHD_Endp_Busy[ DEF_UEP2 ] = 0;
+                        case UIS_TOKEN_IN | DEF_UEP3:
+                            R8_UEP3_CTRL = (R8_UEP3_CTRL & ~MASK_UEP_T_RES) | UEP_T_RES_NAK;
+                            R8_UEP3_CTRL ^= RB_UEP_T_TOG;
+                            USBHD_Endp_Busy[ DEF_UEP3 ] = 0;
                             Uart.USB_Up_IngFlag = 0x00;
                             break;
 
@@ -323,7 +334,7 @@ void USBHD_IRQHandler( void )
                                       Uart.Com_Cfg[ 5 ] = USBHD_EP0_Buf[ 5 ];
                                       Uart.Com_Cfg[ 6 ] = USBHD_EP0_Buf[ 6 ];
                                       Uart.Com_Cfg[ 7 ] = DEF_UARTx_RX_TIMEOUT;
-                                      UART1_USB_Init( );
+                                      UART2_USB_Init( );
                                  }
                             }
                             else
@@ -342,13 +353,14 @@ void USBHD_IRQHandler( void )
                     /* end-point 1 data out interrupt */
                     case UIS_TOKEN_OUT | DEF_UEP2:
                         R8_UEP2_CTRL ^= RB_UEP_R_TOG;
-                        Uart.Tx_PackLen[ Uart.Tx_LoadNum ] = (uint16_t)(R16_USB_RX_LEN&MASK_UIS_RX_LEN);
+                        Uart.Tx_PackLen[ Uart.Tx_LoadNum ] = (uint16_t)( R16_USB_RX_LEN&MASK_UIS_RX_LEN );
                         Uart.Tx_LoadNum++;
-                        R16_UEP2_DMA = (uint16_t)(uint32_t)(uint8_t *)&UART1_Tx_Buf[ ( Uart.Tx_LoadNum * DEF_USB_FS_PACK_LEN ) ];
+                        R16_UEP2_DMA = (uint16_t)(uint32_t)(uint8_t *)&UART2_Tx_Buf[ ( Uart.Tx_LoadNum * DEF_USB_FS_PACK_LEN ) ];
+
                         if( Uart.Tx_LoadNum >= DEF_UARTx_TX_BUF_NUM_MAX )
                         {
                             Uart.Tx_LoadNum = 0x00;
-                            R16_UEP2_DMA = (uint16_t)(uint32_t)(uint8_t *)&UART1_Tx_Buf[ 0 ];
+                            R16_UEP2_DMA = (uint16_t)(uint32_t)(uint8_t *)&UART2_Tx_Buf[ 0 ];
                         }
                         Uart.Tx_RemainNum++;
                         if( Uart.Tx_RemainNum >= ( DEF_UARTx_TX_BUF_NUM_MAX - 2 ) )
@@ -740,6 +752,7 @@ void USBHD_IRQHandler( void )
 
         R8_USB_DEV_AD = 0;
         USBHD_Device_Endp_Init( );
+        UART2_ParaInit( 1 );
         R8_USB_INT_FG |= RB_UIF_BUS_RST;
     }
     else if( intflag & RB_UIF_SUSPEND )

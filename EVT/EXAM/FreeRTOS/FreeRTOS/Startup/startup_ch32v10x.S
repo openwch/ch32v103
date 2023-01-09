@@ -4,9 +4,11 @@
 ;* Version            : V1.0.0
 ;* Date               : 2020/04/30
 ;* Description        : CH32V10x vector table for eclipse toolchain.
-;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-;* SPDX-License-Identifier: Apache-2.0
-;*******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 	.section	.init,"ax",@progbits
 	.global	_start
@@ -44,7 +46,7 @@ _vector_base:
     .word   0
         j   SysTick_Handler            /* SysTick Handler */
     .word   0
-        j   SW_handler                 /* SW Handler */
+        j   SW_Handler                 /* SW Handler */
     .word   0
     /* External Interrupts */
         j   WWDG_IRQHandler            /* Window Watchdog */
@@ -98,7 +100,7 @@ _vector_base:
     .weak   NMI_Handler
     .weak   HardFault_Handler
     .weak   SysTick_Handler
-    .weak   SW_handler
+    .weak   SW_Handler
     .weak   WWDG_IRQHandler
     .weak   PVD_IRQHandler
     .weak   TAMPER_IRQHandler
@@ -143,7 +145,7 @@ _vector_base:
 NMI_Handler:  1:  j 1b
 HardFault_Handler:  1:  j 1b
 SysTick_Handler:  1:  j 1b
-SW_handler:  1:  j 1b
+SW_Handler:  1:  j 1b
 WWDG_IRQHandler:  1:  j 1b
 PVD_IRQHandler:  1:  j 1b
 TAMPER_IRQHandler:  1:  j 1b

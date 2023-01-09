@@ -4,19 +4,21 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 单线半双工模式，Master/Slave 模式收发例程：
- Master：USART2_Tx(PA2)
- Slave：USART3_Tx(PB10)
+ Single wire half duplex mode, master / slave mode transceiver routine:
+ Master:USART2_Tx(PA2)
+ Slave:USART3_Tx(PB10)
 
- 本例程演示 UART2 和 USART3 单线半双工模式数据收发。
- 注：
-     硬件连线：PA2 —— PB10
+This example demonstrates UART2 and USART3 single-wire half-duplex mode data
+transmission and reception.
+     Hardware connection:PA2 -- PB10
 
 */
 

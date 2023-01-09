@@ -4,16 +4,20 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 硬件流控制模式例程：
- USART1_Tx(PA9)、USART1_Rx(PA10)、USART1_CTS(PA11)、USART1_RTS(PA12)
- 本例程演示 UART1 硬件流控制数据收发，将UART1 Tx和Rx引脚分别连接串口工具，
- 通过上位机工具查看，CTS连接VCC，无法发送数据，接GND，可正常发送数据
+ hardware flow control mode, master / slave mode, transceiver routine:
+ USART1_Tx(PA9)\USART1_Rx(PA10)\USART1_CTS(PA11)\USART1_RTS(PA12)
+ This example demonstrates UART1 hardware flow control data sending and receiving,
+ connect the UART1 Tx and Rx pins to the serial port tool respectively,
+ View through the host computer tool, CTS is connected to VCC, and data cannot be sent,
+ but connected to GND, data can be sent normally
 
 */
 

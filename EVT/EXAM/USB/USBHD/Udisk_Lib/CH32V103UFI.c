@@ -223,7 +223,7 @@ UINT8 CHRV3DiskConnect( void )
 			}
 			else
 			{  /* 内置Root-HUB下的USB设备存在 */
-mDiskConnect:
+//mDiskConnect:
 				CHRV3DiskStatus = DISK_CONNECT;  /* 曾经断开过 */
 				return( ERR_SUCCESS );  /* 外部HUB或USB设备已经连接或者断开后重新连接 */
 			}

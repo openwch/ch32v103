@@ -5,9 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for UART
  *                      Printf , Delay functions.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
@@ -18,7 +20,7 @@ extern "C" {
 #include "stdio.h"
 #include "ch32v10x.h"
 
-/* HID功能开关，1为关闭HID功能，0为打开HID功能 */
+/*  HID function switch, 1 is to turn off HID function, 0 is to turn on HID function */
 #define ch32v10x_usb_hid       0
 
 /* UART Printf Definition */
@@ -27,9 +29,9 @@ extern "C" {
 #define DEBUG_UART3    3
 
 /* DEBUG UATR Definition */
-#define DEBUG          DEBUG_UART1
-//#define DEBUG   DEBUG_UART2
-//#define DEBUG   DEBUG_UART3
+#ifndef DEBUG
+#define DEBUG   DEBUG_UART1
+#endif
 
 void Delay_Init(void);
 void Delay_Us(uint32_t n);

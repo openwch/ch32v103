@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : RISC-V Core Peripheral Access Layer Header File
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 #ifndef __CORE_RISCV_H__
 #define __CORE_RISCV_H__
 
@@ -359,8 +361,6 @@ extern uint32_t __get_MSTATUS(void);
 extern void __set_MSTATUS(uint32_t value);
 extern uint32_t __get_MISA(void);
 extern void __set_MISA(uint32_t value);
-extern uint32_t __get_MIE(void);
-extern void __set_MIE(uint32_t value);
 extern uint32_t __get_MTVEC(void);
 extern void __set_MTVEC(uint32_t value);
 extern uint32_t __get_MSCRATCH(void);

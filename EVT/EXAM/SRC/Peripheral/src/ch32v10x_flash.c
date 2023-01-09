@@ -30,6 +30,7 @@
 #define CR_OPTER_Reset             ((uint32_t)0xFFFFFFDF)
 #define CR_STRT_Set                ((uint32_t)0x00000040)
 #define CR_LOCK_Set                ((uint32_t)0x00000080)
+#define CR_FAST_LOCK_Set           ((uint32_t)0x00008000)
 #define CR_PAGE_PG                 ((uint32_t)0x00010000)
 #define CR_PAGE_ER                 ((uint32_t)0x00020000)
 #define CR_BUF_LOAD                ((uint32_t)0x00040000)
@@ -861,7 +862,7 @@ void FLASH_Unlock_Fast(void)
  */
 void FLASH_Lock_Fast(void)
 {
-    FLASH->CTLR |= CR_LOCK_Set;
+    FLASH->CTLR |= CR_FAST_LOCK_Set;
 }
 
 /*********************************************************************

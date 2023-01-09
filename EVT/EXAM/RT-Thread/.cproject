@@ -213,9 +213,4 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="obj">
-			<resource resourceType="PROJECT" workspacePath="/CH32V10x_rtt"/>
-		</configuration>
-	</storageModule>
 </cproject>

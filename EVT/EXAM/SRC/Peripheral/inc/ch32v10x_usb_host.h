@@ -5,9 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for the USB
  *                      Host firmware library.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 #ifndef __CH32V10x_USBHOST_H
 #define __CH32V10x_USBHOST_H
 
@@ -87,9 +89,9 @@ UINT8 CtrlSetUsbIntercace(UINT8 cfg);
 
 void  USB_HostInit(void);
 UINT8 InitRootDevice(PUINT8 DataBuf);
-UINT8 HubGetPortStatus(UINT8 HubPortIndex);                       // 查询HUB端口状态,返回在TxBuffer中
-UINT8 HubSetPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt);   // 设置HUB端口特性
-UINT8 HubClearPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt); // 清除HUB端口特性
+UINT8 HubGetPortStatus(UINT8 HubPortIndex);                       
+UINT8 HubSetPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt);   
+UINT8 HubClearPortFeature(UINT8 HubPortIndex, UINT8 FeatureSelt); 
 #endif
 
 #ifdef __cplusplus

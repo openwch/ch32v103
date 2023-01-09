@@ -4,9 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2022/08/20
  * Description        : ch32v10x series usb interrupt Processing.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 #include "ch32v10x_usbfs_device.h"
 #include "usbd_compatibility_hid.h"
@@ -60,7 +62,14 @@ void USBHD_RCC_Init(void)
 {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
-    RCC_USBCLKConfig(RCC_USBCLKSource_PLLCLK_1Div5);
+    if( SystemCoreClock == 72000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_1Div5 );
+    }
+    else if( SystemCoreClock == 48000000 ) 
+    {
+        RCC_USBCLKConfig( RCC_USBCLKSource_PLLCLK_Div1 );
+    }
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBHD,ENABLE);
 }
 

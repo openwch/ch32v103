@@ -4,16 +4,18 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- 低功耗，睡眠模式例程：
+ low power consumption, sleep mode routine:
  EXTI_Line0(PA0)
- 本例程演示 WFI 进入睡眠模式，PA0引脚输入低电平触发外部中断 EXTI_Line0 退出睡眠模式，
- 唤醒后程序继续执行。
+ This routine demonstrates WFI enters sleep mode, PA0 pin input low level triggers
+ external interrupt EXTI_Line0 to exit sleep mode,Program execution continues after wake-up.
 
 */
 

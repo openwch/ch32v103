@@ -89,11 +89,13 @@ http://wch.cn
   |      |      |      |      |      |      |-- Compatibility_HID：模拟HID设备，数据通过串口上下传。
   |      |      |      |      |      |      |-- CompositeKM：模拟键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
   |      |      |      |      |      |      |-- MSC_U-Disk: 模拟简单U盘，可选使用片内Flash或外部SPI-Flash
-  |      |      |      |      |      |      |-- SimulateCDC：模拟一个CDC串口，使用串口1收发。
+  |      |      |      |      |      |      |-- SimulateCDC：模拟一个CDC串口，使用串口2收发。
+  |      |      |      |      |      |      |-- MSC_CD-ROM: 模拟CDROM例程，需要外挂SPI-Flash
   |      |      |      |      |      |-- HOST_IAP
   |      |      |      |      |      |      |-- APP: 与HOST_IAP配套使用的APP，工程修改了程序起始位置，编译后需自行将文件转化为bin文件并重命名为APP.bin
   |      |      |      |      |      |      |-- HOST_IAP:  基于U盘读取文件例程整理的主机U盘IAP例程，从U盘内读取名称位APP.bin的文件，写入内部flash，校验后自动跳转。
   |      |      |      |      |      |-- HOST_KM: 主机操作键鼠，获取键鼠上传的端点的数据并打印，支持U口下1级hub
+  |      |      |      |      |      |-- Host_Udisk：USB主机操作U盘例程
   |      |      |      |      |      |-- HOST_MTP_FileSystem：枚举过程的USB主机到一个支持MTP和PTP协议的设备，支持MTP和PTP协议，并读取其文件
   |      |      |      |      |      |-- Udisk_Lib：U盘文件系统库文件
   |      |      |      |-- WWDG：窗口看门狗例程

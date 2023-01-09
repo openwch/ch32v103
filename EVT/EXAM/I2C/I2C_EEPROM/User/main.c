@@ -4,18 +4,20 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 
 /*
  *@Note
- I2C接口操作EEPROM外设例程：
- I2C1_SCL(PB10)、I2C1_SDA(PB11)。
- 本例程使用 EEPROM 为 AT24Cxx系列。
- 操作步骤：
- READ EEPROM：Start + 0xA0 + 8bit Data Address + Start + 0xA1 + Read Data + Stop.
- WRITE EERPOM：Start + 0xA0 + 8bit Data Address + Write Data + Stop.
+ I2C interface operation EEPROM peripheral routine:
+ I2C1_SCL(PB10)\I2C1_SDA(PB11).
+ This example uses EEPROM for AT24Cxx series.
+ Steps:
+ READ EEPROM:Start + 0xA0 + 8bit Data Address + Start + 0xA1 + Read Data + Stop.
+ WRITE EERPOM:Start + 0xA0 + 8bit Data Address + Write Data + Stop.
 
 */
 
@@ -23,10 +25,10 @@
 
 /**********************************************************************
 *@Note:
-AT24Cxx：
+AT24Cxx:
 
-READ EEPROM：Start + 0xA0 + 8bit Data Address + Start + 0xA1 + Read Data + Stop.
-WRITE EERPOM：Start + 0xA0 + 8bit Data Address + Write Data + Stop.
+READ EEPROM:Start + 0xA0 + 8bit Data Address + Start + 0xA1 + Read Data + Stop.
+WRITE EERPOM:Start + 0xA0 + 8bit Data Address + Write Data + Stop.
 *******************************************************************************/
 /* EERPOM DATA ADDRESS Length Definition */
 #define Address_8bit     0

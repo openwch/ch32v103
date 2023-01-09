@@ -5,9 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for the
  *                      GPIO firmware library.
- * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
- * SPDX-License-Identifier: Apache-2.0
- *******************************************************************************/
+*********************************************************************************
+* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+* Attention: This software (modified or not) and binary are used for 
+* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+*******************************************************************************/
 #ifndef __CH32V10x_GPIO_H
 #define __CH32V10x_GPIO_H
 
@@ -97,8 +99,6 @@ typedef enum
 #define GPIO_Remap_PD01                ((uint32_t)0x00008000) /* PD01 Alternate Function mapping */
 #define GPIO_Remap_ADC1_ETRGINJ        ((uint32_t)0x00200002) /* ADC1 External Trigger Injected Conversion remapping */
 #define GPIO_Remap_ADC1_ETRGREG        ((uint32_t)0x00200004) /* ADC1 External Trigger Regular Conversion remapping */
-#define GPIO_Remap_SWJ_NoJTRST         ((uint32_t)0x00300100) /* Full SWJ Enabled (JTAG-DP + SW-DP) but without JTRST */
-#define GPIO_Remap_SWJ_JTAGDisable     ((uint32_t)0x00300200) /* JTAG-DP Disabled and SW-DP Enabled */
 #define GPIO_Remap_SWJ_Disable         ((uint32_t)0x00300400) /* Full SWJ Disabled (JTAG-DP + SW-DP) */
 #define GPIO_Remap_TIM2ITR1_PTP_SOF    ((uint32_t)0x00202000) /* Ethernet PTP output or USB OTG SOF (Start of Frame) connected \
                                                                  to TIM2 Internal Trigger 1 for calibration                    \
