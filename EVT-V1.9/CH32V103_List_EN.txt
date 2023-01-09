@@ -1,0 +1,102 @@
+
+Nanjing Qinheng Microelectronics Co., Ltd. 2020.07
+
+http://wch-ic.com
+
+
+Directory
+  |
+  |-- CH32V103£ºRISC-V MCU
+  |      |-- DS
+  |      |      |--CH32V103DS0.PDF£ºCH32V103 datasheet
+  |      |-- EVT: CH32V103EVT evaluation board and CH32V103 related software routines
+  |      |      |-- PUB: 
+  |      |      |      |-- CH32V103EVT Evaluation Board Manual.pdf£ºCH32V103EVT evaluation board instruction and project creation description
+  |      |      |      |-- CH32V103SCH.pdf£ºSchematic of CH32V103EVT evaluation board
+  |      |      |-- EXAM: 
+  |      |      |      |-- SRC  
+  |      |      |      |      |-- Core£ºkernal system header file
+  |      |      |      |      |-- Startup£ºCH32V103 startup file
+  |      |      |      |      |-- Peripheral£ºbasic peripheral driver source file and header file
+  |      |      |      |      |-- Debug£ºdelay fuction¡¢UART debugging source file and header file
+  |      |      |      |-- ADC
+  |      |      |      |      |-- ADC_DMA£ºADC uses DMA sampling routines
+  |      |      |      |      |-- AnalogWatchdog£ºanalog watchdog routine
+  |      |      |      |      |-- Auto_Injection£ºautomatic injection mode routine
+  |      |      |      |      |-- Discontinuous_mode£ºdiscontinuous mode routine
+  |      |      |      |      |-- ExtLines_Trigger£ºexternal lines trigger ADC conversion routine
+  |      |      |      |      |-- Internal_Temperature£ºinternal temperature sensor routine 
+  |      |      |      |-- BKP£ºBKP routine
+  |      |      |      |-- CRC£ºCRC routine
+  |      |      |      |-- DMA
+  |      |      |      |      |-- DMA_MEM2MEM£ºmemory to memory mode routine
+  |      |      |      |      |-- DMA_MEM2PERIP£ºsee each peripheral subroutine for memory to peripheral mode and peripheral to memory mode routines
+  |      |      |      |-- EXTI£ºexternal interrupt line routine
+  |      |      |      |-- FLASH£ºFLASH erase / read / write, and fast programming
+  |      |      |      |-- FreeRTOS£ºFreeRTOS migration routine   
+  |      |      |      |-- GPIO£ºGPIO routine
+  |      |      |      |-- HarmonyOS£ºHarmonyOS migration routine   
+  |      |      |      |-- I2C
+  |      |      |      |      |-- I2C_7bit_Mode£º7-bit address mode, master / slave mode, transceiver routine
+  |      |      |      |      |-- I2C_10bit_Mode£º10 bit address mode, master / slave mode transceiver routine
+  |      |      |      |      |-- I2C_DMA£ºI2C uses DMA, master / slave mode transceiver routine
+  |      |      |      |      |-- I2C_EEPROM£ºI2C interface operation EEPROM peripheral routine
+  |      |      |      |      |-- I2C_PEC£ºuse PEC error check and master / slave mode transceiver routine
+  |      |      |      |-- IWDG£ºindependent watchdog routine
+  |      |      |      |-- PWR
+  |      |      |      |      |-- Sleep_Mode£ºlow power consumption, sleep mode routine
+  |      |      |      |      |-- Standby_Mode£ºlow power consumption, standby mode routine
+  |      |      |      |      |-- Stop_Mode£ºlow power consumption, stop mode routine
+  |      |      |      |-- RCC
+  |      |      |      |      |-- MCO£ºMCO pin clock output routine
+  |      |      |      |      |-- HSI_PLL_Source£ºHSI or HSI/2 as PLL input clock routine
+  |      |      |      |-- RTC£ºcalendar routine
+  |      |      |      |-- RT-Thread£ºRT thread migration routine  
+  |      |      |      |-- SPI
+  |      |      |      |      |-- 1Lines_half-duplex£ºsingle wire half duplex mode, master / slave mode, data transceiver
+  |      |      |      |      |-- 2Lines_FullDuplex£ºtwo-wire full duplex mode, master / slave mode, data transceiver
+  |      |      |      |      |-- FullDuplex_HardNSS£ºHardware NSS mode, master / slave mode, data transceiver
+  |      |      |      |      |-- SPI_CRC£ºuse CRC error check and master / slave mode transceiver routine
+  |      |      |      |      |-- SPI_DMA£ºSPI uses DMA, master / slave mode transceiver routine
+  |      |      |      |      |-- SPI_FLASH£ºSPI interface operation flash peripheral routine
+  |      |      |      |-- TencentOS£ºTencentOS migration routine    
+  |      |      |      |-- TIM
+  |      |      |      |      |-- Clock_Select£ºclock source selection routine
+  |      |      |      |      |-- ComplementaryOutput_DeadTime£ºcomplementary output and deadband insertion mode routines
+  |      |      |      |      |-- ExtTrigger_Start_Two_Timer£ºexternal trigger starts two timer routines synchronously
+  |      |      |      |      |-- Input_Capture£ºinput capture routine
+  |      |      |      |      |-- One_Pulse£ºsingle pulse output routine
+  |      |      |      |      |-- Output_Compare_Mode£ºoutput comparison mode routine
+  |      |      |      |      |-- PWM_Output£ºPWM output routine
+  |      |      |      |      |-- Synchro_ExtTrigger£ºslave mode routine, including reset mode, gating mode and trigger mode
+  |      |      |      |      |-- Synchro_Timer£ºtimer synchronization mode
+  |      |      |      |      |-- TIM_DMA£ºthe timer uses DMA routines
+  |      |      |      |-- TOUCHKEY£ºtouchkey detection routine
+  |      |      |      |-- USART
+  |      |      |      |      |-- USART_DMA£ºUSART uses DMA, master / slave mode transceiver routine
+  |      |      |      |      |-- USART_HalfDuplex£ºsingle wire half duplex mode, master / slave mode transceiver routine
+  |      |      |      |      |-- USART_HardwareFlowControl£ºhardware flow control mode, master / slave mode, transceiver routine
+  |      |      |      |      |-- USART_Interrupt£ºUSART interrupt routine, master / slave mode transceiver routine
+  |      |      |      |      |-- USART_MultiProcessorCommunication£ºmultiprocessor communication mode routine
+  |      |      |      |      |-- USART_Polling£ºpolling transceiver mode, master / slave transceiver routine
+  |      |      |      |      |-- USART_Printf£ºUSART Print debugging routine
+  |      |      |      |      |-- USART_SynchronousMode£ºsynchronous mode, master / slave mode, transceiver routine
+  |      |      |      |-- USB
+  |      |      |      |      |-- USBHD
+  |      |      |      |      |      |-- DEVICE
+  |      |      |      |      |      |      |-- CH372£ºSimulates a custom USB device (CH372 device) with endpoints 1, 3 down and 2, 4 up. Data down from endpoint 1 is uploaded from endpoint 3 and not reversed, and data down from endpoint 2 is uploaded from endpoint 4 and reversed.
+  |      |      |      |      |      |      |-- Compatibility_HID£ºSimulates HID devices, with data transmitted up and down through the serial port.
+  |      |      |      |      |      |      |-- CompositeKM£ºSimulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
+  |      |      |      |      |      |      |-- MSC_U-Disk: Smulates a simple USB flash drive, optionally using on-chip Flash or external SPI-Flash
+  |      |      |      |      |      |      |-- SimulateCDC£ºSimulate a CDC serial port and use serial port 2 to send and receive.
+  |      |      |      |      |      |      |-- MSC_CD-ROM: Simulate CDROM, need external SPI-Flash
+  |      |      |      |      |      |-- HOST_IAP
+  |      |      |      |      |      |      |-- APP: APP used with HOST_IAP, the project has modified the starting location of the program, after compilation, you need to convert the file into a bin file and rename it to APP.bin
+  |      |      |      |      |      |      |-- HOST_IAP:  The host U disk IAP routine based on the U disk read file routine finishing, read the file with the name bit APP.bin from the U disk, write it to the internal flash, check it and jump automatically.
+  |      |      |      |      |      |-- HOST_KM: The host operates the keypad, gets the data of the endpoints uploaded by the keypad and prints it, supports U-port under level 1 hub
+  |      |      |      |      |      |-- HOST_MTP_FileSystem£ºEnumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
+  |      |      |      |      |      |-- Udisk_Lib£ºU disk file system library file  
+  |      |      |      |      |      |-- Host_Udisk£ºUSB host operation USB disk routine 
+  |      |      |      |-- WWDG£ºwindow watchdog routine
+
+
