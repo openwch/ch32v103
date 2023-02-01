@@ -27,7 +27,7 @@ The CH32V103 is a general purpose microcontroller based on the 32-bit RISC proce
 - 2 SPIs (Master mode and Slave mode);
 - 51 I/O ports, all I/O ports can be mapped to 16 external interrupts;
 - CRC calculation unit, 96-bit unique chip ID;
-- Serial debugging interface (SDI);
+- Serial 2—wire debug interface (SDI);
 - Packages: LQFP64M, LQFP48, QFN48.
 debug interface;
 - Packages: LQFP64M, LQFP100.
