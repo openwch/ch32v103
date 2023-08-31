@@ -4,23 +4,23 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- Single wire half duplex mode, master / slave mode transceiver routine:
- Master:USART2_Tx(PA2)
- Slave:USART3_Tx(PB10)
-
-This example demonstrates UART2 and USART3 single-wire half-duplex mode data
-transmission and reception.
-     Hardware connection:PA2 -- PB10
-
-*/
+ *Single wire half duplex mode, master / slave mode transceiver routine:
+ *Master:USART2_Tx(PA2)
+ *Slave:USART3_Tx(PB10)
+ *
+ *This example demonstrates UART2 and USART3 single-wire half-duplex mode data
+ *transmission and reception.
+ *     Hardware connection:PA2 -- PB10
+ *
+ */
 
 #include "debug.h"
 
@@ -122,10 +122,11 @@ void USARTx_CFG(void)
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
-
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("USART HalfDuplex TEST\r\n");
     USARTx_CFG(); /* USART2 & USART3 INIT */
 

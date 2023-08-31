@@ -1,5 +1,5 @@
 
-南京沁恒微电子股份有限公司 2020.07
+南京沁恒微电子股份有限公司 2023.06
 最新资料请到我们的网站上查询
 http://wch.cn
 
@@ -13,6 +13,7 @@ http://wch.cn
   |      |      |-- PUB: 
   |      |      |      |-- CH32V103评估板说明书.pdf：CH32V103评估板说明及工程创建说明
   |      |      |      |-- CH32V103SCH.pdf：CH32V103评估板原理图
+  |      |      |      |-- SCHPCB: CH32V103评估板原理图和PCB原文件
   |      |      |-- EXAM: 
   |      |      |      |-- SRC  
   |      |      |      |      |-- Core：内核系统头文件
@@ -26,6 +27,8 @@ http://wch.cn
   |      |      |      |      |-- Discontinuous_mode：间断模式例程
   |      |      |      |      |-- ExtLines_Trigger：外部触发ADC转换例程
   |      |      |      |      |-- Internal_Temperature：内部温度传感器例程
+  |      |      |      |      |-- Temperature-External channel：温度传感器_外部通道交替注入例程
+  |      |      |      |      |-- TIM_trigger：定时器触发ADC转换例程
   |      |      |      |-- BKP：BKP例程
   |      |      |      |-- CRC：CRC例程
   |      |      |      |-- DMA
@@ -35,7 +38,7 @@ http://wch.cn
   |      |      |      |-- FLASH：FLASH的擦/读/写，以及快速编程
   |      |      |      |-- FreeRTOS：FreeRTOS移植例程   
   |      |      |      |-- GPIO：GPIO例程
-  |      |      |      |-- HarmonyOS：HarmonyOS移植例程   
+  |      |      |      |-- HarmonyOS：HarmonyOS移植例程  
   |      |      |      |-- I2C
   |      |      |      |      |-- I2C_7bit_Mode：7位地址模式，Master/Slave 模式收发例程
   |      |      |      |      |-- I2C_10bit_Mode：10位地址模式，Master/Slave 模式收发例程
@@ -50,7 +53,8 @@ http://wch.cn
   |      |      |      |      |-- Stop_Mode：低功耗，停机模式例程
   |      |      |      |-- RCC
   |      |      |      |      |-- MCO：MCO引脚时钟输出例程
-  |      |      |      |      |-- HSI_PLL_Source：HSI或HSI/2作为PLL输入时钟例程   
+  |      |      |      |      |-- HSI_PLL_Source：HSI或HSI/2作为PLL输入时钟例程 
+  |      |      |      |      |-- HSE_CLK：检查HSE频率例程   
   |      |      |      |-- RTC：日历例程
   |      |      |      |-- RT-Thread：RT-Thread移植例程  
   |      |      |      |-- SPI
@@ -88,6 +92,7 @@ http://wch.cn
   |      |      |      |      |      |      |-- CH372：模拟自定义USB设备（CH372设备），端点1，3下传，2，4上传，端点1下传的数据从端点3上传，不取反，端点2下传的数据从端点4上传，取反。
   |      |      |      |      |      |      |-- Compatibility_HID：模拟HID设备，数据通过串口上下传。
   |      |      |      |      |      |      |-- CompositeKM：模拟键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
+  |      |      |      |      |      |      |-- CompositeKM_LowSpeed：模拟低速键盘和鼠标，使用IO模拟按键，同时模拟数据可以通过串口2上传。
   |      |      |      |      |      |      |-- MSC_U-Disk: 模拟简单U盘，可选使用片内Flash或外部SPI-Flash
   |      |      |      |      |      |      |-- SimulateCDC：模拟一个CDC串口，使用串口2收发。
   |      |      |      |      |      |      |-- MSC_CD-ROM: 模拟CDROM例程，需要外挂SPI-Flash

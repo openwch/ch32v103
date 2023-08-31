@@ -4,21 +4,21 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- Low power consumption, stop mode routine:
- EXTI_Line0(PA0)
- This routine demonstrates WFI enters sleep mode, PA0 pin input low level triggers
- external interrupt EXTI_Line0 exits stop mode,Program execution continues after
- wake-up.
-
-*/
+ *Low power consumption, stop mode routine:
+ *EXTI_Line0(PA0)
+ *This routine demonstrates WFI enters sleep mode, PA0 pin input low level triggers
+ *external interrupt EXTI_Line0 exits stop mode,Program execution continues after
+ *wake-up.
+ *
+ */
 
 #include "debug.h"
 
@@ -71,12 +71,15 @@ void EXTI0_INT_INIT(void)
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("Stop Mode Test\r\n");
     EXTI0_INT_INIT();
 
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
     printf("\r\n ********** \r\n");
     PWR_EnterSTOPMode(PWR_Regulator_LowPower, PWR_STOPEntry_WFI);
     printf("\r\n ########## \r\n");

@@ -128,7 +128,7 @@ UINT32 taskSample(VOID)
     stTask.pfnTaskEntry = (TSK_ENTRY_FUNC)taskSampleEntry1;
     stTask.uwStackSize = 0X500;
     stTask.pcName = "taskSampleEntry1";
-    stTask.usTaskPrio = 6; /* 高优先级 */
+    stTask.usTaskPrio = 6; /* high priority */
     uwRet = LOS_TaskCreate(&taskID1, &stTask);
     if(uwRet != LOS_OK)
     {
@@ -138,7 +138,7 @@ UINT32 taskSample(VOID)
     stTask.pfnTaskEntry = (TSK_ENTRY_FUNC)taskSampleEntry2;
     stTask.uwStackSize = 0X500;
     stTask.pcName = "taskSampleEntry2";
-    stTask.usTaskPrio = 7; /* 低优先级 */
+    stTask.usTaskPrio = 7; /* low priority */
     uwRet = LOS_TaskCreate(&taskID2, &stTask);
     if(uwRet != LOS_OK)
     {
@@ -158,9 +158,11 @@ UINT32 taskSample(VOID)
 LITE_OS_SEC_TEXT_INIT int main(void)
 {
     unsigned int ret;
+    SystemCoreClockUpdate();
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     ret = LOS_KernelInit();
     taskSample();
     if(ret == LOS_OK)
@@ -184,11 +186,14 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 void EXTI0_IRQHandler(void) __attribute__((interrupt()));
 void EXTI0_IRQHandler(void)
 {
-    /* 中断栈使用的是原来调用main设置的值，将中断栈和线程栈分开，这样线程跳中断，中断函数如果嵌套深度较大，不至于
-     * 线程栈被压满溢出，但是采用当前方式，线程进中断时，编译器保存到的16个caller寄存器任然压入线程栈，如果需要希
-     * 望caller寄存器压入中断栈，则中断函数的入口和出口需要使用汇编，中间调用用户中断处理函数即可，详见los_exc.S
-     * 中的ipq_entry例子
-     *  */
+    /* The interrupt stack uses the value set by the original call "main" to separate the interrupt stack 
+     *from the thread stack, so that the thread jumps interrupt.If the interrupt function is nested deeply, 
+     *the thread stack will not be full and overflow. However,in the current mode, when the thread enters 
+     *the interrupt, the 16 caller registers saved by the compiler will still be pushed into the thread stack. 
+     *If you want to push the caller register into the interrupt stack, Then the entry and exit of the interrupt 
+     *function need to use assembly, and the user interrupt processing function can be called in the middle. 
+     *See "ipq_entry example" in "los_exc. S" for details. 
+     */
     GET_INT_SP();
     HalIntEnter();
     if(EXTI_GetITStatus(EXTI_Line0) != RESET)

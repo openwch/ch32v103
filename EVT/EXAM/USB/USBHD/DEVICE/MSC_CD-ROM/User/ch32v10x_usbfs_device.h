@@ -81,7 +81,7 @@ extern volatile uint8_t  USBHD_Endp_Busy[ ];
 
 /******************************************************************************/
 /* external functions */
-extern void USBHD_Device_Init( FunctionalState sta );
+extern void USBHD_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage);
 extern void USBHD_Device_Endp_Init(void);
 extern void USBHD_RCC_Init(void);
 extern void USBHD_Send_Resume(void);

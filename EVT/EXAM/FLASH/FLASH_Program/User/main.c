@@ -4,18 +4,18 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- FLASH erase / read / write, and fast programming:
- Includes Standard Erase and Program, Fast Erase and Program.
-
-*/
+ *FLASH erase / read / write, and fast programming:
+ *Includes Standard Erase and Program, Fast Erase and Program.
+ *
+ */
 
 #include "debug.h"
 
@@ -63,6 +63,7 @@ void Flash_Test(void)
             if(FLASHStatus != FLASH_COMPLETE)
             {
                 printf("FLASH Erase ERR at Page%d\r\n", EraseCounter + 60);
+                return;
             }
             printf("FLASH Erase Page%d...\r\n", EraseCounter + 60);
         }
@@ -161,6 +162,7 @@ void Flash_Test_Fast(void)
     printf("128Byte Page Program Sucess\r\n");
 
     FLASH_Lock_Fast();
+    FLASH_Lock();
 
     for(i = 0; i < 32; i++){
         if(buf[i] == *(u32 *)(0x0800E000 + 4 * i))
@@ -190,10 +192,11 @@ void Flash_Test_Fast(void)
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
-
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("Flash Program Test\r\n");
 
     Flash_Test();

@@ -20,14 +20,14 @@ extern "C" {
 #include "ch32v10x.h"
 
 /* PVD_detection_level  */
-#define PWR_PVDLevel_2V2          ((uint32_t)0x00000000)
-#define PWR_PVDLevel_2V3          ((uint32_t)0x00000020)
-#define PWR_PVDLevel_2V4          ((uint32_t)0x00000040)
-#define PWR_PVDLevel_2V5          ((uint32_t)0x00000060)
-#define PWR_PVDLevel_2V6          ((uint32_t)0x00000080)
-#define PWR_PVDLevel_2V7          ((uint32_t)0x000000A0)
-#define PWR_PVDLevel_2V8          ((uint32_t)0x000000C0)
-#define PWR_PVDLevel_2V9          ((uint32_t)0x000000E0)
+#define PWR_PVDLevel_2V7          ((uint32_t)0x00000000)
+#define PWR_PVDLevel_2V9          ((uint32_t)0x00000020)
+#define PWR_PVDLevel_3V1          ((uint32_t)0x00000040)
+#define PWR_PVDLevel_3V3          ((uint32_t)0x00000060)
+#define PWR_PVDLevel_3V5          ((uint32_t)0x00000080)
+#define PWR_PVDLevel_3V8          ((uint32_t)0x000000A0)
+#define PWR_PVDLevel_4V1          ((uint32_t)0x000000C0)
+#define PWR_PVDLevel_4V4          ((uint32_t)0x000000E0)
 
 /* Regulator_state_is_STOP_mode */
 #define PWR_Regulator_ON          ((uint32_t)0x00000000)
@@ -42,6 +42,9 @@ extern "C" {
 #define PWR_FLAG_SB               ((uint32_t)0x00000002)
 #define PWR_FLAG_PVDO             ((uint32_t)0x00000004)
 
+/* PWR_VDD_Supply_Voltage */
+typedef enum {PWR_VDD_5V = 0, PWR_VDD_3V3 = !PWR_VDD_5V} PWR_VDD;
+
 void       PWR_DeInit(void);
 void       PWR_BackupAccessCmd(FunctionalState NewState);
 void       PWR_PVDCmd(FunctionalState NewState);
@@ -51,6 +54,7 @@ void       PWR_EnterSTOPMode(uint32_t PWR_Regulator, uint8_t PWR_STOPEntry);
 void       PWR_EnterSTANDBYMode(void);
 FlagStatus PWR_GetFlagStatus(uint32_t PWR_FLAG);
 void       PWR_ClearFlag(uint32_t PWR_FLAG);
+PWR_VDD    PWR_VDD_SupplyVoltage(void);
 
 #ifdef __cplusplus
 }

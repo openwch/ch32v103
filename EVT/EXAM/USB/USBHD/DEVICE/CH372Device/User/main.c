@@ -55,6 +55,7 @@ int main(void)
 {
     uint8_t ret;
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	SystemCoreClockUpdate();
 	Delay_Init();
 	USART_Printf_Init(115200);
 	printf("SystemClk:%d\r\n",SystemCoreClock);
@@ -65,7 +66,7 @@ int main(void)
 
 	/* Usb Init */
 	USBHD_RCC_Init( );
-	USBHD_Device_Init( ENABLE );
+    USBHD_Device_Init( ENABLE , PWR_VDD_SupplyVoltage());
 
 	while(1)
 	{

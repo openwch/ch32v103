@@ -4,23 +4,23 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- 10 bit address mode, master / slave mode transceiver routine:
- I2C1_SCL(PB8)\I2C1_SDA(PB9).
-  This routine demonstrates that Master sends and Slave receives.
-  Note: The two boards download the Master and Slave programs respectively,
-  and power on at the same time.
-      Hardware connection:
-            PB8 -- PB8
-            PB9 -- PB9
-*/
+ *10 bit address mode, master / slave mode transceiver routine:
+ *I2C1_SCL(PB8)\I2C1_SDA(PB9).
+ * This routine demonstrates that Master sends and Slave receives.
+ * Note: The two boards download the Master and Slave programs respectively,
+ * and power on at the same time.
+ *      Hardware connection:
+ *            PB8 -- PB8
+ *            PB9 -- PB9
+ */
 
 #include "debug.h"
 
@@ -96,9 +96,11 @@ int main(void)
     u8 j = 0;
 	u8 p = 0;
 
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(460800);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
 #if(I2C_MODE == HOST_MODE)
     printf("IIC Host mode\r\n");
@@ -120,11 +122,8 @@ int main(void)
 
     for( i=0; i< 6;i++ )
     {
-        if(I2C_GetFlagStatus(I2C1, I2C_FLAG_TXE) != RESET)
-        {
-		    Delay_Ms(100);
-            I2C_SendData( I2C1, TxData[i] );
-        }
+       while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTING ) );
+       I2C_SendData( I2C1, TxData[i] );
     }
     while( !I2C_CheckEvent( I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
     I2C_GenerateSTOP( I2C1, ENABLE );
@@ -148,7 +147,8 @@ int main(void)
             i++;
         }
     }
-		I2C1->CTLR1 &= I2C1->CTLR1;
+    while( !I2C_CheckEvent( I2C1, I2C_EVENT_SLAVE_STOP_DETECTED ) );
+          I2C1->CTLR1 &= I2C1->CTLR1;
   }
 
     printf( "RxData:\r\n" );

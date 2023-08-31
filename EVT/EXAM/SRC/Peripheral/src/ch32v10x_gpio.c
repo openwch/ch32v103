@@ -4,11 +4,11 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : This file provides all the GPIO firmware functions.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 #include "ch32v10x_gpio.h"
 #include "ch32v10x_rcc.h"
 
@@ -309,8 +309,8 @@ void GPIO_ResetBits(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
  * @param   GPIO_Pin - specifies the port bit to be written.
  *            This parameter can be one of GPIO_Pin_x where x can be (0..15).
  *          BitVal - specifies the value to be written to the selected bit.
- *            Bit_SetL - to clear the port pin.
- *            Bit_SetH - to set the port pin.
+ *            Bit_RESET - to clear the port pin.
+ *            Bit_SET - to set the port pin.
  *
  * @return  none
  */
@@ -495,13 +495,13 @@ void GPIO_PinRemapConfig(uint32_t GPIO_Remap, FunctionalState NewState)
     }
     else
     {
-        tmpreg &= ~(tmp << ((GPIO_Remap >> 0x15) * 0x10));
+        tmpreg &= ~(tmp << (((GPIO_Remap & 0x7FFFFFFF)>> 0x15) * 0x10));
         tmpreg |= ~DBGAFR_SWJCFG_MASK;
     }
 
     if(NewState != DISABLE)
     {
-        tmpreg |= (tmp << ((GPIO_Remap >> 0x15) * 0x10));
+        tmpreg |= (tmp << (((GPIO_Remap & 0x7FFFFFFF)>> 0x15) * 0x10));
     }
 
     if((GPIO_Remap & 0x80000000) == 0x80000000)
@@ -535,6 +535,46 @@ void GPIO_EXTILineConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
     AFIO->EXTICR[GPIO_PinSource >> 0x02] |= (((uint32_t)GPIO_PortSource) << (0x04 * (GPIO_PinSource & (uint8_t)0x03)));
 }
 
+
+/*********************************************************************
+ * @fn      GPIO_IPD_Unused
+ *
+ * @brief   Configure unused GPIO as input pull-up.
+ *
+ * @param   none
+ *
+ * @return  none
+ */
+void GPIO_IPD_Unused(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure = {0};
+    uint32_t chip = 0;
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD, ENABLE);
+    chip =  *( uint32_t * )0x1FFFF884 & (~0x000000F0);
+    switch(chip)
+    {
+        case 0x25004102:     //CH32V103C8T6
+        {
+            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1\
+                                          |GPIO_Pin_2|GPIO_Pin_3\
+                                          |GPIO_Pin_4|GPIO_Pin_5\
+                                          |GPIO_Pin_6|GPIO_Pin_7\
+                                          |GPIO_Pin_8|GPIO_Pin_9\
+                                          |GPIO_Pin_10|GPIO_Pin_11|GPIO_Pin_12;
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+            GPIO_Init(GPIOC, &GPIO_InitStructure);
+            GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+            GPIO_Init(GPIOD, &GPIO_InitStructure);
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+}
 
 
 

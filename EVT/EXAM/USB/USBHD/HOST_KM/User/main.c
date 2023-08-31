@@ -51,7 +51,7 @@ int main( void )
     /* Configure USB clock and initialize USB host */
 #if DEF_USBHD_PORT_EN
     USBHD_RCC_Init( );
-    USBHD_Host_Init( ENABLE );
+    USBHD_Host_Init( ENABLE , PWR_VDD_SupplyVoltage());
     memset( &RootHubDev.bStatus, 0, sizeof( ROOT_HUB_DEVICE ) );
     memset( &HostCtl[ DEF_USBHD_PORT_INDEX * DEF_ONE_USB_SUP_DEV_TOTAL ].InterfaceNum, 0, DEF_ONE_USB_SUP_DEV_TOTAL * sizeof( HOST_CTL ) );
 #endif

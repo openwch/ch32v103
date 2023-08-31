@@ -81,14 +81,14 @@ void PWR_PVDCmd(FunctionalState NewState)
  *        Detector(PVD).
  *
  * @param   PWR_PVDLevel - specifies the PVD detection level
- *            PWR_PVDLevel_2V2 - PVD detection level set to 2.2V
- *            PWR_PVDLevel_2V3 - PVD detection level set to 2.3V
- *            PWR_PVDLevel_2V4 - PVD detection level set to 2.4V
- *            PWR_PVDLevel_2V5 - PVD detection level set to 2.5V
- *            PWR_PVDLevel_2V6 - PVD detection level set to 2.6V
  *            PWR_PVDLevel_2V7 - PVD detection level set to 2.7V
- *            PWR_PVDLevel_2V8 - PVD detection level set to 2.8V
  *            PWR_PVDLevel_2V9 - PVD detection level set to 2.9V
+ *            PWR_PVDLevel_3V1 - PVD detection level set to 3.1V
+ *            PWR_PVDLevel_3V3 - PVD detection level set to 3.3V
+ *            PWR_PVDLevel_3V5 - PVD detection level set to 3.5V
+ *            PWR_PVDLevel_3V8 - PVD detection level set to 3.8V
+ *            PWR_PVDLevel_4V1 - PVD detection level set to 4.1V
+ *            PWR_PVDLevel_4V4 - PVD detection level set to 4.4V
  *
  * @return  none
  */
@@ -217,3 +217,34 @@ void PWR_ClearFlag(uint32_t PWR_FLAG)
 {
     PWR->CTLR |= PWR_FLAG << 2;
 }
+
+/*********************************************************************
+ * @fn      PWR_VDD_SupplyVoltage
+ *
+ * @brief   Checks VDD Supply Voltage.
+ *
+ * @param   none
+ *
+ * @return  PWR_VDD - VDD Supply Voltage.
+ *            PWR_VDD_5V - VDD = 5V
+ *            PWR_VDD_3V3 - VDD = 3.3V
+ */
+PWR_VDD PWR_VDD_SupplyVoltage(void)
+{
+
+    PWR_VDD VDD_Voltage = PWR_VDD_3V3;
+    Delay_Init();
+    RCC_APB1PeriphClockCmd( RCC_APB1Periph_PWR, ENABLE);
+    PWR_PVDLevelConfig(PWR_PVDLevel_4V1);
+    PWR_PVDCmd(ENABLE);
+    Delay_Us(10);
+    if( PWR_GetFlagStatus(PWR_FLAG_PVDO) == (uint32_t)RESET)
+    {
+        VDD_Voltage = PWR_VDD_5V;
+    }
+    PWR_PVDLevelConfig(PWR_PVDLevel_2V7);
+    PWR_PVDCmd(DISABLE);
+
+    return VDD_Voltage;
+}
+

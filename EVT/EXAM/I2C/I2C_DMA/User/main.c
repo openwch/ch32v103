@@ -4,25 +4,25 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- I2C uses DMA, master / slave mode transceiver routine:
- I2C1_SCL(PB8)\I2C1_SDA(PB9).
- This example demonstrates the 7-bit address mode, Master sends via DMA,
- and Slave receives via DMA.
- Note: The two boards download the Master and Slave programs respectively,
- and power on at the same time.
-     Hardware connection:
-               PB8 -- PB8
-               PB9 -- PB9
-
-*/
+ *I2C uses DMA, master / slave mode transceiver routine:
+ *I2C1_SCL(PB8)\I2C1_SDA(PB9).
+ *This example demonstrates the 7-bit address mode, Master sends via DMA,
+ *and Slave receives via DMA.
+ *Note: The two boards download the Master and Slave programs respectively,
+ *and power on at the same time.
+ *     Hardware connection:
+ *               PB8 -- PB8
+ *               PB9 -- PB9
+ *
+ */
 
 #include "debug.h"
 
@@ -177,9 +177,11 @@ int main(void)
     uint8_t i ,t;
 	uint8_t j ;
     NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(460800);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
 #if (I2C_MODE == HOST_MODE)
     printf( "IIC Host mode\r\n" );
@@ -214,6 +216,9 @@ int main(void)
     DMA_Cmd( DMA1_Channel7, ENABLE );
     
     while( ( !DMA_GetFlagStatus( DMA1_FLAG_TC7 ) ) );
+
+    while( !I2C_CheckEvent( I2C1, I2C_EVENT_SLAVE_STOP_DETECTED ) );
+    I2C1->CTLR1 &= I2C1->CTLR1;
 		
     printf( "RxData:\r\n" );
 

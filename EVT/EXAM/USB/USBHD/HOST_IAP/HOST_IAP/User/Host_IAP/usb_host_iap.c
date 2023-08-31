@@ -606,7 +606,7 @@ void IAP_Initialization( void )
     USBHD_RCC_Init( );
 //    pHOST_RX_RAM_Addr = USBHD_RX_Buf;
 //    pHOST_TX_RAM_Addr = USBHD_TX_Buf;
-    USBHD_Host_Init( ENABLE );
+    USBHD_Host_Init( ENABLE , PWR_VDD_SupplyVoltage());
     /* USB Libs Initialization */
     DUG_PRINTF( "UDisk library Initialization. \r\n" );
     CHRV3LibInit( );

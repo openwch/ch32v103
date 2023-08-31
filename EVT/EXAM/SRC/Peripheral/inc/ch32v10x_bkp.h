@@ -5,11 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for the
  *                      BKP firmware library.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 #ifndef __CH32V10x_BKP_H
 #define __CH32V10x_BKP_H
 
