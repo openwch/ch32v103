@@ -71,7 +71,7 @@ void Udisk_USBH_Initialization( void )
     USBHD_RCC_Init( );
     pHOST_TX_RAM_Addr = USBHD_TX_Buf;
     pHOST_RX_RAM_Addr = USBHD_RX_Buf;
-    USBHD_Host_Init( ENABLE );
+    USBHD_Host_Init( ENABLE , PWR_VDD_SupplyVoltage());
 	
 	/* USB Libs Initialization */
     printf( "UDisk library Initialization. \r\n" );
@@ -260,7 +260,7 @@ uint8_t UDisk_USBH_PreDeal( void )
     {
         DUG_PRINTF("USB Dev Out.\n");
         /* Clear parameters */
-        USBHD_Host_Init( DISABLE );
+        USBHD_Host_Init( DISABLE , PWR_VDD_SupplyVoltage());
         memset( &RootHubDev.bStatus, 0, sizeof( struct _ROOT_HUB_DEVICE ) );
         UDisk_Opeation_Flag = 1;
         CHRV3DiskStatus = DISK_UNKNOWN;

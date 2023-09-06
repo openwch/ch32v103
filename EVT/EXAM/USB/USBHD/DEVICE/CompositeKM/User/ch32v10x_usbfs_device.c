@@ -103,8 +103,17 @@ void USBHD_Device_Endp_Init( void )
  *
  * @return  none
  */
-void USBHD_Device_Init( FunctionalState sta )
+void USBHD_Device_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
 {
+    if( VDD_Voltage == PWR_VDD_5V)
+    {
+        EXTEN->EXTEN_CTR |= EXTEN_USB_5V_SEL;
+    }
+    else
+    {
+        EXTEN->EXTEN_CTR &= ~EXTEN_USB_5V_SEL;
+    }
+
     if( sta )
     {
         /* Reset USB module */
@@ -844,10 +853,9 @@ void USBHD_IRQHandler( void )
  *
  * @return  none
  */
-void USBHD_Send_Resume( void )
+void USBHD_Send_Resume(void)
 {
     R8_UDEV_CTRL ^= RB_UD_LOW_SPEED;
-    Delay_Ms( 5 );
+    Delay_Ms(8);
     R8_UDEV_CTRL ^= RB_UD_LOW_SPEED;
-    Delay_Ms( 1 );
 }

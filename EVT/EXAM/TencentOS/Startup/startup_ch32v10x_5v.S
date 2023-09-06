@@ -4,11 +4,12 @@
 ;* Version            : V1.0.0
 ;* Date               : 2020/04/30
 ;* Description        : CH32V10x vector table for eclipse toolchain.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+;*                      Applied to VDD = 5V
+;*********************************************************************************
+;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+;* Attention: This software (modified or not) and binary are used for 
+;* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+;*******************************************************************************/
 
 	.section	.init,"ax",@progbits
 	.global	_start
@@ -36,7 +37,7 @@ _vector_base:
     .word   0
         j   NMI_Handler                 /* NMI Handler */
         j   HardFault_Handler           /* Hard Fault Handler */
-    .word   0
+    .word   0x005FFFFF                  /* 0x005FFFFF-(VDD = 5V)  others-(VDD = 3.3V) */
     .word   0
     .word   0
     .word   0
@@ -219,14 +220,14 @@ handle_reset:
 	addi a0, a0, 4
 	bltu a0, a1, 1b
 2:
-	/* disable interrupt */
-    li t0, 0x1800
-    csrs mstatus, t0
+	/* enable all interrupt */
+  li t0, 0x1800
+  csrs mstatus, t0
 	la t0, _vector_base
-    ori t0, t0, 1
+  ori t0, t0, 1
 	csrw mtvec, t0
 
-    jal  SystemInit
+  jal  SystemInit
 	la t0, main
 	csrw mepc, t0
 	mret

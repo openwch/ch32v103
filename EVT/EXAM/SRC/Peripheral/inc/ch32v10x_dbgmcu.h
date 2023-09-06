@@ -5,11 +5,11 @@
  * Date               : 2020/04/30
  * Description        : This file contains all the functions prototypes for the
  *                      DBGMCU firmware library.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 #ifndef __CH32V10x_DBGMCU_H
 #define __CH32V10x_DBGMCU_H
 
@@ -38,6 +38,7 @@ extern "C" {
 uint32_t DBGMCU_GetREVID(void);
 uint32_t DBGMCU_GetDEVID(void);
 void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState);
+uint32_t DBGMCU_GetCHIPID( void );
 
 #ifdef __cplusplus
 }

@@ -69,6 +69,7 @@ int main( )
     Delay_Ms( 100 );
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("This is a APP code for a IAP application\n" );
 
     GPIO_Cfg_init( );

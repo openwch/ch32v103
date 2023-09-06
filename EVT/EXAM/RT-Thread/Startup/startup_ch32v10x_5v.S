@@ -4,11 +4,12 @@
 ;* Version            : V1.0.0
 ;* Date               : 2020/04/30
 ;* Description        : CH32V10x vector table for eclipse toolchain.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+;*                      Applied to VDD = 5V
+;*********************************************************************************
+;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+;* Attention: This software (modified or not) and binary are used for 
+;* microcontroller manufactured by Nanjing Qinheng Microelectronics.
+;*******************************************************************************/
 
 	.section	.init,"ax",@progbits
 	.global	_start
@@ -36,7 +37,7 @@ _vector_base:
     .word   0
         j   NMI_Handler                 /* NMI Handler */
         j   HardFault_Handler           /* Hard Fault Handler */
-    .word   0
+    .word   0x005FFFFF                  /* 0x005FFFFF-(VDD = 5V)  others-(VDD = 3.3V) */
     .word   0
     .word   0
     .word   0
@@ -142,6 +143,51 @@ _vector_base:
     .weak   USBWakeUp_IRQHandler
     .weak   USBHD_IRQHandler
 
+NMI_Handler:  1:  j 1b
+HardFault_Handler:  1:  j 1b
+SysTick_Handler:  1:  j 1b
+SW_Handler:  1:  j 1b
+WWDG_IRQHandler:  1:  j 1b
+PVD_IRQHandler:  1:  j 1b
+TAMPER_IRQHandler:  1:  j 1b
+RTC_IRQHandler:  1:  j 1b
+FLASH_IRQHandler:  1:  j 1b
+RCC_IRQHandler:  1:  j 1b
+EXTI0_IRQHandler:  1:  j 1b
+EXTI1_IRQHandler:  1:  j 1b
+EXTI2_IRQHandler:  1:  j 1b
+EXTI3_IRQHandler:  1:  j 1b
+EXTI4_IRQHandler:  1:  j 1b
+DMA1_Channel1_IRQHandler:  1:  j 1b
+DMA1_Channel2_IRQHandler:  1:  j 1b
+DMA1_Channel3_IRQHandler:  1:  j 1b
+DMA1_Channel4_IRQHandler:  1:  j 1b
+DMA1_Channel5_IRQHandler:  1:  j 1b
+DMA1_Channel6_IRQHandler:  1:  j 1b
+DMA1_Channel7_IRQHandler:  1:  j 1b
+ADC1_2_IRQHandler:  1:  j 1b
+EXTI9_5_IRQHandler:  1:  j 1b
+TIM1_BRK_IRQHandler:  1:  j 1b
+TIM1_UP_IRQHandler:  1:  j 1b
+TIM1_TRG_COM_IRQHandler:  1:  j 1b
+TIM1_CC_IRQHandler:  1:  j 1b
+TIM2_IRQHandler:  1:  j 1b
+TIM3_IRQHandler:  1:  j 1b
+TIM4_IRQHandler:  1:  j 1b
+I2C1_EV_IRQHandler:  1:  j 1b
+I2C1_ER_IRQHandler:  1:  j 1b
+I2C2_EV_IRQHandler:  1:  j 1b
+I2C2_ER_IRQHandler:  1:  j 1b
+SPI1_IRQHandler:  1:  j 1b
+SPI2_IRQHandler:  1:  j 1b
+USART1_IRQHandler:  1:  j 1b
+USART2_IRQHandler:  1:  j 1b
+USART3_IRQHandler:  1:  j 1b
+EXTI15_10_IRQHandler:  1:  j 1b
+RTCAlarm_IRQHandler:  1:  j 1b
+USBWakeUp_IRQHandler:  1:  j 1b
+USBHD_IRQHandler:  1:  j 1b
+
 	.section	.text.handle_reset,"ax",@progbits
 	.weak	handle_reset
 	.align	1
@@ -174,15 +220,15 @@ handle_reset:
 	addi a0, a0, 4
 	bltu a0, a1, 1b
 2:
-	/* enable all interrupt */
-  li t0, 0x1800
-  csrs mstatus, t0
+	/* disable interrupt */
+  	li t0, 0x1800
+  	csrs mstatus, t0
 	la t0, _vector_base
-  ori t0, t0, 1
+  	ori t0, t0, 1
 	csrw mtvec, t0
 
-  jal  SystemInit
-	la t0, main
+  	jal  SystemInit  
+	la t0,entry      
 	csrw mepc, t0
 	mret
 

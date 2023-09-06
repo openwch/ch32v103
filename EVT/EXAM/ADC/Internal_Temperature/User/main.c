@@ -4,19 +4,19 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- Internal temperature sensor routine:
- Through the ADC channel 16, the output voltage value of the internal temperature
- sensor is collected.
-  Note: Take 3.3V as an example.
-*/
+ *Internal temperature sensor routine:
+ *Through the ADC channel 16, the output voltage value of the internal temperature
+ *sensor is collected.
+ *Note: Take 3.3V as an example.
+ */
 
 #include "debug.h"
 
@@ -209,9 +209,11 @@ int main(void)
     u16 ADC_val;
     s32 val_mv;
 
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
     ADC_Function_Init();
     printf("CalibrattionValue:%d\n", Calibrattion_Val);

@@ -52,8 +52,17 @@ void USBHD_RCC_Init( void )
  *
  * @return  none
  */
-void USBHD_Host_Init( FunctionalState sta )
+void USBHD_Host_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
 {
+    if( VDD_Voltage == PWR_VDD_5V)
+    {
+        EXTEN->EXTEN_CTR |= EXTEN_USB_5V_SEL;
+    }
+    else
+    {
+        EXTEN->EXTEN_CTR &= ~EXTEN_USB_5V_SEL;
+    }
+
     if( sta )
     {
         R8_USB_CTRL = RB_UC_HOST_MODE;

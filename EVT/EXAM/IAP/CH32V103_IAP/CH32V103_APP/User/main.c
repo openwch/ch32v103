@@ -45,7 +45,7 @@ void GPIO_PA2(void)
 int main(void)
 {
 	u16 i;
-
+	SystemCoreClockUpdate();
 	Delay_Init();
 	USART_Printf_Init(115200);
 	GPIO_PA2();

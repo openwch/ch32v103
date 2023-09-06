@@ -70,6 +70,7 @@ void Var_Init(void)
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
     printf("USBHD Compatibility HID Example\r\n");
@@ -84,7 +85,7 @@ int main(void)
 
     /* Usb init */
     USBHD_RCC_Init();
-    USBHD_Device_Init(ENABLE);
+    USBHD_Device_Init( ENABLE , PWR_VDD_SupplyVoltage());
     
     /* Timer init */
     TIM2_Init();

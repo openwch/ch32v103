@@ -13,4 +13,5 @@ Description=ROM(byte): 64K, SRAM(byte): 20K, CHIP PINS: 64, GPIO PORTS: 51.\nWCH
 
 PeripheralVersion=1.7
 MCU=CH32V103R8T6
-Target Path=obj/HOST_KM.hex
+Target Path=obj\HOST_KM.hex
+CLKSpeed=1

@@ -4,18 +4,18 @@
  * Version            : V1.0.0
  * Date               : 2020/04/30
  * Description        : Main program body.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
+ *********************************************************************************
+ * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
+ * Attention: This software (modified or not) and binary are used for 
+ * microcontroller manufactured by Nanjing Qinheng Microelectronics.
+ *******************************************************************************/
 
 /*
  *@Note
- TouchKey detection routine:
- This example demonstrates channel 2 (PA2), which is a Touchkey application.
-
-*/
+ *TouchKey detection routine:
+ *This example demonstrates channel 2 (PA2), which is a Touchkey application.
+ *
+ */
 
 #include "debug.h"
 
@@ -96,9 +96,10 @@ u16 Touch_Key_Adc(u8 ch)
 int main(void)
 {
     u16 ADC_val;
-
+    SystemCoreClockUpdate();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
     Touch_Key_Init();
 

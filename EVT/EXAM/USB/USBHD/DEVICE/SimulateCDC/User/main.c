@@ -42,7 +42,7 @@ int main(void)
 
     /* USB20 device init */
     USBHD_RCC_Init( );
-    USBHD_Device_Init( ENABLE );
+    USBHD_Device_Init( ENABLE , PWR_VDD_SupplyVoltage());
 
     printf( "main\r\n" );
 
