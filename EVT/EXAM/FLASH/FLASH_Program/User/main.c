@@ -38,7 +38,11 @@ uint32_t              NbrOfPage;
 volatile FLASH_Status FLASHStatus = FLASH_COMPLETE;
 volatile TestStatus MemoryProgramStatus = PASSED;
 volatile TestStatus MemoryEraseStatus = PASSED;
-u32 buf[32];
+
+#define Fadr    (0x0800E000)
+#define Fsize   ((((128*4))>>2))
+u32 buf[Fsize];
+
 /*********************************************************************
  * @fn      Flash_Test
  *
@@ -136,50 +140,59 @@ void Flash_Test(void)
  */
 void Flash_Test_Fast(void)
 {
-    u8  i, Verity_Flag = 0;
+    u32 i;
+    u8 Verify_Flag = 0;
+    FLASH_Status s;
 
-    for(i = 0; i < 32; i++){
+    for(i = 0; i < Fsize; i++){
         buf[i] = i;
     }
 
-    FLASH_Unlock_Fast();
+    printf("Read flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
+    }
 
-    FLASH_ErasePage_Fast(0x0800E000);
+    s = FLASH_ROM_ERASE(Fadr, Fsize*4);
+    if(s != FLASH_COMPLETE)
+    {
+        printf("check FLASH_ADR_RANGE_ERROR FLASH_ALIGN_ERROR or FLASH_OP_RANGE_ERROR\r\n");
+        return;
+    }
 
-    printf("128Byte Page Erase Sucess\r\n");
+    printf("Erase flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
+    }
 
-    FLASH_BufReset();
-    FLASH_BufLoad(0x0800E000, buf[0], buf[1], buf[2], buf[3]);
-    FLASH_BufLoad(0x0800E000 + 0x10, buf[4], buf[5], buf[6], buf[7]);
-    FLASH_BufLoad(0x0800E000 + 0x20, buf[8], buf[9], buf[10], buf[11]);
-    FLASH_BufLoad(0x0800E000 + 0x30, buf[12], buf[13], buf[14], buf[15]);
-    FLASH_BufLoad(0x0800E000 + 0x40, buf[16], buf[17], buf[18], buf[19]);
-    FLASH_BufLoad(0x0800E000 + 0x50, buf[20], buf[21], buf[22], buf[23]);
-    FLASH_BufLoad(0x0800E000 + 0x60, buf[24], buf[25], buf[26], buf[27]);
-    FLASH_BufLoad(0x0800E000 + 0x70, buf[28], buf[29], buf[30], buf[31]);
-    FLASH_ProgramPage_Fast(0x0800E000);
+    s = FLASH_ROM_WRITE(Fadr,  buf, Fsize*4);
+    if(s != FLASH_COMPLETE)
+    {
+        printf("check FLASH_ADR_RANGE_ERROR FLASH_ALIGN_ERROR or FLASH_OP_RANGE_ERROR\r\n");
+        return;
+    }
 
-    printf("128Byte Page Program Sucess\r\n");
+    printf("Write flash\r\n");
+    for(i=0; i<Fsize; i++){
+        printf("adr-%08x v-%08x\r\n", Fadr +4*i, *(u32*)(Fadr +4*i));
+    }
 
-    FLASH_Lock_Fast();
-    FLASH_Lock();
-
-    for(i = 0; i < 32; i++){
-        if(buf[i] == *(u32 *)(0x0800E000 + 4 * i))
+    for(i = 0; i < Fsize; i++){
+        if(buf[i] == *(u32 *)(Fadr + 4 * i))
         {
-            Verity_Flag = 0;
+            Verify_Flag = 0;
         }
         else
         {
-            Verity_Flag = 1;
+            Verify_Flag = 1;
             break;
         }
     }
 
-    if(Verity_Flag)
-        printf("128Byte Page Verity Fail\r\n");
+    if(Verify_Flag)
+        printf("%d Byte Verify Fail\r\n", (Fsize*4));
     else
-        printf("128Byte Page Verity Sucess\r\n");
+        printf("%d Byte Verify Suc\r\n", (Fsize*4));
 }
 
 /*********************************************************************

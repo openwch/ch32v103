@@ -73,7 +73,6 @@ void USBHD_RCC_Init( void )
  */
 void USBHD_Device_Endp_Init(void)
 {
-    uint8_t i;
 
     R8_UEP4_1_MOD = RB_UEP1_TX_EN;
     R8_UEP2_3_MOD = RB_UEP2_RX_EN | RB_UEP3_TX_EN;
@@ -91,7 +90,7 @@ void USBHD_Device_Endp_Init(void)
     R8_UEP3_CTRL = UEP_R_RES_ACK | UEP_T_RES_NAK;
 
     /* Clear End-points Busy Status */
-    for( i=0; i<DEF_UEP_NUM; i++ )
+    for(uint8_t i=0; i<DEF_UEP_NUM; i++ )
     {
         USBHD_Endp_Busy[ i ] = 0;
     }

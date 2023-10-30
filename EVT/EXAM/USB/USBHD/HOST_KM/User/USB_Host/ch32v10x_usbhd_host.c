@@ -68,22 +68,23 @@ void USBHD_Host_Init( FunctionalState sta , PWR_VDD VDD_Voltage)
 
     if( sta )
     {
-        /* Reset USB module */
-        R8_USB_CTRL = RB_UC_RESET_SIE | RB_UC_CLR_ALL;
-        Delay_Us( 10 );
-        R8_USB_CTRL = 0;
-
-        /* Initialize USB host configuration */
-        R8_USB_CTRL = RB_UC_HOST_MODE | RB_UC_INT_BUSY | RB_UC_DMA_EN;
+        R8_USB_CTRL = RB_UC_HOST_MODE;
+        R8_UHOST_CTRL = 0x00;
+        R8_USB_DEV_AD = 0x00;
         R8_UH_EP_MOD = RB_UH_EP_TX_EN | RB_UH_EP_RX_EN;
         R16_UH_RX_DMA = (uint16_t)(uint32_t)USBHD_RX_Buf;
         R16_UH_TX_DMA = (uint16_t)(uint32_t)USBHD_TX_Buf;
+
+        R8_UH_RX_CTRL = 0x00;
+        R8_UH_TX_CTRL = 0x00;
+        R8_USB_CTRL = RB_UC_HOST_MODE | RB_UC_INT_BUSY | RB_UC_DMA_EN;
+        R8_UH_SETUP = RB_UH_SOF_EN;
+        R8_USB_INT_FG = 0xFF;
+        R8_USB_INT_EN = RB_UIE_TRANSFER | RB_UIE_DETECT;
     }
     else
     {
         R8_USB_CTRL = RB_UC_RESET_SIE | RB_UC_CLR_ALL;
-        Delay_Us( 10 );
-        R8_USB_CTRL = 0;
     }
 }
 

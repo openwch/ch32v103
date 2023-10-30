@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.06
+Nanjing Qinheng Microelectronics Co., Ltd. 2023.10
 
 http://wch-ic.com
 
@@ -29,23 +29,33 @@ Directory
   |      |      |      |      |-- Internal_Temperature:internal temperature sensor routine 
   |      |      |      |      |-- TIM Trigger:TIM trigger ADC conversion routine 
   |      |      |      |      |-- Temperature-External channel:Temperature-External channel Injection alternating inversion routine 
-  |      |      |      |-- BKP:BKP routine
-  |      |      |      |-- CRC:CRC routine
+  |      |      |      |-- BKP
+  |      |      |      |      |-- BKP:BKP routines
+  |      |      |      |-- CRC
+  |      |      |      |      |-- CRC_Calculation:CRC routines  
   |      |      |      |-- DMA
   |      |      |      |      |-- DMA_MEM2MEM:memory to memory mode routine
   |      |      |      |      |-- DMA_MEM2PERIP:see each peripheral subroutine for memory to peripheral mode and peripheral to memory mode routines
-  |      |      |      |-- EXTI:external interrupt line routine
-  |      |      |      |-- FLASH:FLASH erase / read / write, and fast programming
-  |      |      |      |-- FreeRTOS:FreeRTOS migration routine   
-  |      |      |      |-- GPIO:GPIO routine
-  |      |      |      |-- HarmonyOS:HarmonyOS migration routine   
+  |      |      |      |-- EXTI
+  |      |      |      |      |-- EXTI0:External Interrupt Routine
+  |      |      |      |-- FLASH
+  |      |      |      |      |-- FLASH_Program:FLASH erase/read/write, and fast programming 
+  |      |      |      |-- FreeRTOS
+  |      |      |      |      |-- FreeRTOS_Core:FreeRTOS migration routines 
+  |      |      |      |-- GPIO
+  |      |      |      |      |-- GPIO_Toggle:GPIO routines 
+  |      |      |      |-- HarmonyOS
+  |      |      |      |      |-- LiteOS_m：HarmonyOS migration routine
   |      |      |      |-- I2C
   |      |      |      |      |-- I2C_7bit_Mode:7-bit address mode, master / slave mode, transceiver routine
   |      |      |      |      |-- I2C_10bit_Mode:10 bit address mode, master / slave mode transceiver routine
   |      |      |      |      |-- I2C_DMA:I2C uses DMA, master / slave mode transceiver routine
   |      |      |      |      |-- I2C_EEPROM:I2C interface operation EEPROM peripheral routine
   |      |      |      |      |-- I2C_PEC:use PEC error check and master / slave mode transceiver routine
-  |      |      |      |-- IWDG:independent watchdog routine
+  |      |      |      |-- IAP
+  |      |      |      |      |-- UART_USB_IAP:IAP Upgrade Routine - Built-in Hex to Bin Tool and IAP Upgrade Tool     
+  |      |      |      |-- IWDG
+  |      |      |      |      |-- IWDG:Independent Watchdog routine 
   |      |      |      |-- PWR
   |      |      |      |      |-- Sleep_Mode:low power consumption, sleep mode routine
   |      |      |      |      |-- Standby_Mode:low power consumption, standby mode routine
@@ -54,8 +64,10 @@ Directory
   |      |      |      |      |-- MCO:MCO pin clock output routine
   |      |      |      |      |-- HSI_PLL_Source:HSI or HSI/2 as PLL input clock routine
   |      |      |      |      |-- HSE_CLK:HSE frequency check routine 
-  |      |      |      |-- RTC:calendar routine
-  |      |      |      |-- RT-Thread:RT thread migration routine  
+  |      |      |      |-- RTC
+  |      |      |      |      |-- RTC_Calendar:Calendar Routines  
+  |      |      |      |-- RT-Thread
+  |      |      |      |      |-- RT_Thread_Core:RT-Thread migration routine  
   |      |      |      |-- SPI
   |      |      |      |      |-- 1Lines_half-duplex:single wire half duplex mode, master / slave mode, data transceiver
   |      |      |      |      |-- 2Lines_FullDuplex:two-wire full duplex mode, master / slave mode, data transceiver
@@ -63,7 +75,9 @@ Directory
   |      |      |      |      |-- SPI_CRC:use CRC error check and master / slave mode transceiver routine
   |      |      |      |      |-- SPI_DMA:SPI uses DMA, master / slave mode transceiver routine
   |      |      |      |      |-- SPI_FLASH:SPI interface operation flash peripheral routine
-  |      |      |      |-- TencentOS:TencentOS migration routine    
+  |      |      |      |      |-- SPI_LCD:SPI interface operation FLASH  and LCD peripheral routines
+  |      |      |      |-- TencentOS
+  |      |      |      |      |-- TencentOS:TencentOS migration routine  
   |      |      |      |-- TIM
   |      |      |      |      |-- Clock_Select:clock source selection routine
   |      |      |      |      |-- ComplementaryOutput_DeadTime:complementary output and deadband insertion mode routines
@@ -75,7 +89,8 @@ Directory
   |      |      |      |      |-- Synchro_ExtTrigger:slave mode routine, including reset mode, gating mode and trigger mode
   |      |      |      |      |-- Synchro_Timer:timer synchronization mode
   |      |      |      |      |-- TIM_DMA:the timer uses DMA routines
-  |      |      |      |-- TOUCHKEY:touchkey detection routine
+  |      |      |      |-- TOUCHKEY
+  |      |      |      |      |-- TKey:TouchKey Detection Routine 
   |      |      |      |-- USART
   |      |      |      |      |-- USART_DMA:USART uses DMA, master / slave mode transceiver routine
   |      |      |      |      |-- USART_HalfDuplex:single wire half duplex mode, master / slave mode transceiver routine
@@ -88,7 +103,7 @@ Directory
   |      |      |      |-- USB
   |      |      |      |      |-- USBHD
   |      |      |      |      |      |-- DEVICE
-  |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3 down and 2, 4 up. Data down from endpoint 1 is uploaded from endpoint 3 and not reversed, and data down from endpoint 2 is uploaded from endpoint 4 and reversed.
+  |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3, 5 down and 2, 4, 6 up. Data down from endpoint 1 is uploaded from endpoint 2 and not reversed, and data down from endpoint 3, 5 is uploaded from endpoint 4,6 and reversed.
   |      |      |      |      |      |      |-- Compatibility_HID:Simulates HID devices, with data transmitted up and down through the serial port.
   |      |      |      |      |      |      |-- CompositeKM:Simulate keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
   |      |      |      |      |      |      |-- CompositeKM_LowSpeed:Simulate low speed keyboard and mouse, use IO to simulate keystrokes, while simulated data can be uploaded through serial port 2.
@@ -102,6 +117,7 @@ Directory
   |      |      |      |      |      |-- HOST_MTP_FileSystem:Enumeration process of a USB host to a device that supports MTP and PTP protocols, supports MTP and PTP protocols, and reads its files
   |      |      |      |      |      |-- Udisk_Lib:U disk file system library file  
   |      |      |      |      |      |-- Host_Udisk:USB host operation USB disk routine 
-  |      |      |      |-- WWDG:window watchdog routine
+  |      |      |      |-- WWDG
+  |      |      |      |      |-- WWDG:Window Watchdog Routine
 
 

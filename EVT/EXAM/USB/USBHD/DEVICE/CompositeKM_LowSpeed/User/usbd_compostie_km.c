@@ -684,11 +684,14 @@ void USB_Sleep_Wakeup_CFG( void )
  */
 void MCU_Sleep_Wakeup_Operate( void )
 {
+    printf( "Sleep\r\n" );
     EXTI_ClearFlag( EXTI_Line12 | EXTI_Line13 | EXTI_Line14 | EXTI_Line15 );
     EXTI_ClearFlag( EXTI_Line4 | EXTI_Line5 | EXTI_Line6 | EXTI_Line7 );
 
-//    printf( "Sleep\r\n" );
-    __WFE( );
+    PWR_EnterSTOPMode(PWR_Regulator_LowPower,PWR_STOPEntry_WFE);
+    SystemInit();
+    SystemCoreClockUpdate();
+    USBHD_RCC_Init();
 
     if( EXTI_GetFlagStatus( EXTI_Line12 | EXTI_Line13 | EXTI_Line14 | EXTI_Line15 ) != RESET  )
     {
@@ -700,5 +703,5 @@ void MCU_Sleep_Wakeup_Operate( void )
         EXTI_ClearFlag( EXTI_Line4 | EXTI_Line5 | EXTI_Line6 | EXTI_Line7 );
         USBHD_Send_Resume( );
     }
-//    printf( "Wake\r\n" );
+    printf( "Wake\r\n" );
 }

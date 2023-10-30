@@ -113,7 +113,14 @@ void SystemCoreClockUpdate(void)
             pllmull = (pllmull >> 18) + 2;
             if(pllsource == 0x00)
             {
-                SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+                if( EXTEN->EXTEN_CTR & EXTEN_PLL_HSI_PRE )
+                {
+                    SystemCoreClock = ( HSI_VALUE ) * pllmull;
+                }
+                else
+                {
+                    SystemCoreClock = ( HSI_VALUE >> 1 ) * pllmull;
+                }
             }
             else
             {
