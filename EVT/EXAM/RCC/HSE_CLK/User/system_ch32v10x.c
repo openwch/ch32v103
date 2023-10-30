@@ -67,9 +67,18 @@ void SystemCoreClockUpdate(void) {
         pllmull = RCC->CFGR0 & RCC_PLLMULL;
         pllsource = RCC->CFGR0 & RCC_PLLSRC;
         pllmull = (pllmull >> 18) + 2;
-        if (pllsource == 0x00) {
-            SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
-        } else {
+        if (pllsource == 0x00) 
+        {
+            if(EXTEN->EXTEN_CTR & EXTEN_PLL_HSI_PRE)
+            {
+                SystemCoreClock = (HSI_VALUE)*pllmull;
+            }
+            else
+            {
+                SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+             }
+        }
+        else {
             if ((RCC->CFGR0 & RCC_PLLXTPRE) != (uint32_t) RESET) {
                 SystemCoreClock = (HSE_VALUE >> 1) * pllmull;
             } else {
