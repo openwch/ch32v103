@@ -127,7 +127,7 @@ void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
  */
 u16 Get_ConversionVal(s16 val)
 {
-    if((val + Calibrattion_Val) < 0)
+    if((val + Calibrattion_Val) < 0|| val==0)
         return 0;
     if((Calibrattion_Val + val) > 4095 || val==4095)
         return 4095;

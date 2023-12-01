@@ -2,7 +2,7 @@
  * File Name          : iap.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2020/12/16
+ * Date               : 2023/11/22
  * Description        : IAP
  *******************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -102,6 +102,8 @@ u8 RecData_Deal(void)
             Verity_addr = FLASH_Base;
 
             s = ERR_End;
+            FLASH->CTLR |= ((uint32_t)0x00008000);
+            FLASH->CTLR |= ((uint32_t)0x00000080);
             break;
 
         default:

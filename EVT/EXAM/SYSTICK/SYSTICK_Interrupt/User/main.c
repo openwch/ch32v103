@@ -11,7 +11,7 @@
  *******************************************************************************/
 /*
  *@Note
- Systick interrupt:
+ Systick interrupt:HCLK/8 is clock source
  USART1_Tx(PA9).
 */
 
@@ -32,7 +32,7 @@ void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
  *
  * @return  none
  */
-void SYSTICK_Init_Config(u_int32_t ticks)
+void SYSTICK_Init_Config(u_int64_t ticks)
 {
     SysTick->CTLR = 0x0000;//关闭系统计数器
 
@@ -51,10 +51,10 @@ void SYSTICK_Init_Config(u_int32_t ticks)
     SysTick->CMPLR2 = (u8)(ticks >> 16);
     SysTick->CMPLR3 = (u8)(ticks >> 24);
 
-    SysTick->CMPHR0 = 0;
-    SysTick->CMPHR1 = 0;
-    SysTick->CMPHR2 = 0;
-    SysTick->CMPHR3 = 0;
+    SysTick->CMPHR0 = (u8)(ticks >> 32);
+    SysTick->CMPHR1 = (u8)(ticks >> 40);
+    SysTick->CMPHR2 = (u8)(ticks >> 48);
+    SysTick->CMPHR3 = (u8)(ticks >> 56);
 
     NVIC_SetPriority(SysTicK_IRQn, 15);
     NVIC_EnableIRQ(SysTicK_IRQn);
@@ -75,7 +75,7 @@ int main(void)
     USART_Printf_Init( 115200 );
     printf("SystemClk:%d\r\n",SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID());
-    SYSTICK_Init_Config(SystemCoreClock-1);
+    SYSTICK_Init_Config(SystemCoreClock/8-1);//1s
     while(1)
     {
     }
@@ -102,7 +102,6 @@ void SysTick_Handler(void)
     SysTick->CNTH3 = 0;
 
     counter++;
-    Delay_Ms(250);
     printf("Counter:%d\r\n",counter);
 
    }

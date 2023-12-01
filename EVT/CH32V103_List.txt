@@ -29,6 +29,9 @@ http://wch.cn
   |      |      |      |      |-- Internal_Temperature：内部温度传感器例程
   |      |      |      |      |-- Temperature-External channel：温度传感器_外部通道交替注入例程
   |      |      |      |      |-- TIM_trigger：定时器触发ADC转换例程
+  |      |      |      |-- APPLICATION
+  |      |      |      |      |-- WS2812_LED
+  |      |      |      |      |      |-- WS2812_LED：通过SPI\PWM操作WS2812例程 
   |      |      |      |-- BKP
   |      |      |      |      |-- BKP：BKP例程  
   |      |      |      |-- CRC
@@ -52,6 +55,7 @@ http://wch.cn
   |      |      |      |      |-- I2C_DMA：I2C使用DMA，Master/Slave 模式收发例程
   |      |      |      |      |-- I2C_EEPROM：I2C接口操作EEPROM外设例程
   |      |      |      |      |-- I2C_PEC：使用PEC错误校验，Master/Slave 模式收发例程
+  |      |      |      |      |-- I2C_7bit_Interrupt_Mode：使用中断进行收发例程 
   |      |      |      |-- IAP
   |      |      |      |      |-- UART_USB_IAP：IAP升级例程-内置Hex转Bin工具和IAP升级工具
   |      |      |      |-- IWDG
@@ -76,6 +80,8 @@ http://wch.cn
   |      |      |      |      |-- SPI_DMA：SPI使用DMA，Master/Slave 模式收发例程
   |      |      |      |      |-- SPI_FLASH：SPI接口操作FLASH外设例程
   |      |      |      |      |-- SPI_LCD：SPI接口操作FLASH和LCD例程
+  |      |      |      |-- SYSTICK 
+  |      |      |      |      |-- SYSTICK_Interrupt：滴答定时器例程  
   |      |      |      |-- TencentOS 
   |      |      |      |      |-- TencentOS：TencentOS移植例程 
   |      |      |      |-- TIM
@@ -100,6 +106,7 @@ http://wch.cn
   |      |      |      |      |-- USART_Polling：轮询收发模式，Master/Slave 模式收发例程
   |      |      |      |      |-- USART_Printf：串口打印调试例程
   |      |      |      |      |-- USART_SynchronousMode：同步模式，Master/Slave 模式收发例程
+  |      |      |      |      |-- USART_Idle_Recv：串口使用DMA进行不定长接收例程
   |      |      |      |-- USB
   |      |      |      |      |-- USBHD
   |      |      |      |      |      |-- DEVICE
