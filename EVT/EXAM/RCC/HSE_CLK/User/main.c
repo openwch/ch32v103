@@ -2,7 +2,7 @@
 * File Name          : main.c
 * Author             : WCH
 * Version            : V1.0.0
-* Date               : 2021/06/06
+* Date               : 2024/01/05
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -96,7 +96,6 @@ uint8_t HSE_FrequencyCheck(void) {
         HSEFrequency = (HSEClock)/(tick_val/(RTC_DIV_VAL/8))*RTC_COUNT_DELAY;
         HSEFrequencyMhz = (HSEFrequency+(F1M/2))/F1M;
 
-        /* �ظ�һ�� */
         SysTick->CTLR = 0;
         SysTick->CNTL0 = 0;
         SysTick->CNTL1 = 0;
@@ -255,7 +254,7 @@ int main(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SetSysClockTo48();
     USART_Printf_Init(115200);
     SystemCoreClockUpdate();

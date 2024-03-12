@@ -1,7 +1,7 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2023.10
+Nanjing Qinheng Microelectronics Co., Ltd. 2024.02
 
-http://wch-ic.com
+https://wch-ic.com
 
 
 Directory
@@ -27,8 +27,8 @@ Directory
   |      |      |      |      |-- Discontinuous_mode:discontinuous mode routine
   |      |      |      |      |-- ExtLines_Trigger:external lines trigger ADC conversion routine
   |      |      |      |      |-- Internal_Temperature:internal temperature sensor routine 
-  |      |      |      |      |-- TIM Trigger:TIM trigger ADC conversion routine 
-  |      |      |      |      |-- Temperature-External channel:Temperature-External channel Injection alternating inversion routine 
+  |      |      |      |      |-- TIM_Trigger:TIM trigger ADC conversion routine 
+  |      |      |      |      |-- Temperature_External_channel:Temperature-External channel Injection alternating inversion routine 
   |      |      |      |-- APPLICATION
   |      |      |      |      |-- WS2812_LED
   |      |      |      |      |      |-- WS2812_LED：SPI\PWM Operates WS2812_LED routine
@@ -64,12 +64,17 @@ Directory
   |      |      |      |      |-- Sleep_Mode:low power consumption, sleep mode routine
   |      |      |      |      |-- Standby_Mode:low power consumption, standby mode routine
   |      |      |      |      |-- Stop_Mode:low power consumption, stop mode routine
+  |      |      |      |      |-- PVD_Wakeup：STOP mode PVD wakeup MCU Routine
+  |      |      |      |      |-- PVD_VoltageJudger：PVD voltage Judger Routine
   |      |      |      |-- RCC
   |      |      |      |      |-- MCO:MCO pin clock output routine
   |      |      |      |      |-- HSI_PLL_Source:HSI or HSI/2 as PLL input clock routine
   |      |      |      |      |-- HSE_CLK:HSE frequency check routine 
+  |      |      |      |      |-- HSI_Calibration：HSI calibrate routine
+  |      |      |      |      |-- HSE_CLK:HSE frequency check routine
   |      |      |      |-- RTC
   |      |      |      |      |-- RTC_Calendar:Calendar Routines  
+  |      |      |      |      |-- RTC_Calibration：RTC calibrate Routines  
   |      |      |      |-- RT-Thread
   |      |      |      |      |-- RT_Thread_Core:RT-Thread migration routine  
   |      |      |      |-- SPI
@@ -95,6 +100,7 @@ Directory
   |      |      |      |      |-- Synchro_ExtTrigger:slave mode routine, including reset mode, gating mode and trigger mode
   |      |      |      |      |-- Synchro_Timer:timer synchronization mode
   |      |      |      |      |-- TIM_DMA:the timer uses DMA routines
+  |      |      |      |      |-- Encode:Timer encoder mode routines
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey:TouchKey Detection Routine 
   |      |      |      |-- USART
@@ -108,7 +114,7 @@ Directory
   |      |      |      |      |-- USART_SynchronousMode:synchronous mode, master / slave mode, transceiver routine
   |      |      |      |      |-- USART_Idle_Recv：USART use DMA receiving indeterminate length data routines
   |      |      |      |-- USB
-  |      |      |      |      |-- USBHD
+  |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE
   |      |      |      |      |      |      |-- CH372:Simulates a custom USB device (CH372 device) with endpoints 1, 3, 5 down and 2, 4, 6 up. Data down from endpoint 1 is uploaded from endpoint 2 and not reversed, and data down from endpoint 3, 5 is uploaded from endpoint 4,6 and reversed.
   |      |      |      |      |      |      |-- Compatibility_HID:Simulates HID devices, with data transmitted up and down through the serial port.

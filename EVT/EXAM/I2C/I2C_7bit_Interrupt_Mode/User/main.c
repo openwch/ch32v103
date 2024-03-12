@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2021/06/06
+ * Date               : 2024/01/05
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -102,10 +102,6 @@ void IIC_Init(u32 bound, u16 address)
     I2C_Init( I2C1, &I2C_InitTSturcture );
 
 	I2C_Cmd( I2C1, ENABLE );
-
-#if (I2C_MODE == HOST_MODE)
-	I2C_AcknowledgeConfig( I2C1, ENABLE );
-#endif
 
     NVIC_InitStructure.NVIC_IRQChannel = I2C1_EV_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
