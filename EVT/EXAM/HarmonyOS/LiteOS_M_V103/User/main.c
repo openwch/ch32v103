@@ -159,7 +159,7 @@ LITE_OS_SEC_TEXT_INIT int main(void)
 {
     unsigned int ret;
     SystemCoreClockUpdate();
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );

@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Date               : 2024/01/05
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -12,7 +12,7 @@
 
 /*
  *@Note
- *IAP upgrade routine：
+ *IAP upgrade routine:
  *Support serial port and USB for FLASH burning
  *
  *1. Use the IAP download tool to realize the download PA0 floating (default pull-up input)
@@ -74,7 +74,7 @@ __attribute__ ((aligned(4))) UINT8 EP5_Databuf[64 + 64];//ep5_out(64)+ep5_in(64)
 __attribute__ ((aligned(4))) UINT8 EP6_Databuf[64 + 64];//ep6_out(64)+ep6_in(64)
 __attribute__ ((aligned(4))) UINT8 EP7_Databuf[64 + 64];//ep7_out(64)+ep7_in(64)
 
-void USBHD_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void USBFS_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*********************************************************************
  * @fn      Set_USBConfig
@@ -85,9 +85,9 @@ void USBHD_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
  */
 void USBHD_ClockCmd(UINT32 RCC_USBCLKSource, FunctionalState NewState) {
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, NewState);
-    EXTEN->EXTEN_CTR |= EXTEN_USBHD_IO_EN;
+    EXTEN->EXTEN_CTR |= EXTEN_USBFS_IO_EN;
     RCC_USBCLKConfig(RCC_USBCLKSource);             //USBclk=PLLclk/1.5=48Mhz
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBHD, NewState);
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_USBFS, NewState);
 }
 
 /*********************************************************************
@@ -437,7 +437,7 @@ void IAP_2_APP(void)
 {
     R8_USB_CTRL&=~RB_UC_DEV_PU_EN;
     R8_USB_CTRL|=RB_UC_CLR_ALL|RB_UC_RESET_SIE;
-    NVIC_DisableIRQ( USBHD_IRQn );
+    NVIC_DisableIRQ( USBFS_IRQn );
     USBHD_ClockCmd(RCC_USBCLKSource_PLLCLK_1Div5, DISABLE);
     Delay_Ms(50);
     printf("jump APP\r\n");
@@ -460,7 +460,7 @@ void IAP_2_APP(void)
  * @return  none
  */
 int main(void) {
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
@@ -490,7 +490,7 @@ int main(void) {
             EXTEN->EXTEN_CTR &= ~EXTEN_USB_5V_SEL;
         }
     USB_DeviceInit();
-    NVIC_EnableIRQ(USBHD_IRQn);
+    NVIC_EnableIRQ(USBFS_IRQn);
 
     while(1)
     {
@@ -652,7 +652,7 @@ void DevEP7_OUT_Deal(UINT16 l) {
  *
  * @return  none
  */
-void USBHD_IRQHandler(void) {
+void USBFS_IRQHandler(void) {
     USB_DevTransProcess();
 }
 

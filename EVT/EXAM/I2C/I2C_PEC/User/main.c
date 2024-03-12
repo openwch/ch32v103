@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Date               : 2024/01/06
  * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -89,14 +89,8 @@ void IIC_Init(u32 bound, u16 address)
     I2C_ITConfig(I2C1, I2C_IT_ERR, ENABLE);
 
 #endif
-
     I2C_Cmd(I2C1, ENABLE);
     I2C_CalculatePEC(I2C1, ENABLE);
-
-#if(I2C_MODE == HOST_MODE)
-    I2C_AcknowledgeConfig(I2C1, ENABLE);
-
-#endif
 }
 
 /*********************************************************************
@@ -111,7 +105,7 @@ int main(void)
     u8 i = 0;
     u8 pecValue;
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(460800);

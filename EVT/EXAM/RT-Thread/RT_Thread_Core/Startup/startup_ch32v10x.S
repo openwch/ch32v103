@@ -2,7 +2,7 @@
 ;* File Name          : startup_ch32v10x.s
 ;* Author             : WCH
 ;* Version            : V1.0.1
-;* Date               : 2023/11/11
+;* Date               : 2024/01/30
 ;* Description        : CH32V10x vector table for eclipse toolchain.
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -93,7 +93,7 @@ _vector_base:
         j   EXTI15_10_IRQHandler       /* EXTI Line 15..10 */
         j   RTCAlarm_IRQHandler        /* RTC Alarm through EXTI Line */
         j   USBWakeUp_IRQHandler       /* USB Wakeup from suspend */
-        j   USBHD_IRQHandler           /* USBHD */
+        j   USBFS_IRQHandler           /* USBFS */
 
     .option rvc;
     .section    .text.vector_handler, "ax", @progbits
@@ -140,7 +140,7 @@ _vector_base:
     .weak   EXTI15_10_IRQHandler
     .weak   RTCAlarm_IRQHandler
     .weak   USBWakeUp_IRQHandler
-    .weak   USBHD_IRQHandler
+    .weak   USBFS_IRQHandler
 
 NMI_Handler:
 HardFault_Handler:
@@ -185,7 +185,7 @@ USART3_IRQHandler:
 EXTI15_10_IRQHandler:
 RTCAlarm_IRQHandler:
 USBWakeUp_IRQHandler:
-USBHD_IRQHandler:
+USBFS_IRQHandler:
 1:
 	j 1b
 

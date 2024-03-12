@@ -1,7 +1,7 @@
 
-南京沁恒微电子股份有限公司 2023.10
+南京沁恒微电子股份有限公司 2024.02
 最新资料请到我们的网站上查询
-http://wch.cn
+https://wch.cn
 
 
 文件目录
@@ -27,7 +27,7 @@ http://wch.cn
   |      |      |      |      |-- Discontinuous_mode：间断模式例程
   |      |      |      |      |-- ExtLines_Trigger：外部触发ADC转换例程
   |      |      |      |      |-- Internal_Temperature：内部温度传感器例程
-  |      |      |      |      |-- Temperature-External channel：温度传感器_外部通道交替注入例程
+  |      |      |      |      |-- Temperature_External_channel：温度传感器_外部通道交替注入例程
   |      |      |      |      |-- TIM_trigger：定时器触发ADC转换例程
   |      |      |      |-- APPLICATION
   |      |      |      |      |-- WS2812_LED
@@ -64,12 +64,17 @@ http://wch.cn
   |      |      |      |      |-- Sleep_Mode：低功耗，睡眠模式例程
   |      |      |      |      |-- Standby_Mode：低功耗，待机模式例程
   |      |      |      |      |-- Stop_Mode：低功耗，停机模式例程
+  |      |      |      |      |-- PVD_Wakeup：STOP模式PVD中断唤醒例程
+  |      |      |      |      |-- PVD_VoltageJudger：PVD电压判定例程
   |      |      |      |-- RCC
   |      |      |      |      |-- MCO：MCO引脚时钟输出例程
   |      |      |      |      |-- HSI_PLL_Source：HSI或HSI/2作为PLL输入时钟例程 
   |      |      |      |      |-- HSE_CLK：检查HSE频率例程   
+  |      |      |      |      |-- HSI_Calibration：HSI校准例程  
+  |      |      |      |      |-- LSI_Calibration：LSI校准例程  
   |      |      |      |-- RTC
   |      |      |      |      |-- RTC_Calendar：日历例程
+  |      |      |      |      |-- RTC_Calibration：RTC校准例程  
   |      |      |      |-- RT-Thread 
   |      |      |      |      |-- RT_Thread_Core：RT-Thread移植例程  
   |      |      |      |-- SPI
@@ -95,6 +100,7 @@ http://wch.cn
   |      |      |      |      |-- Synchro_ExtTrigger：从模式例程，包括复位模式、门控模式、触发模式
   |      |      |      |      |-- Synchro_Timer：定时器同步模式
   |      |      |      |      |-- TIM_DMA：定时器使用DMA例程
+  |      |      |      |      |-- Encoder：定时器编码器例程
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey：TouchKey检测例程  
   |      |      |      |-- USART
@@ -108,7 +114,7 @@ http://wch.cn
   |      |      |      |      |-- USART_SynchronousMode：同步模式，Master/Slave 模式收发例程
   |      |      |      |      |-- USART_Idle_Recv：串口使用DMA进行不定长接收例程
   |      |      |      |-- USB
-  |      |      |      |      |-- USBHD
+  |      |      |      |      |-- USBFS
   |      |      |      |      |      |-- DEVICE
   |      |      |      |      |      |      |-- CH372：模拟自定义USB设备（CH372设备），端点1，3，5下传，2，4, 6上传，端点1下传的数据从端点2上传，不取反，端点3, 5下传的数据从端点4, 6上传，取反。
   |      |      |      |      |      |      |-- Compatibility_HID：模拟HID设备，数据通过串口上下传。

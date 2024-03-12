@@ -2,7 +2,7 @@
  * File Name          : ch32v10x.h
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Date               : 2024/01/30
  * Description        : CH32V10x Device Peripheral Access Layer Header File.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -28,7 +28,7 @@ extern "C" {
 
 /* CH32V10x Standard Peripheral Library version number */
 #define __CH32V10x_STDPERIPH_VERSION_MAIN   (0x02) /* [15:8] main version */
-#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x03) /* [7:0] sub version */
+#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x04) /* [7:0] sub version */
 #define __CH32V10x_STDPERIPH_VERSION        ( (__CH32V10x_STDPERIPH_VERSION_MAIN << 8)\
                                              |(__CH32V10x_STDPERIPH_VERSION_SUB << 0))
 
@@ -81,9 +81,12 @@ typedef enum IRQn
     EXTI15_10_IRQn = 56,     /* External Line[15:10] Interrupts                      */
     RTCAlarm_IRQn = 57,      /* RTC Alarm through EXTI Line Interrupt                */
     USBWakeUp_IRQn = 58,     /* USB WakeUp from suspend through EXTI Line Interrupt  */
-    USBHD_IRQn = 59,         /* USBHD Interrupt                                      */
+    USBFS_IRQn = 59,         /* USBFS Interrupt                                      */
 
 } IRQn_Type;
+
+#define USBHD_IRQn        USBFS_IRQn
+#define USBHD_IRQHandler  USBFS_IRQHandler
 
 #define HardFault_IRQn    EXC_IRQn
 #define ADC1_2_IRQn       ADC_IRQn
@@ -3195,11 +3198,12 @@ typedef struct
 /****************************  Enhanced register  *****************************/
 #define EXTEN_USBD_LS                           ((uint32_t)0x00000001) /* Bit 0 */
 #define EXTEN_USBD_PU_EN                        ((uint32_t)0x00000002) /* Bit 1 */
-#define EXTEN_USBHD_IO_EN                       ((uint32_t)0x00000004) /* Bit 2 */
+#define EXTEN_USBFS_IO_EN                       ((uint32_t)0x00000004) /* Bit 2 */
 #define EXTEN_USB_5V_SEL                        ((uint32_t)0x00000008) /* Bit 3 */
 #define EXTEN_PLL_HSI_PRE                       ((uint32_t)0x00000010) /* Bit 4 */
 #define EXTEN_LOCKUP_EN                         ((uint32_t)0x00000040) /* Bit 5 */
 #define EXTEN_LOCKUP_RSTF                       ((uint32_t)0x00000080) /* Bit 7 */
+#define EXTEN_USBHD_IO_EN                       EXTEN_USBFS_IO_EN
 
 #define EXTEN_ULLDO_TRIM                        ((uint32_t)0x00000300) /* ULLDO_TRIM[1:0] bits */
 #define EXTEN_ULLDO_TRIM0                       ((uint32_t)0x00000100) /* Bit 0 */
