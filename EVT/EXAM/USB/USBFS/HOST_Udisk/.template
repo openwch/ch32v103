@@ -13,3 +13,4 @@ Vendor=WCH
 MCU=CH32V103C8T6
 Mcu Type=CH32V10x
 Link=WCH-Link
+CLKSpeed=1
