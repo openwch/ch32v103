@@ -2,7 +2,7 @@
  * File Name          : main.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Date               : 2024/06/26
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -16,17 +16,10 @@
  *This example demonstrates that HSI or HSI/2 is used as the PLL input clock,
  *and the system clock uses the PLL as the clock source.
  *Refer to system_ch32v10x.c, system_ch32v10x.h.
- *HSI is used as the PLL input clock, and the demonstration system clocks are 24MHz, 48MHz, and 72MHz.
  *HSI/2 is used as the PLL input clock, and the demonstration system clock is 24MHz, 48MHz
  *
  */
 #include "debug.h"
-
-#define HSI           0    //HSI
-#define HSI_1_2       1    //HSI/2
-
-#define PLL_Source    HSI
-//#define PLL_Source   HSI_1_2
 
 /*********************************************************************
  * @fn      main

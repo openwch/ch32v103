@@ -2,7 +2,7 @@
  * File Name          : ch32v10x_pwr.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Date               : 2024/06/14
  * Description        : This file provides all the PWR firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -81,14 +81,14 @@ void PWR_PVDCmd(FunctionalState NewState)
  *        Detector(PVD).
  *
  * @param   PWR_PVDLevel - specifies the PVD detection level
- *            PWR_PVDLevel_2V7 - PVD detection level set to 2.7V
- *            PWR_PVDLevel_2V9 - PVD detection level set to 2.9V
- *            PWR_PVDLevel_3V1 - PVD detection level set to 3.1V
- *            PWR_PVDLevel_3V3 - PVD detection level set to 3.3V
- *            PWR_PVDLevel_3V5 - PVD detection level set to 3.5V
- *            PWR_PVDLevel_3V8 - PVD detection level set to 3.8V
- *            PWR_PVDLevel_4V1 - PVD detection level set to 4.1V
- *            PWR_PVDLevel_4V4 - PVD detection level set to 4.4V
+ *            PWR_PVDLevel_MODE0 - PVD detection level set to mode 0.
+ *            PWR_PVDLevel_MODE1 - PVD detection level set to mode 1.
+ *            PWR_PVDLevel_MODE2 - PVD detection level set to mode 2.
+ *            PWR_PVDLevel_MODE3 - PVD detection level set to mode 3.
+ *            PWR_PVDLevel_MODE4 - PVD detection level set to mode 4.
+ *            PWR_PVDLevel_MODE5 - PVD detection level set to mode 5.
+ *            PWR_PVDLevel_MODE6 - PVD detection level set to mode 6.
+ *            PWR_PVDLevel_MODE7 - PVD detection level set to mode 7.
  *
  * @return  none
  */
@@ -235,14 +235,14 @@ PWR_VDD PWR_VDD_SupplyVoltage(void)
     PWR_VDD VDD_Voltage = PWR_VDD_3V3;
     Delay_Init();
     RCC_APB1PeriphClockCmd( RCC_APB1Periph_PWR, ENABLE);
-    PWR_PVDLevelConfig(PWR_PVDLevel_4V1);
+    PWR_PVDLevelConfig(PWR_PVDLevel_MODE6);
     PWR_PVDCmd(ENABLE);
     Delay_Us(10);
     if( PWR_GetFlagStatus(PWR_FLAG_PVDO) == (uint32_t)RESET)
     {
         VDD_Voltage = PWR_VDD_5V;
     }
-    PWR_PVDLevelConfig(PWR_PVDLevel_2V7);
+    PWR_PVDLevelConfig(PWR_PVDLevel_MODE0);
     PWR_PVDCmd(DISABLE);
 
     return VDD_Voltage;

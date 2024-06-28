@@ -2,7 +2,7 @@
  * File Name          : ch32v10x.h
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2024/01/30
+ * Date               : 2024/06/14
  * Description        : CH32V10x Device Peripheral Access Layer Header File.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -28,7 +28,7 @@ extern "C" {
 
 /* CH32V10x Standard Peripheral Library version number */
 #define __CH32V10x_STDPERIPH_VERSION_MAIN   (0x02) /* [15:8] main version */
-#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x05) /* [7:0] sub version */
+#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x06) /* [7:0] sub version */
 #define __CH32V10x_STDPERIPH_VERSION        ( (__CH32V10x_STDPERIPH_VERSION_MAIN << 8)\
                                              |(__CH32V10x_STDPERIPH_VERSION_SUB << 0))
 
@@ -2409,14 +2409,23 @@ typedef struct
 #define PWR_CTLR_PLS_1                          ((uint16_t)0x0040) /* Bit 1 */
 #define PWR_CTLR_PLS_2                          ((uint16_t)0x0080) /* Bit 2 */
 
-#define PWR_CTLR_PLS_2V2                        ((uint16_t)0x0000) /* PVD level 2.2V */
-#define PWR_CTLR_PLS_2V3                        ((uint16_t)0x0020) /* PVD level 2.3V */
-#define PWR_CTLR_PLS_2V4                        ((uint16_t)0x0040) /* PVD level 2.4V */
-#define PWR_CTLR_PLS_2V5                        ((uint16_t)0x0060) /* PVD level 2.5V */
-#define PWR_CTLR_PLS_2V6                        ((uint16_t)0x0080) /* PVD level 2.6V */
-#define PWR_CTLR_PLS_2V7                        ((uint16_t)0x00A0) /* PVD level 2.7V */
-#define PWR_CTLR_PLS_2V8                        ((uint16_t)0x00C0) /* PVD level 2.8V */
-#define PWR_CTLR_PLS_2V9                        ((uint16_t)0x00E0) /* PVD level 2.9V */
+#define  PWR_CTLR_PLS_MODE0                     ((uint16_t)0x0000)     
+#define  PWR_CTLR_PLS_MODE1                     ((uint16_t)0x0020)     
+#define  PWR_CTLR_PLS_MODE2                     ((uint16_t)0x0040)     
+#define  PWR_CTLR_PLS_MODE3                     ((uint16_t)0x0060)     
+#define  PWR_CTLR_PLS_MODE4                     ((uint16_t)0x0080)     
+#define  PWR_CTLR_PLS_MODE5                     ((uint16_t)0x00A0)     
+#define  PWR_CTLR_PLS_MODE6                     ((uint16_t)0x00C0)     
+#define  PWR_CTLR_PLS_MODE7                     ((uint16_t)0x00E0)     
+
+#define PWR_CTLR_PLS_2V2                        PWR_CTLR_PLS_MODE0 
+#define PWR_CTLR_PLS_2V3                        PWR_CTLR_PLS_MODE1 
+#define PWR_CTLR_PLS_2V4                        PWR_CTLR_PLS_MODE2 
+#define PWR_CTLR_PLS_2V5                        PWR_CTLR_PLS_MODE3 
+#define PWR_CTLR_PLS_2V6                        PWR_CTLR_PLS_MODE4 
+#define PWR_CTLR_PLS_2V7                        PWR_CTLR_PLS_MODE5 
+#define PWR_CTLR_PLS_2V8                        PWR_CTLR_PLS_MODE6 
+#define PWR_CTLR_PLS_2V9                        PWR_CTLR_PLS_MODE7 
 
 #define PWR_CTLR_DBP                            ((uint16_t)0x0100) /* Disable Backup Domain write protection */
 
