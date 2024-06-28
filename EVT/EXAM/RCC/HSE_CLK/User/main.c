@@ -14,8 +14,8 @@
  *HSE frequency check routine:
  *HSE value -the frequency of HSE
  *MCO(PA8)	- outputs the HSE clock
-	 
-*/
+ *	 
+ */
 
 #include "debug.h"
 
@@ -71,8 +71,10 @@ uint8_t HSE_FrequencyCheck(void) {
 
         rtc_val = RTC_GetCounter();
 
-        while( rtc_val == RTC_GetCounter()) {
-            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_CHANGE_TIMEOUT ) {
+        while( rtc_val == RTC_GetCounter()) 
+        {
+            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_CHANGE_TIMEOUT ) 
+            {
                 return 0;
             }
         }
@@ -85,8 +87,10 @@ uint8_t HSE_FrequencyCheck(void) {
         SysTick->CTLR = 1;
 
         rtc_val += (RTC_COUNT_DELAY);
-        while( rtc_val >= RTC_GetCounter() ) {
-            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_COUNT_MAX_TIMEOUT ) {
+        while( rtc_val >= RTC_GetCounter() ) 
+        {
+            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_COUNT_MAX_TIMEOUT ) 
+            {
                 return 0;
             }
         }
@@ -103,8 +107,10 @@ uint8_t HSE_FrequencyCheck(void) {
         SysTick->CNTL3 = 0;
         SysTick->CTLR = 1;
         rtc_val = RTC_GetCounter();
-        while( rtc_val == RTC_GetCounter() ) {
-            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_CHANGE_TIMEOUT ) {
+        while( rtc_val == RTC_GetCounter() ) 
+        {
+            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_CHANGE_TIMEOUT ) 
+            {
                 return 0;
             }
         }
@@ -115,24 +121,25 @@ uint8_t HSE_FrequencyCheck(void) {
         SysTick->CNTL3 = 0;
         SysTick->CTLR = 1;
         rtc_val += (RTC_COUNT_DELAY);
-        while( rtc_val >= RTC_GetCounter() ) {
-            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_COUNT_MAX_TIMEOUT ) {
+        while( rtc_val >= RTC_GetCounter() ) 
+        {
+            if( SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24) > RTC_COUNT_MAX_TIMEOUT ) 
+            {
                 return 0;
             }
         }
+
         tick_val = SysTick->CNTL0+(SysTick->CNTL1<<8)+(SysTick->CNTL2<<16)+(SysTick->CNTL3<<24);
-
         SysTick->CTLR = 0;
-
         HSEFrequency = (HSEClock)/(tick_val/(RTC_DIV_VAL/8))*RTC_COUNT_DELAY;
-
         HSEFrequency_x = (HSEFrequency+(F1M/2))/F1M;
 
-
-        if( HSEFrequencyMhz == HSEFrequency_x ) {
+        if( HSEFrequencyMhz == HSEFrequency_x ) 
+        {
             break;
         }
-        if( --count == 0 ) {
+        if( --count == 0 ) 
+        {
             HSEFrequencyMhz = 253;
             printf("HSE check error.\n");
             break;
@@ -150,6 +157,8 @@ uint8_t HSE_FrequencyCheck(void) {
  */
 static void SetSysClockTo48(void)
 {
+    u32 temp = 0;
+    u32 temp1 = 0;
     __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
 
     RCC->CTLR |= ((uint32_t)RCC_HSEON);
@@ -164,7 +173,8 @@ static void SetSysClockTo48(void)
     {
         HSEStatus = (uint32_t) 0x00;
         value = HSE_FrequencyCheck();
-        if ((value >= 3) && (value <= 25)) {
+        if ((value >= 3) && (value <= 25)) 
+        {
             HSEStatus = (uint32_t) 0x01;
         }
     }
@@ -179,8 +189,10 @@ static void SetSysClockTo48(void)
         FLASH->ACTLR |= FLASH_ACTLR_PRFTBE;
 
         /* Flash 1 wait state */
-        FLASH->ACTLR &= (uint32_t)((uint32_t)~FLASH_ACTLR_LATENCY);
-        FLASH->ACTLR |= (uint32_t)FLASH_ACTLR_LATENCY_1;
+        temp = FLASH->ACTLR;
+        temp &= (uint32_t)((uint32_t)~FLASH_ACTLR_LATENCY);
+        temp |= (uint32_t)FLASH_ACTLR_LATENCY_1;
+        FLASH->ACTLR = temp;
 
         /* HCLK = SYSCLK */
         RCC->CFGR0 |= (uint32_t)RCC_HPRE_DIV1;
@@ -213,9 +225,11 @@ static void SetSysClockTo48(void)
         /* Enable Prefetch Buffer */
         FLASH->ACTLR |= FLASH_ACTLR_PRFTBE;
 
-        /* Flash 2 wait state */
-        FLASH->ACTLR &= (uint32_t)((uint32_t)~FLASH_ACTLR_LATENCY);
-        FLASH->ACTLR |= (uint32_t)FLASH_ACTLR_LATENCY_2;
+        /* Flash 1 wait state */
+        temp1 = FLASH->ACTLR;
+        temp1 &= (uint32_t)((uint32_t)~FLASH_ACTLR_LATENCY);
+        temp1 |= (uint32_t)FLASH_ACTLR_LATENCY_1;
+        FLASH->ACTLR = temp1;
 
         /* HCLK = SYSCLK */
         RCC->CFGR0 |= (uint32_t)RCC_HPRE_DIV1;
@@ -224,7 +238,7 @@ static void SetSysClockTo48(void)
         /* PCLK1 = HCLK */
         RCC->CFGR0 |= (uint32_t)RCC_PPRE1_DIV2;
 
-        /*  PLL configuration: PLLCLK = HSE * 9 = 72 MHz */
+        /*  PLL configuration: PLLCLK = HSI * 6 = 48 MHz */
         RCC->CFGR0 &= (uint32_t)((uint32_t) ~(RCC_PLLSRC | RCC_PLLXTPRE |
                         RCC_PLLMULL));
         RCC->CFGR0 |= (uint32_t)(RCC_PLLSRC_HSI_Div2 | RCC_PLLMULL6);
