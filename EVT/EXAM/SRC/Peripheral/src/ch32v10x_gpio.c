@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x_gpio.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : This file provides all the GPIO firmware functions.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -431,7 +431,7 @@ void GPIO_EventOutputCmd(FunctionalState NewState)
  *            GPIO_Remap_TIM4 - TIM4 Alternate Function mapping
  *            GPIO_Remap1_CAN1 - CAN1 Alternate Function mapping
  *            GPIO_Remap2_CAN1 - CAN1 Alternate Function mapping
- *            GPIO_Remap_PD01 - PD01 Alternate Function mapping
+ *            GPIO_Remap_PD0PD1 - PD0 and PD1 Alternate Function mapping
  *            GPIO_Remap_ADC1_ETRGINJ - ADC1 External Trigger Injected Conversion remapping
  *            GPIO_Remap_ADC1_ETRGREG - ADC1 External Trigger Regular Conversion remapping
  *            GPIO_Remap_ADC2_ETRGINJ - ADC2 External Trigger Injected Conversion remapping

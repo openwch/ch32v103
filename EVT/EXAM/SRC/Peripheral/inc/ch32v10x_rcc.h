@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x_rcc.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/30
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : This file provides all the RCC firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -152,7 +152,6 @@ typedef struct
 #define RCC_APB1Periph_TIM14             ((uint32_t)0x00000100)
 #define RCC_APB1Periph_WWDG              ((uint32_t)0x00000800)
 #define RCC_APB1Periph_SPI2              ((uint32_t)0x00004000)
-#define RCC_APB1Periph_SPI3              ((uint32_t)0x00008000)
 #define RCC_APB1Periph_USART2            ((uint32_t)0x00020000)
 #define RCC_APB1Periph_USART3            ((uint32_t)0x00040000)
 #define RCC_APB1Periph_UART4             ((uint32_t)0x00080000)

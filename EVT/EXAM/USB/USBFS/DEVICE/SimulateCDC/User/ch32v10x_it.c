@@ -58,6 +58,7 @@ void TIM2_IRQHandler( void )
  */
 void HardFault_Handler(void)
 {
+    NVIC_SystemReset();
     while(1)
     {
     }

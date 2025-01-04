@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x_spi.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : This file contains all the functions prototypes for the
  *                      SPI firmware library.
 *********************************************************************************
@@ -53,28 +53,6 @@ typedef struct
     uint16_t SPI_CRCPolynomial; /* Specifies the polynomial used for the CRC calculation. */
 } SPI_InitTypeDef;
 
-/* I2S Init structure definition */
-typedef struct
-{
-    uint16_t I2S_Mode; /* Specifies the I2S operating mode.
-                          This parameter can be a value of @ref I2S_Mode */
-
-    uint16_t I2S_Standard; /* Specifies the standard used for the I2S communication.
-                              This parameter can be a value of @ref I2S_Standard */
-
-    uint16_t I2S_DataFormat; /* Specifies the data format for the I2S communication.
-                                This parameter can be a value of @ref I2S_Data_Format */
-
-    uint16_t I2S_MCLKOutput; /* Specifies whether the I2S MCLK output is enabled or not.
-                                This parameter can be a value of @ref I2S_MCLK_Output */
-
-    uint32_t I2S_AudioFreq; /* Specifies the frequency selected for the I2S communication.
-                               This parameter can be a value of @ref I2S_Audio_Frequency */
-
-    uint16_t I2S_CPOL; /* Specifies the idle state of the I2S clock.
-                          This parameter can be a value of @ref I2S_Clock_Polarity */
-} I2S_InitTypeDef;
-
 /* SPI_data_direction */
 #define SPI_Direction_2Lines_FullDuplex    ((uint16_t)0x0000)
 #define SPI_Direction_2Lines_RxOnly        ((uint16_t)0x0400)
@@ -115,45 +93,6 @@ typedef struct
 #define SPI_FirstBit_MSB                   ((uint16_t)0x0000)
 #define SPI_FirstBit_LSB                   ((uint16_t)0x0080)
 
-/* I2S_Mode */
-#define I2S_Mode_SlaveTx                   ((uint16_t)0x0000)
-#define I2S_Mode_SlaveRx                   ((uint16_t)0x0100)
-#define I2S_Mode_MasterTx                  ((uint16_t)0x0200)
-#define I2S_Mode_MasterRx                  ((uint16_t)0x0300)
-
-/* I2S_Standard */
-#define I2S_Standard_Phillips              ((uint16_t)0x0000)
-#define I2S_Standard_MSB                   ((uint16_t)0x0010)
-#define I2S_Standard_LSB                   ((uint16_t)0x0020)
-#define I2S_Standard_PCMShort              ((uint16_t)0x0030)
-#define I2S_Standard_PCMLong               ((uint16_t)0x00B0)
-
-/* I2S_Data_Format */
-#define I2S_DataFormat_16b                 ((uint16_t)0x0000)
-#define I2S_DataFormat_16bextended         ((uint16_t)0x0001)
-#define I2S_DataFormat_24b                 ((uint16_t)0x0003)
-#define I2S_DataFormat_32b                 ((uint16_t)0x0005)
-
-/* I2S_MCLK_Output */
-#define I2S_MCLKOutput_Enable              ((uint16_t)0x0200)
-#define I2S_MCLKOutput_Disable             ((uint16_t)0x0000)
-
-/* I2S_Audio_Frequency */
-#define I2S_AudioFreq_192k                 ((uint32_t)192000)
-#define I2S_AudioFreq_96k                  ((uint32_t)96000)
-#define I2S_AudioFreq_48k                  ((uint32_t)48000)
-#define I2S_AudioFreq_44k                  ((uint32_t)44100)
-#define I2S_AudioFreq_32k                  ((uint32_t)32000)
-#define I2S_AudioFreq_22k                  ((uint32_t)22050)
-#define I2S_AudioFreq_16k                  ((uint32_t)16000)
-#define I2S_AudioFreq_11k                  ((uint32_t)11025)
-#define I2S_AudioFreq_8k                   ((uint32_t)8000)
-#define I2S_AudioFreq_Default              ((uint32_t)2)
-
-/* I2S_Clock_Polarity */
-#define I2S_CPOL_Low                       ((uint16_t)0x0000)
-#define I2S_CPOL_High                      ((uint16_t)0x0008)
-
 /* SPI_I2S_DMA_transfer_requests */
 #define SPI_I2S_DMAReq_Tx                  ((uint16_t)0x0002)
 #define SPI_I2S_DMAReq_Rx                  ((uint16_t)0x0001)
@@ -182,8 +121,6 @@ typedef struct
 /* SPI_I2S_flags_definition */
 #define SPI_I2S_FLAG_RXNE                  ((uint16_t)0x0001)
 #define SPI_I2S_FLAG_TXE                   ((uint16_t)0x0002)
-#define I2S_FLAG_CHSIDE                    ((uint16_t)0x0004)
-#define I2S_FLAG_UDR                       ((uint16_t)0x0008)
 #define SPI_FLAG_CRCERR                    ((uint16_t)0x0010)
 #define SPI_FLAG_MODF                      ((uint16_t)0x0020)
 #define SPI_I2S_FLAG_OVR                   ((uint16_t)0x0040)
@@ -191,11 +128,8 @@ typedef struct
 
 void       SPI_I2S_DeInit(SPI_TypeDef *SPIx);
 void       SPI_Init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_InitStruct);
-void       I2S_Init(SPI_TypeDef *SPIx, I2S_InitTypeDef *I2S_InitStruct);
 void       SPI_StructInit(SPI_InitTypeDef *SPI_InitStruct);
-void       I2S_StructInit(I2S_InitTypeDef *I2S_InitStruct);
 void       SPI_Cmd(SPI_TypeDef *SPIx, FunctionalState NewState);
-void       I2S_Cmd(SPI_TypeDef *SPIx, FunctionalState NewState);
 void       SPI_I2S_ITConfig(SPI_TypeDef *SPIx, uint8_t SPI_I2S_IT, FunctionalState NewState);
 void       SPI_I2S_DMACmd(SPI_TypeDef *SPIx, uint16_t SPI_I2S_DMAReq, FunctionalState NewState);
 void       SPI_I2S_SendData(SPI_TypeDef *SPIx, uint16_t Data);
