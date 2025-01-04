@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x_gpio.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/30
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : This file contains all the functions prototypes for the
  *                      GPIO firmware library.
 *********************************************************************************
@@ -96,7 +96,7 @@ typedef enum
 #define GPIO_Remap_TIM4                ((uint32_t)0x00001000) /* TIM4 Alternate Function mapping */
 #define GPIO_Remap1_CAN1               ((uint32_t)0x001D4000) /* CAN1 Alternate Function mapping */
 #define GPIO_Remap2_CAN1               ((uint32_t)0x001D6000) /* CAN1 Alternate Function mapping */
-#define GPIO_Remap_PD01                ((uint32_t)0x00008000) /* PD01 Alternate Function mapping */
+#define GPIO_Remap_PD0PD1              ((uint32_t)0x00008000) /* PD0 and PD1 Alternate Function mapping */
 #define GPIO_Remap_ADC1_ETRGINJ        ((uint32_t)0x00200002) /* ADC1 External Trigger Injected Conversion remapping */
 #define GPIO_Remap_ADC1_ETRGREG        ((uint32_t)0x00200004) /* ADC1 External Trigger Regular Conversion remapping */
 #define GPIO_Remap_SWJ_Disable         ((uint32_t)0x00300400) /* Full SWJ Disabled */
@@ -107,6 +107,7 @@ typedef enum
 #define GPIO_Remap_TIM67_DAC_DMA       ((uint32_t)0x80000800) /* TIM6/TIM7 and DAC DMA requests remapping (only for High density Value line devices) */
 #define GPIO_Remap_MISC                ((uint32_t)0x80002000) /* Miscellaneous Remap (DMA2 Channel5 Position and DAC Trigger remapping, \
                                                                    only for High density Value line devices) */
+#define GPIO_Remap_PD01                GPIO_Remap_PD0PD1
 
 /* GPIO_Port_Sources */
 #define GPIO_PortSourceGPIOA           ((uint8_t)0x00)

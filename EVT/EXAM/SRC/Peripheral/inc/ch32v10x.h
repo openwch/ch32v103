@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/06/14
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : CH32V10x Device Peripheral Access Layer Header File.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -19,7 +19,9 @@ extern "C" {
 #define __MPU_PRESENT             0  /* Other CH32 devices does not provide an MPU */
 #define __Vendor_SysTickConfig    0  /* Set to 1 if different SysTick Config is used */
 
+#ifndef HSE_VALUE
 #define HSE_VALUE                 ((uint32_t)8000000) /* Value of the External oscillator in Hz */
+#endif
 
 /* In the following line adjust the External High Speed oscillator (HSE) Startup Timeout value */
 #define HSE_STARTUP_TIMEOUT       ((uint16_t)0x500) /* Time out for HSE start up */
@@ -28,7 +30,7 @@ extern "C" {
 
 /* CH32V10x Standard Peripheral Library version number */
 #define __CH32V10x_STDPERIPH_VERSION_MAIN   (0x02) /* [15:8] main version */
-#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x06) /* [7:0] sub version */
+#define __CH32V10x_STDPERIPH_VERSION_SUB    (0x07) /* [7:0] sub version */
 #define __CH32V10x_STDPERIPH_VERSION        ( (__CH32V10x_STDPERIPH_VERSION_MAIN << 8)\
                                              |(__CH32V10x_STDPERIPH_VERSION_SUB << 0))
 
@@ -38,7 +40,7 @@ typedef enum IRQn
     /******  RISC-V Processor Exceptions Numbers *******************************************************/
     NonMaskableInt_IRQn = 2, /* 2 Non Maskable Interrupt                             */
     EXC_IRQn = 3,            /* 4 Exception Interrupt                                */
-    SysTicK_IRQn = 12,       /* 12 System timer Interrupt                            */
+    SysTick_IRQn = 12,       /* 12 System timer Interrupt                            */
     Software_IRQn = 14,      /* 14 software Interrupt                                */
 
     /******  RISC-V specific Interrupt Numbers *********************************************************/
@@ -87,6 +89,7 @@ typedef enum IRQn
 
 #define USBHD_IRQn        USBFS_IRQn
 #define USBHD_IRQHandler  USBFS_IRQHandler
+#define SysTicK_IRQn      SysTick_IRQn
 
 #define HardFault_IRQn    EXC_IRQn
 #define ADC1_2_IRQn       ADC_IRQn
@@ -428,10 +431,10 @@ typedef struct
     uint16_t      RESERVED5;
     __IO uint16_t TCRCR;
     uint16_t      RESERVED6;
-    __IO uint16_t I2SCFGR;
-    uint16_t      RESERVED7;
-    __IO uint16_t I2SPR;
-    uint16_t      RESERVED8;
+    uint32_t      RESERVED7;
+    uint32_t      RESERVED8;
+    __IO uint16_t HSCR;
+    uint16_t      RESERVED9;
 } SPI_TypeDef;
 
 /* TIM */
@@ -534,7 +537,6 @@ typedef struct
 #define WWDG_BASE                               (APB1PERIPH_BASE + 0x2C00)
 #define IWDG_BASE                               (APB1PERIPH_BASE + 0x3000)
 #define SPI2_BASE                               (APB1PERIPH_BASE + 0x3800)
-#define SPI3_BASE                               (APB1PERIPH_BASE + 0x3C00)
 #define USART2_BASE                             (APB1PERIPH_BASE + 0x4400)
 #define USART3_BASE                             (APB1PERIPH_BASE + 0x4800)
 #define UART4_BASE                              (APB1PERIPH_BASE + 0x4C00)
@@ -604,7 +606,6 @@ typedef struct
 #define WWDG                                    ((WWDG_TypeDef *)WWDG_BASE)
 #define IWDG                                    ((IWDG_TypeDef *)IWDG_BASE)
 #define SPI2                                    ((SPI_TypeDef *)SPI2_BASE)
-#define SPI3                                    ((SPI_TypeDef *)SPI3_BASE)
 #define USART2                                  ((USART_TypeDef *)USART2_BASE)
 #define USART3                                  ((USART_TypeDef *)USART3_BASE)
 #define UART4                                   ((USART_TypeDef *)UART4_BASE)
@@ -2123,10 +2124,8 @@ typedef struct
 #define AFIO_PCFR1_SWJ_CFG_1                    ((uint32_t)0x02000000) /* Bit 1 */
 #define AFIO_PCFR1_SWJ_CFG_2                    ((uint32_t)0x04000000) /* Bit 2 */
 
-#define AFIO_PCFR1_SWJ_CFG_RESET                ((uint32_t)0x00000000) /* Full SWJ (JTAG-DP + SW-DP) : Reset State */
-#define AFIO_PCFR1_SWJ_CFG_NOJNTRST             ((uint32_t)0x01000000) /* Full SWJ (JTAG-DP + SW-DP) but without JNTRST */
-#define AFIO_PCFR1_SWJ_CFG_JTAGDISABLE          ((uint32_t)0x02000000) /* JTAG-DP Disabled and SW-DP Enabled */
-#define AFIO_PCFR1_SWJ_CFG_DISABLE              ((uint32_t)0x04000000) /* JTAG-DP Disabled and SW-DP Disabled */
+#define AFIO_PCFR1_SWJ_CFG_RESET                ((uint32_t)0x00000000) 
+#define AFIO_PCFR1_SWJ_CFG_DISABLE              ((uint32_t)0x04000000) 
 
 /*****************  Bit definition for AFIO_EXTICR1 register  *****************/
 #define AFIO_EXTICR1_EXTI0                      ((uint16_t)0x000F) /* EXTI 0 configuration */
@@ -2592,8 +2591,6 @@ typedef struct
 #define RCC_SPI1RST                             ((uint32_t)0x00001000) /* SPI 1 reset */
 #define RCC_USART1RST                           ((uint32_t)0x00004000) /* USART1 reset */
 
-#define RCC_IOPERST                             ((uint32_t)0x00000040) /* I/O port E reset */
-
 /*****************  Bit definition for RCC_APB1PRSTR register  *****************/
 #define RCC_TIM2RST                             ((uint32_t)0x00000001) /* Timer 2 reset */
 #define RCC_TIM3RST                             ((uint32_t)0x00000002) /* Timer 3 reset */
@@ -2770,32 +2767,8 @@ typedef struct
 /******************  Bit definition for SPI_TCRCR register  ******************/
 #define SPI_TCRCR_TXCRC                         ((uint16_t)0xFFFF) /* Tx CRC Register */
 
-/******************  Bit definition for SPI_I2SCFGR register  *****************/
-#define SPI_I2SCFGR_CHLEN                       ((uint16_t)0x0001) /* Channel length (number of bits per audio channel) */
-
-#define SPI_I2SCFGR_DATLEN                      ((uint16_t)0x0006) /* DATLEN[1:0] bits (Data length to be transferred) */
-#define SPI_I2SCFGR_DATLEN_0                    ((uint16_t)0x0002) /* Bit 0 */
-#define SPI_I2SCFGR_DATLEN_1                    ((uint16_t)0x0004) /* Bit 1 */
-
-#define SPI_I2SCFGR_CKPOL                       ((uint16_t)0x0008) /* steady state clock polarity */
-
-#define SPI_I2SCFGR_I2SSTD                      ((uint16_t)0x0030) /* I2SSTD[1:0] bits (I2S standard selection) */
-#define SPI_I2SCFGR_I2SSTD_0                    ((uint16_t)0x0010) /* Bit 0 */
-#define SPI_I2SCFGR_I2SSTD_1                    ((uint16_t)0x0020) /* Bit 1 */
-
-#define SPI_I2SCFGR_PCMSYNC                     ((uint16_t)0x0080) /* PCM frame synchronization */
-
-#define SPI_I2SCFGR_I2SCFG                      ((uint16_t)0x0300) /* I2SCFG[1:0] bits (I2S configuration mode) */
-#define SPI_I2SCFGR_I2SCFG_0                    ((uint16_t)0x0100) /* Bit 0 */
-#define SPI_I2SCFGR_I2SCFG_1                    ((uint16_t)0x0200) /* Bit 1 */
-
-#define SPI_I2SCFGR_I2SE                        ((uint16_t)0x0400) /* I2S Enable */
-#define SPI_I2SCFGR_I2SMOD                      ((uint16_t)0x0800) /* I2S mode selection */
-
-/******************  Bit definition for SPI_I2SPR register  *******************/
-#define SPI_I2SPR_I2SDIV                        ((uint16_t)0x00FF) /* I2S Linear prescaler */
-#define SPI_I2SPR_ODD                           ((uint16_t)0x0100) /* Odd factor for the prescaler */
-#define SPI_I2SPR_MCKOE                         ((uint16_t)0x0200) /* Master Clock Output Enable */
+/******************  Bit definition for SPI_HSCR register  *****************/
+#define SPI_HSCR_HSRXEN                         ((uint16_t)0x0001) 
 
 /******************************************************************************/
 /*                                    TIM                                     */

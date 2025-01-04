@@ -1,5 +1,5 @@
 
-Nanjing Qinheng Microelectronics Co., Ltd. 2024.02
+Nanjing Qinheng Microelectronics Co., Ltd. 2025.01
 
 https://wch-ic.com
 
@@ -101,6 +101,10 @@ Directory
   |      |      |      |      |-- Synchro_Timer:timer synchronization mode
   |      |      |      |      |-- TIM_DMA:the timer uses DMA routines
   |      |      |      |      |-- Encode:Timer encoder mode routines
+  |      |      |      |      |-- TIM_Continuous：Timer continuous routines
+  |      |      |      |      |-- PWM_Phase_shifted：Timer PWM Phase shifted routines
+  |      |      |      |      |-- PWM_6_Step：Timer 6_Step PWM routines
+  |      |      |      |      |-- TIM_INT:Timer interput mode routines
   |      |      |      |-- TOUCHKEY
   |      |      |      |      |-- TKey:TouchKey Detection Routine 
   |      |      |      |-- USART

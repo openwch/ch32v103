@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.1
+ * Date               : 2025/01/02
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -78,7 +78,8 @@ u8 RTC_Init(void)
     u8 temp = 0;
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
     PWR_BackupAccessCmd(ENABLE);
-
+    RTC_ClearITPendingBit(RTC_IT_ALR);
+    RTC_ClearITPendingBit(RTC_IT_SEC);
     /* Is it the first configuration */
 
     BKP_DeInit();
@@ -248,7 +249,6 @@ u8 RTC_Get(void)
                     temp -= 366;
                 else
                 {
-                    temp1++;
                     break;
                 }
             }

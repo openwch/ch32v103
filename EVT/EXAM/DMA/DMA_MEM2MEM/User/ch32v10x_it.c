@@ -37,6 +37,7 @@ void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
  */
 void HardFault_Handler(void)
 {
+    NVIC_SystemReset();
     while(1)
     {
     }

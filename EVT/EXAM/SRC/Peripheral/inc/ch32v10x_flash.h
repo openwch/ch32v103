@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT  *******************************
  * File Name          : ch32v10x_flash.h
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Version            : V1.0.1
+ * Date               : 2024/01/02
  * Description        : This file contains all the functions prototypes for the FLASH
  *                      firmware library.
 *********************************************************************************
@@ -45,43 +45,39 @@ typedef enum
 #define FLASH_PrefetchBuffer_Enable      ((uint32_t)0x00000010) /* FLASH Prefetch Buffer Enable */
 #define FLASH_PrefetchBuffer_Disable     ((uint32_t)0x00000000) /* FLASH Prefetch Buffer Disable */
 
-/* Values to be used with CH32V10x Low and Medium density devices */
-#define FLASH_WRProt_Pages0to3           ((uint32_t)0x00000001) /* CH32 Low and Medium density devices: Write protection of page 0 to 3 */
-#define FLASH_WRProt_Pages4to7           ((uint32_t)0x00000002) /* CH32 Low and Medium density devices: Write protection of page 4 to 7 */
-#define FLASH_WRProt_Pages8to11          ((uint32_t)0x00000004) /* CH32 Low and Medium density devices: Write protection of page 8 to 11 */
-#define FLASH_WRProt_Pages12to15         ((uint32_t)0x00000008) /* CH32 Low and Medium density devices: Write protection of page 12 to 15 */
-#define FLASH_WRProt_Pages16to19         ((uint32_t)0x00000010) /* CH32 Low and Medium density devices: Write protection of page 16 to 19 */
-#define FLASH_WRProt_Pages20to23         ((uint32_t)0x00000020) /* CH32 Low and Medium density devices: Write protection of page 20 to 23 */
-#define FLASH_WRProt_Pages24to27         ((uint32_t)0x00000040) /* CH32 Low and Medium density devices: Write protection of page 24 to 27 */
-#define FLASH_WRProt_Pages28to31         ((uint32_t)0x00000080) /* CH32 Low and Medium density devices: Write protection of page 28 to 31 */
-
-/* Values to be used with CH32V10x Medium-density devices */
-#define FLASH_WRProt_Pages32to35         ((uint32_t)0x00000100) /* CH32 Medium-density devices: Write protection of page 32 to 35 */
-#define FLASH_WRProt_Pages36to39         ((uint32_t)0x00000200) /* CH32 Medium-density devices: Write protection of page 36 to 39 */
-#define FLASH_WRProt_Pages40to43         ((uint32_t)0x00000400) /* CH32 Medium-density devices: Write protection of page 40 to 43 */
-#define FLASH_WRProt_Pages44to47         ((uint32_t)0x00000800) /* CH32 Medium-density devices: Write protection of page 44 to 47 */
-#define FLASH_WRProt_Pages48to51         ((uint32_t)0x00001000) /* CH32 Medium-density devices: Write protection of page 48 to 51 */
-#define FLASH_WRProt_Pages52to55         ((uint32_t)0x00002000) /* CH32 Medium-density devices: Write protection of page 52 to 55 */
-#define FLASH_WRProt_Pages56to59         ((uint32_t)0x00004000) /* CH32 Medium-density devices: Write protection of page 56 to 59 */
-#define FLASH_WRProt_Pages60to63         ((uint32_t)0x00008000) /* CH32 Medium-density devices: Write protection of page 60 to 63 */
-#define FLASH_WRProt_Pages64to67         ((uint32_t)0x00010000) /* CH32 Medium-density devices: Write protection of page 64 to 67 */
-#define FLASH_WRProt_Pages68to71         ((uint32_t)0x00020000) /* CH32 Medium-density devices: Write protection of page 68 to 71 */
-#define FLASH_WRProt_Pages72to75         ((uint32_t)0x00040000) /* CH32 Medium-density devices: Write protection of page 72 to 75 */
-#define FLASH_WRProt_Pages76to79         ((uint32_t)0x00080000) /* CH32 Medium-density devices: Write protection of page 76 to 79 */
-#define FLASH_WRProt_Pages80to83         ((uint32_t)0x00100000) /* CH32 Medium-density devices: Write protection of page 80 to 83 */
-#define FLASH_WRProt_Pages84to87         ((uint32_t)0x00200000) /* CH32 Medium-density devices: Write protection of page 84 to 87 */
-#define FLASH_WRProt_Pages88to91         ((uint32_t)0x00400000) /* CH32 Medium-density devices: Write protection of page 88 to 91 */
-#define FLASH_WRProt_Pages92to95         ((uint32_t)0x00800000) /* CH32 Medium-density devices: Write protection of page 92 to 95 */
-#define FLASH_WRProt_Pages96to99         ((uint32_t)0x01000000) /* CH32 Medium-density devices: Write protection of page 96 to 99 */
-#define FLASH_WRProt_Pages100to103       ((uint32_t)0x02000000) /* CH32 Medium-density devices: Write protection of page 100 to 103 */
-#define FLASH_WRProt_Pages104to107       ((uint32_t)0x04000000) /* CH32 Medium-density devices: Write protection of page 104 to 107 */
-#define FLASH_WRProt_Pages108to111       ((uint32_t)0x08000000) /* CH32 Medium-density devices: Write protection of page 108 to 111 */
-#define FLASH_WRProt_Pages112to115       ((uint32_t)0x10000000) /* CH32 Medium-density devices: Write protection of page 112 to 115 */
-#define FLASH_WRProt_Pages116to119       ((uint32_t)0x20000000) /* CH32 Medium-density devices: Write protection of page 115 to 119 */
-#define FLASH_WRProt_Pages120to123       ((uint32_t)0x40000000) /* CH32 Medium-density devices: Write protection of page 120 to 123 */
-#define FLASH_WRProt_Pages124to127       ((uint32_t)0x80000000) /* CH32 Medium-density devices: Write protection of page 124 to 127 */
-
-#define FLASH_WRProt_Pages62to255        ((uint32_t)0x80000000) /* CH32 Medium-density devices: Write protection of page 62 to 255 */
+/* Write Protect */
+#define FLASH_WRProt_Pages0to3           ((uint32_t)0x00000001) /* Write protection of the standard page 0 to 3 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages4to7           ((uint32_t)0x00000002) /* Write protection of the standard page 4 to 7 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages8to11          ((uint32_t)0x00000004) /* Write protection of the standard page 8 to 11 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages12to15         ((uint32_t)0x00000008) /* Write protection of the standard page 12 to 15 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages16to19         ((uint32_t)0x00000010) /* Write protection of the standard page 16 to 19 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages20to23         ((uint32_t)0x00000020) /* Write protection of the standard page 20 to 23 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages24to27         ((uint32_t)0x00000040) /* Write protection of the standard page 24 to 27 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages28to31         ((uint32_t)0x00000080) /* Write protection of the standard page 28 to 31 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages32to35         ((uint32_t)0x00000100) /* Write protection of the standard page 32 to 35 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages36to39         ((uint32_t)0x00000200) /* Write protection of the standard page 36 to 39 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages40to43         ((uint32_t)0x00000400) /* Write protection of the standard page 40 to 43 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages44to47         ((uint32_t)0x00000800) /* Write protection of the standard page 44 to 47 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages48to51         ((uint32_t)0x00001000) /* Write protection of the standard page 48 to 51 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages52to55         ((uint32_t)0x00002000) /* Write protection of the standard page 52 to 55 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages56to59         ((uint32_t)0x00004000) /* Write protection of the standard page 56 to 59 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages60to63         ((uint32_t)0x00008000) /* Write protection of the standard page 60 to 63 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages64to67         ((uint32_t)0x00010000) /* Write protection of the standard page 64 to 67 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages68to71         ((uint32_t)0x00020000) /* Write protection of the standard page 68 to 71 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages72to75         ((uint32_t)0x00040000) /* Write protection of the standard page 72 to 75 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages76to79         ((uint32_t)0x00080000) /* Write protection of the standard page 76 to 79 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages80to83         ((uint32_t)0x00100000) /* Write protection of the standard page 80 to 83 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages84to87         ((uint32_t)0x00200000) /* Write protection of the standard page 84 to 87 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages88to91         ((uint32_t)0x00400000) /* Write protection of the standard page 88 to 91 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages92to95         ((uint32_t)0x00800000) /* Write protection of the standard page 92 to 95 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages96to99         ((uint32_t)0x01000000) /* Write protection of the standard page 96 to 99 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages100to103       ((uint32_t)0x02000000) /* Write protection of the standard page 100 to 103 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages104to107       ((uint32_t)0x04000000) /* Write protection of the standard page 104 to 107 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages108to111       ((uint32_t)0x08000000) /* Write protection of the standard page 108 to 111 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages112to115       ((uint32_t)0x10000000) /* Write protection of the standard page 112 to 115 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages116to119       ((uint32_t)0x20000000) /* Write protection of the standard page 115 to 119 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages120to123       ((uint32_t)0x40000000) /* Write protection of the standard page 120 to 123 ,1K bytes/standard page */
+#define FLASH_WRProt_Pages124to127       ((uint32_t)0x80000000) /* Write protection of the standard page 124 to 127 ,1K bytes/standard page */
 
 #define FLASH_WRProt_AllPages            ((uint32_t)0xFFFFFFFF) /* Write protection of all Pages */
 
