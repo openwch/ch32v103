@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : main.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/06/14
+* Version            : V1.0.1
+* Date               : 2026/10/14
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -27,7 +27,6 @@ void PVD_IRQHandler(void)
     if (EXTI_GetITStatus(EXTI_Line16) != RESET)
     {
         Voltage_ThresFlag = !PWR_GetFlagStatus(PWR_FLAG_PVDO);
-        printf("Run at EXTI\r\n");
         EXTI_ClearITPendingBit(EXTI_Line16);
     }
 }
@@ -75,13 +74,12 @@ void PVD_Init(void)
  */
 int main(void)
 {
-    u8 i = 0;
 
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf("ChipID:%08x\r\n", DBGMCU_GetCHIPID());
 
     printf("Voltage judger TEST\r\n");
@@ -92,6 +90,6 @@ int main(void)
     while (1)
     {
         Delay_Ms(250);
-        Voltage_ThresFlag?printf("Supply voltage is 5V\r\n"):printf("Supply voltage is 3.3V\r\n");
+        Voltage_ThresFlag ? printf("Supply voltage is 5V\r\n") : printf("Supply voltage is 3.3V\r\n");
     }
 }

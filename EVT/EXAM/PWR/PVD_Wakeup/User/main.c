@@ -27,7 +27,6 @@ void PVD_IRQHandler(void)
     if (EXTI_GetITStatus(EXTI_Line16) != RESET)
     {
         SystemInit();
-        printf("Run at EXTI\r\n");
         EXTI_ClearITPendingBit(EXTI_Line16);
     }
 }
@@ -40,20 +39,19 @@ void PVD_IRQHandler(void)
  *
  * @return   none
  */
-
 void PVD_Init(void)
 {
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 
-    EXTI_InitTypeDef EXIT_InitStructure = {0};
+    EXTI_InitTypeDef EXTI_InitStructure = {0};
     NVIC_InitTypeDef NVIC_InitStructure = {0};
 
-    EXIT_InitStructure.EXTI_Line = EXTI_Line16;
-    EXIT_InitStructure.EXTI_LineCmd = ENABLE;
-    EXIT_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-    EXIT_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; // 4.2V
-    EXTI_Init(&EXIT_InitStructure);
+    EXTI_InitStructure.EXTI_Line = EXTI_Line16;
+    EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; 
+    EXTI_Init(&EXTI_InitStructure);
 
     NVIC_InitStructure.NVIC_IRQChannel = PVD_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
@@ -75,13 +73,11 @@ void PVD_Init(void)
  */
 int main(void)
 {
-    u8 i = 0;
-
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf("ChipID:%08x\r\n", DBGMCU_GetCHIPID());
 
     printf("PVD wakeup TEST\r\n");

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.1
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -19,7 +19,7 @@
  */
 
 #include "debug.h"
-
+vu8  IntResponse=0 ;
 /*********************************************************************
  * @fn      ADC_Function_Init
  *
@@ -105,7 +105,9 @@ u16 Get_ADC_Val(u8 ch)
 {
     u16 val;
 
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    ADC_RegularChannelConfig(ADC1, ch ,1, ADC_SampleTime_239Cycles5 );
+
+    ADC_SoftwareStartConvCmd( ADC1, ENABLE );
 
     while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
 
@@ -136,9 +138,14 @@ int main(void)
 
     while(1)
     {
-        ADC_val = Get_ADC_Val(ADC_Channel_2);
-        Delay_Ms(500);
-        printf("%04d\r\n", ADC_val);
-        Delay_Ms(2);
+        ADC_val = Get_ADC_Val( ADC_Channel_2 );
+        Delay_Ms( 500 );
+	    if(IntResponse == 1)
+        {
+					IntResponse=0;
+           printf( "Enter AnalogWatchdog Interrupt\r\n" );
+        }
+        printf( "%04d\r\n", ADC_val );
+        Delay_Ms( 2 );
     }
 }

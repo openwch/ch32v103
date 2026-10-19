@@ -56,7 +56,6 @@ void EXTI0_IRQHandler(void)
     if(EXTI_GetITStatus(EXTI_Line0) != RESET)
     {
         SystemInit();
-        printf("EXTI0 Wake_up\r\n");
         EXTI_ClearITPendingBit(EXTI_Line0); /* Clear Flag */
     }
 }

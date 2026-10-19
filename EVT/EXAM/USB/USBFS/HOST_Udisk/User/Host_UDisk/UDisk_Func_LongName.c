@@ -12,15 +12,15 @@
 
 /*******************************************************************************/
 /* Header File */
-#include "Udisk_Operation.h"
+#include "UDisk_Operation.h"
 
 /*******************************************************************************/
 /* Variable Definition */
 uint8_t    LongNameBuf[ LONG_NAME_BUF_LEN ];
 /*
-长文件名示例(UNICODE编码的大小端 必须与UNICODE_ENDIAN定义相同)
-以下是LongName里编码内容:
-建立长文件名，输入两个参数： 1.采用(unicode 大端)，字符串末尾用两个0表示结束;2.ANSI编码短文件名.TXT
+Long file name example(UNICODEthe endianness of the encoding must match theUNICODE_ENDIAN definition)
+The following is the encoded content inLongName:
+Create a long file name with two input parameters: 1.use(unicode  big-endian), terminate the string with two 00s0 to mark the end;2.ANSIencode the short file name.TXT
 */
 uint8_t LongName[ ] =
 #if UNICODE_ENDIAN == 1
@@ -63,15 +63,15 @@ void UDisk_USBH_Longname( void )
     if( ( ret == DISK_READY )&&( UDisk_Opeation_Flag == 1 ) )
     {
         UDisk_Opeation_Flag = 0;
-        /*==================== 以下演示创建及读取长文件名 ============================*/
-        // 复制长文件名(UNICODE 大端)到LongNameBuf里
+        /*==================== The following demonstrates creating and reading long file names ============================*/
+        // Copy the long file name(UNICODE big-endian) toLongNameBuf
         len = LongName_Len;
         memcpy( LongNameBuf, LongName, len );
-        // 末尾用两个0表示结束
+        // Terminate with two0 to mark the end
         LongNameBuf[len] = 0x00;
         LongNameBuf[len + 1] = 0x00;
-        // 该长文件名的ANSI编码短文件名(8+3格式)
-        strcpy( mCmdParam.Create.mPathName, "\\长文件名.TXT" );
+        // TheANSI encoded short file name of this long file name(8+3 format)
+        strcpy( mCmdParam.Create.mPathName, "\\long file name.TXT" );
         i = CHRV3CreateLongName( );
         if( i == ERR_SUCCESS )
         {
@@ -84,14 +84,14 @@ void UDisk_USBH_Longname( void )
         }
 
         DUG_PRINTF( "Get long Name#\r\n" );
-        strcpy( mCmdParam.Open.mPathName, "\\长文件名.TXT" );
-        // 以上需要输入文件名的完整路径
+        strcpy( mCmdParam.Open.mPathName, "\\long file name.TXT" );
+        // The full path of the file name must be input above
         i = CHRV3GetLongName( );
         if( i == ERR_SUCCESS )
         {
-            // 长文件名收集完成,以UNICODE编码方式(按UNICODE_ENDIAN定义)
-            // 存放在LongNameBuf缓冲里,长文件名最后用两个0结束.
-            // 以下显示缓冲区里所有数据
+            // Long file name collection completed,inUNICODE encoding(as per theUNICODE_ENDIAN definition)
+            // Stored in theLongNameBuf buffer,, the long file name is terminated with two 0s at the end0.
+            // Display all data in the buffer below
             DUG_PRINTF( "LongNameBuf: " );
             for( j=0; j!=LONG_NAME_BUF_LEN; j++ )
             {
@@ -110,9 +110,9 @@ void UDisk_USBH_Longname( void )
 /*********************************************************************
  * @fn      CheckNameSum
  *
- * @brief   检查长文件名的短文件名检验和
+ * @brief   Check the short file name checksum of the long file name
  *
- * @return  计算后的校验和
+ * @return  The calculated checksum
  */
 uint8_t CheckNameSum( uint8_t *p )
 {
@@ -128,9 +128,9 @@ uint8_t Sum;
 /*********************************************************************
  * @fn      AnalyzeLongName
  *
- * @brief   整理长文件名 返回有几个的26长度
+ * @brief   Organize the long file name return the number of26-byte units
  *
- * @return  返回有多少个26的长度
+ * @return  return the number of26-byte units
  */
 uint8_t AnalyzeLongName( void )
 {
@@ -147,15 +147,15 @@ uint16_t  index;
         }
     }
     if( ( i == FALSE ) || ( index == 0) )
-        return 0;                   // 返回0表示错误的长文件名
+        return 0;                   // Return0 to indicate a wrong long file name
 
     i = index % 26;
     if( i != 0 )
     {
         index += 2;
-        if( index % 26 != 0 )       // 加0刚好结束
+        if( index % 26 != 0 )       // Add0 to terminate exactly
         {
-            for( j=i+2; j!=26; j++ )// 把剩余数据填为0XFF
+            for( j=i+2; j!=26; j++ )// Fill the remaining data with0XFF
                 LongNameBuf[index++] = 0xff;
         }
     }
@@ -165,37 +165,37 @@ uint16_t  index;
 /*********************************************************************
  * @fn      CHRV3CreateLongName
  *
- * @brief   创建长文件名,需要输入短文件名的完整路径
+ * @brief   Create a long file name,the full path of the short file name must be input
  *
- * @return  操作状态
+ * @return  Operation status
  */
 uint8_t CHRV3CreateLongName( void )
 {
-// 分析 保留文件路径 创建一个空文件 得到FDT偏移和其所在扇区 删除文件
-// 向后偏移扇区 可能失败 如FAT12/16处在根目录处 填充完毕后再次创建文件
+// Analyze preserve the file path create an empty file get theFDT offset and its sector delete the file
+// Shift backward by sectors may fail e.g.FAT12/16when located in the root directory re-create the file after padding
 uint8_t   i;
-uint8_t   len;                                // 存放路径的长度
-uint16_t  index;                              // 长文件偏移索引
-uint16_t  indexBak;                           // 长文件偏移索引备份
-uint32_t  Secoffset;                          // 扇区偏移
+uint8_t   len;                                // Length of the stored path
+uint16_t  index;                              // Long file offset index
+uint16_t  indexBak;                           // Backup of the long file offset index
+uint32_t  Secoffset;                          // Sector offset
 
-uint8_t   Fbit;                               // 第一次进入写扇区
-uint8_t   Mult;                               // 长文件名长度26的倍数
-uint8_t   MultBak;                            // 长文件名长度26的倍数备份
+uint8_t   Fbit;                               // First entry: write sector
+uint8_t   Mult;                               // The long file name length is a multiple of26
+uint8_t   MultBak;                            // Backup: the long file name length is a multiple of26
 
-uint16_t  Backoffset;                         // 保存文件偏移备份
-uint16_t  BackoffsetBak;                      // 保存偏移备份的备份
-uint32_t  BackFdtSector;                      // 保寸偏移上一个扇区
-uint8_t   sum;                                // 保存长文件名的校验和
+uint16_t  Backoffset;                         // Save the backup of the file offset
+uint16_t  BackoffsetBak;                      // Save the backup of the offset backup
+uint32_t  BackFdtSector;                      // Save the offset of the previous sector
+uint8_t   sum;                                // Save the checksum of the long file name
 
-uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
+uint8_t   BackPathBuf[MAX_PATH_LEN];    // Save the file path
 
-    Mult = AnalyzeLongName( );              // 保存长文件名是26的倍数
+    Mult = AnalyzeLongName( );              // Save whether the long file name is a multiple of26
     if( Mult == 0 )
         return ERR_LONG_NAME;
     MultBak = Mult;
 
-    i = CHRV3FileOpen();                    // 短文件名存在则返回错误
+    i = CHRV3FileOpen();                    // Return an error if the short file name exists
     if( i == ERR_SUCCESS )
         return ERR_NAME_EXIST;
 
@@ -206,45 +206,45 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
         BackoffsetBak = Backoffset;
         BackFdtSector = CHRV3vFdtLba;
         sum = CheckNameSum( &DISK_BASE_BUF[Backoffset ] );
-        for( i=0; i!=MAX_PATH_LEN; i++ )    // 对文件路径进行备份
+        for( i=0; i!=MAX_PATH_LEN; i++ )    // Back up the file path
             BackPathBuf[i] = mCmdParam.Open.mPathName[i];
-        CHRV3FileErase( );                  // 删除此文件
+        CHRV3FileErase( );                  // Delete this file
 
-        Secoffset   = 0;                    // 从0开始偏移
-        index       = Mult*26;              // 得到长文件名的长度
+        Secoffset   = 0;                    // Offset starting from0
+        index       = Mult*26;              // Get the length of the long file name
         indexBak    = index;
-        Fbit        = FALSE;                // 默认没有进入
-        // 打开上级 进行数据填充数据
+        Fbit        = FALSE;                // Not entered by default
+        // Open the parent  to fill data
         P_RETRY:
         for(len=0; len!=MAX_PATH_LEN; len++)
         {
             if(mCmdParam.Open.mPathName[len] == 0)
-                break;                      // 得到字符串长度
+                break;                      // Get the string length
         }
 
-        for(i=len-1; i!=0xff; i--)          // 得到上级目录位置
+        for(i=len-1; i!=0xff; i--)          // Get the parent directory position
         {
             if((mCmdParam.Open.mPathName[i] == '\\') || (mCmdParam.Open.mPathName[i] == '/'))
                 break;
         }
         mCmdParam.Open.mPathName[i] = 0x00;
 
-        if( i==0 )                          // 打开一级目录注意:处在根目录开始的特殊情况
+        if( i==0 )                          // Note when opening a first-level directory:the special case starting at the root directory
         {
             mCmdParam.Open.mPathName[0] = '/';
             mCmdParam.Open.mPathName[1] = 0;
         }
 
-        i = CHRV3FileOpen();                // 打开上级目录
+        i = CHRV3FileOpen();                // Open the parent directory
         if( i == ERR_OPEN_DIR )
         {
-            while( 1 )                      // 循环填写 直到完成
+            while( 1 )                      // Fill in a loop until completed
             {
                 mCmdParam.Locate.mSectorOffset = Secoffset;
                 i = CHRV3FileLocate( );
                 if( i == ERR_SUCCESS )
                 {
-                    if( Fbit )             // 第二次进入次写扇区
+                    if( Fbit )             // Second entry: write sector
                     {
                         if( mCmdParam.Locate.mSectorOffset != 0x0FFFFFFFF )
                         {
@@ -253,28 +253,28 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
                         }
                         else
                         {
-                            for( i=0; i!=MAX_PATH_LEN; i++ )// 还原文件路径
+                            for( i=0; i!=MAX_PATH_LEN; i++ )// Restore the file path
                                 mCmdParam.Open.mPathName[i] = BackPathBuf[i];
-                            i = CHRV3FileCreate( );         // 进行空间扩展
+                            i = CHRV3FileCreate( );         // Expand the space
                             if( i != ERR_SUCCESS )
                                 return i;
                             CHRV3FileErase( );
-                            goto P_RETRY;                   // 重新打开上级目录
+                            goto P_RETRY;                   // Reopen the parent directory
                         }
                     }
 
                     if( BackFdtSector == mCmdParam.Locate.mSectorOffset )
                     {
-                        mCmdParam.Read.mSectorCount = 1;   // 读一个扇区到磁盘缓冲区
+                        mCmdParam.Read.mSectorCount = 1;   // Read one sector into the disk buffer
                         mCmdParam.Read.mDataBuffer = &DISK_BASE_BUF[0];
                         i = CHRV3FileRead( );
-                        CHRV3DirtyBuffer( );                // 清除磁盘缓冲区
+                        CHRV3DirtyBuffer( );                // Clear the disk buffer
                         if( i!= ERR_SUCCESS )
                             return i;
 
                         i = ( CHRV3vSectorSize - Backoffset ) / 32;
                         if( Mult > i )
-                            Mult = Mult - i;                // 剩余的倍数
+                            Mult = Mult - i;                // Remaining multiple of
                         else
                         {
                             i = Mult;
@@ -285,8 +285,8 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
                         {
                             indexBak -= 26;
                             index = indexBak;
-                            for( i=0; i!=5; i++)            // 长文件名的1-5个字符
-                            {                               // 在磁盘上UNICODE用小端方式存放
+                            for( i=0; i!=5; i++)            // 1-5 characters of the long file name
+                            {                               // On the diskUNICODE stored in little-endian
                                 #if UNICODE_ENDIAN == 1
                                 DISK_BASE_BUF[Backoffset + i*2 + 2 ] =
                                     LongNameBuf[index++];
@@ -300,7 +300,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
                                 #endif
                             }
 
-                            for( i =0; i!=6; i++)           // 长文件名的6-11个字符
+                            for( i =0; i!=6; i++)           // 6-11 characters of the long file name
                             {
                                 #if UNICODE_ENDIAN == 1
                                 DISK_BASE_BUF[Backoffset + 14 + i*2 + 1 ] =
@@ -315,7 +315,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
                                 #endif
                             }
 
-                            for( i=0; i!=2; i++)            // 长文件名的12-13个字符
+                            for( i=0; i!=2; i++)            // 12-13 characters of the long file name
                             {
                                 #if UNICODE_ENDIAN == 1
                                 DISK_BASE_BUF[Backoffset + 28 + i*2 + 1 ] =
@@ -350,7 +350,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
                             return i;
 
                         if( Mult==0 )
-                        {   // 还原文件路径
+                        {   // Restore the file path
 					        CHRV3FileClose( );
                             for( i=0; i!=MAX_PATH_LEN; i++ )
                                 mCmdParam.Open.mPathName[i] = BackPathBuf[i];
@@ -371,31 +371,31 @@ uint8_t   BackPathBuf[MAX_PATH_LEN];    // 保存文件路径
 /*********************************************************************
  * @fn      GetUpSectorData
  *
- * @brief   由当前扇区得到上一个扇区的数据，放在磁盘缓冲区
+ * @brief   Get the data of the previous sector from the current sector, put it in the disk buffer
  *
- * @return  操作状态
+ * @return  Operation status
  */
 uint8_t GetUpSectorData( uint32_t *NowSector )
 {
 uint8_t  i;
-uint8_t  len;             // 存放路径的长度
-uint32_t index;           // 目录扇区偏移扇区数
+uint8_t  len;             // Length of the stored path
+uint32_t index;           // Directory sector offset sector count
 
     index = 0;
     for(len=0; len!=MAX_PATH_LEN; len++)
     {
-        if(mCmdParam.Open.mPathName[len] == 0)          // 得到字符串长度
+        if(mCmdParam.Open.mPathName[len] == 0)          // Get the string length
             break;
     }
 
-    for(i=len-1; i!=0xff; i--)                          // 得到上级目录位置
+    for(i=len-1; i!=0xff; i--)                          // Get the parent directory position
     {
         if((mCmdParam.Open.mPathName[i] == '\\') || (mCmdParam.Open.mPathName[i] == '/'))
             break;
     }
     mCmdParam.Open.mPathName[i] = 0x00;
 
-    if( i==0 )  // 打开一级目录注意:处在根目录开始的特殊情况
+    if( i==0 )  // Note when opening a first-level directory:the special case starting at the root directory
     {
         mCmdParam.Open.mPathName[0] = '/';
         mCmdParam.Open.mPathName[1] = 0;
@@ -417,17 +417,17 @@ uint32_t index;           // 目录扇区偏移扇区数
                 {
                     if( *NowSector == mCmdParam.Locate.mSectorOffset )
                     {
-                        if( index==0 )                          // 处于根目录扇区的开始
+                        if( index==0 )                          // At the start of the root directory sector
                             return ERR_NO_NAME;
                         mCmdParam.Locate.mSectorOffset = --index;
-                        i = CHRV3FileLocate( );                 // 读上一个扇区的数据
+                        i = CHRV3FileLocate( );                 // Read the data of the previous sector
                         if( i == ERR_SUCCESS )
-                        {                                       // 以下保存当前所在扇区数
+                        {                                       // Save the current sector count below
                             *NowSector = mCmdParam.Locate.mSectorOffset;
-                            mCmdParam.Read.mSectorCount = 1;   // 读一个扇区到磁盘缓冲区
+                            mCmdParam.Read.mSectorCount = 1;   // Read one sector into the disk buffer
                             mCmdParam.Read.mDataBuffer = &DISK_BASE_BUF[0];
                             i = CHRV3FileRead( );
-                            CHRV3DirtyBuffer( );                // 清除磁盘缓冲区
+                            CHRV3DirtyBuffer( );                // Clear the disk buffer
                             return i;
                         }
                         else
@@ -446,31 +446,31 @@ uint32_t index;           // 目录扇区偏移扇区数
 /*********************************************************************
  * @fn      CHRV3GetLongName
  *
- * @brief   由完整短文件名路径(可以是文件或文件夹)得到相应的长文件名
+ * @brief   From the full short file name path(which can be a file or a folder)get the corresponding long file name
  *
- * @return  操作状态
+ * @return  Operation status
  */
 uint8_t CHRV3GetLongName( void )
 {
-// 需要变量扇区大小
-// 第一步：打开文件是否找到文件,分析文件是否存在,并得到FDT在此扇区的偏移和所在扇区
-// 第二步：分析上面的信息看是否有长文件名存在，是否处于目录的第一个扇区的开始
-// 第三步：实现向后偏移一个扇区?读取长文件名(扇区512字节的U盘)
+// Requires variable sector size
+// Step 1: check whether the file is found when opening it,analyze whether the file exists,and get theFDT offset in this sector and the sector it is in
+// Step 2: analyze the above info for long file name existence and whether it is at the start of the first sector of the directory
+// Step 3: shift backward by one sector?read the long file name ((sector512-byteUdisk)
 uint8_t   i;
-uint16_t  index;          // 在长文件名缓冲区内的索引
-uint32_t  BackFdtSector;  // 保寸偏移上一个扇区
-uint8_t   sum;            // 保存长文件名的校验和
-//uint16_t  Backoffset;     // 保存文件偏移备份
-uint16_t  offset;         // 扇区内文件偏移32倍数
-uint8_t   FirstBit;       // 长文件名跨越两个扇区标志位
-uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
+uint16_t  index;          // Index within the long file name buffer
+uint32_t  BackFdtSector;  // Save the offset of the previous sector
+uint8_t   sum;            // Save the checksum of the long file name
+//uint16_t  Backoffset;     // Save the backup of the file offset
+uint16_t  offset;         // File offset within the sector is a multiple of32
+uint8_t   FirstBit;       // Flag: long file name spans two sectors
+uint8_t   BackPathBuf[MAX_PATH_LEN]; // Save the file path
 
     i = CHRV3FileOpen( );
     if( ( i == ERR_SUCCESS ) || ( i == ERR_OPEN_DIR ) )
     {
         for( i=0; i!=MAX_PATH_LEN; i++ )
             BackPathBuf[i] = mCmdParam.Open.mPathName[i];
-        // 以上完成对路径的备份
+        // Backup of the path completed above
 
         sum = CheckNameSum( &DISK_BASE_BUF[CHRV3vFdtOffset] );
         index = 0;
@@ -479,7 +479,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
         BackFdtSector = CHRV3vFdtLba;
         if( CHRV3vFdtOffset == 0 )
         {
-            // 先判断是否处于一个扇区开始 是否处于根目录开始 ，否则向后偏移
+            // First check whether it is at the start of a sector whether it is at the start of the root directory , otherwise shift backward
             if( FirstBit == FALSE )
                 FirstBit = TRUE;
             i = GetUpSectorData( &BackFdtSector );
@@ -491,7 +491,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
         }
         else
         {
-            // 读取偏移后的数据，直到结束。如果不够则向后偏移
+            // Read the offset data until the end. If not enough, shift backward
             P_NEXT1:
             offset = CHRV3vFdtOffset;
             while( 1 )
@@ -505,8 +505,8 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
                         if( (index + 26) > LONG_NAME_BUF_LEN )
                             return ERR_BUF_OVER;
 
-                        for( i=0; i!=5; i++)            // 长文件名的1-5个字符
-                        {                               // 在磁盘上UNICODE用小端方式存放
+                        for( i=0; i!=5; i++)            // 1-5 characters of the long file name
+                        {                               // On the diskUNICODE stored in little-endian
                             #if UNICODE_ENDIAN == 1
                             LongNameBuf[index++] =
                                 DISK_BASE_BUF[offset + i*2 + 2];
@@ -520,7 +520,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
                             #endif
                         }
 
-                        for( i =0; i!=6; i++)           // 长文件名的6-11个字符
+                        for( i =0; i!=6; i++)           // 6-11 characters of the long file name
                         {
                             #if UNICODE_ENDIAN == 1
                             LongNameBuf[index++] =
@@ -536,7 +536,7 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
 
                         }
 
-                        for( i=0; i!=2; i++)            // 长文件名的12-13个字符
+                        for( i=0; i!=2; i++)            // 12-13 characters of the long file name
                         {
                             #if UNICODE_ENDIAN == 1
                             LongNameBuf[index++] =
@@ -557,25 +557,25 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
                                 && (LongNameBuf[index -2] ==0x00))
                                 || ((LongNameBuf[index -1] ==0xFF)
                                 && (LongNameBuf[index -2 ] ==0xFF))))
-                            {                           // 处理刚好为26字节长倍数的文件名
+                            {                           // Handle file names with length exactly26 bytes
                                 if(index + 52 >LONG_NAME_BUF_LEN )
                                     return ERR_BUF_OVER;
                                 LongNameBuf[ index ] = 0x00;
                                 LongNameBuf[ index + 1] = 0x00;
                             }
-                            return ERR_SUCCESS;         // 成功完成长文件名收集完成
+                            return ERR_SUCCESS;         // Long file name collection completed successfully
                         }
                     }
                     else
-                        return ERR_NO_NAME;             // 错误的长文件名,程序返回
+                        return ERR_NO_NAME;             // Wrong long file name,the program returns
                 }
                 else
                 {
                     if( FirstBit == FALSE )
                         FirstBit = TRUE;
-                    else                                // 否则第二次进入
+                    else                                // Otherwise enter a second time
                     {
-                        for( i=0; i!=MAX_PATH_LEN; i++ )// 还原路径
+                        for( i=0; i!=MAX_PATH_LEN; i++ )// Restore the path
                             mCmdParam.Open.mPathName[i] = BackPathBuf[i];
                     }
                     i = GetUpSectorData( &BackFdtSector );
@@ -586,11 +586,11 @@ uint8_t   BackPathBuf[MAX_PATH_LEN]; // 保存文件路径
                     }
                     else
                         return i;
-                    // 向后偏移扇区
+                    // Shift backward by sectors
                 }
             }
         }
     }
-    return i;                // 返回错误
+    return i;                // Return an error
 }
 

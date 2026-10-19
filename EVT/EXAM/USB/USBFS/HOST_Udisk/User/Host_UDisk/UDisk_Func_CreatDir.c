@@ -12,16 +12,16 @@
 
 /*******************************************************************************/
 /* Header File */
-#include "Udisk_Operation.h"
+#include "UDisk_Operation.h"
 
 /*******************************************************************************
 * Function Name  : CreateDirectory
-* Description    : 新建目录并打开,如果目录已经存在则直接打开，目录名在mCmdParam.Create.mPathName中,与文件名规则相同
+* Description    : Create a directory and open it,if the directory already exists open it directly, the directory name is inmCmdParam.Create.mPathName,following the same rules as file names
 * Input          :
 * Output         : None
-* Return         : ERR_SUCCESS = 打开目录成功或者创建目录成功,
-                   ERR_FOUND_NAME = 已经存在同名文件,
-                   ERR_MISS_DIR = 路径名无效或者上级目录不存在
+* Return         : ERR_SUCCESS = Directory opened or created successfully,
+                   ERR_FOUND_NAME = A file with the same name already exists,
+                   ERR_MISS_DIR = Invalid path name or the parent directory does not exist
 *******************************************************************************/
 uint8_t CreateDirectory( void )
 {
@@ -30,7 +30,7 @@ uint8_t CreateDirectory( void )
     uint8_t * DirXramBuf;
     uint8_t  *DirConstData;
     j = 0xFF;
-    for ( i = 0; i != sizeof( mCmdParam.Create.mPathName ); i ++ )    //检查目录路径
+    for ( i = 0; i != sizeof( mCmdParam.Create.mPathName ); i ++ )    //Check the directory path
     {
         if ( mCmdParam.Create.mPathName[ i ] == 0 )
         {
@@ -38,79 +38,79 @@ uint8_t CreateDirectory( void )
         }
         if ( mCmdParam.Create.mPathName[ i ] == PATH_SEPAR_CHAR1 || mCmdParam.Create.mPathName[ i ] == PATH_SEPAR_CHAR2 )
         {
-            j = i;                                                     //记录上级目录
+            j = i;                                                     //Record the parent directory
         }
     }
     i = ERR_SUCCESS;
     if ( j == 0 || (j == 2 && mCmdParam.Create.mPathName[1] == ':') )
     {
-        UpDirCluster = 0;                                              //在根目录下创建子目录
+        UpDirCluster = 0;                                              //Create the subdirectory under the root directory
     }
     else
     {
-        if ( j != 0xFF )                                               //对于绝对路径应该获取上级目录的起始簇号
+        if ( j != 0xFF )                                               //For an absolute path, get the start cluster number of the parent directory
         {
             mCmdParam.Create.mPathName[ j ] = 0;
-            i = CHRV3FileOpen( );                                      //打开上级目录
+            i = CHRV3FileOpen( );                                      //Open the parent directory
             if ( i == ERR_SUCCESS )
             {
-                i = ERR_MISS_DIR;                                      //是文件而非目录
+                i = ERR_MISS_DIR;                                      //It is a file rather than a directory
             }
             else if ( i == ERR_OPEN_DIR )
             {
-                i = ERR_SUCCESS;                                       //成功打开上级目录
+                i = ERR_SUCCESS;                                       //Parent directory opened successfully
             }
-            mCmdParam.Create.mPathName[ j ] = PATH_SEPAR_CHAR1;        //恢复目录分隔符
+            mCmdParam.Create.mPathName[ j ] = PATH_SEPAR_CHAR1;        //Restore the directory separator
         }
-        UpDirCluster = CHRV3vStartCluster;                             //保存上级目录的起始簇号
+        UpDirCluster = CHRV3vStartCluster;                             //Save the start cluster number of the parent directory
     }
-    if ( i == ERR_SUCCESS )                                            //成功获取上级目录的起始簇号
+    if ( i == ERR_SUCCESS )                                            //Start cluster number of the parent directory obtained successfully
     {
-        i = CHRV3FileOpen( );                                          //打开本级子目录
+        i = CHRV3FileOpen( );                                          //Open the current level subdirectory
         if ( i == ERR_SUCCESS )
         {
-            i = ERR_FOUND_NAME;                                        //是文件而非目录
+            i = ERR_FOUND_NAME;                                        //It is a file rather than a directory
         }
         else if ( i == ERR_OPEN_DIR )
         {
-            i = ERR_SUCCESS;                                           //目录已经存在
+            i = ERR_SUCCESS;                                           //The directory already exists
         }
-        else if ( i == ERR_MISS_FILE )                                 //目录不存在,可以新建
+        else if ( i == ERR_MISS_FILE )                                 //The directory does not exist,it can be created
         {
-            i = CHRV3FileCreate( );                                    //以创建文件的方法创建目录
+            i = CHRV3FileCreate( );                                    //Create the directory the same way as creating a file
             if ( i == ERR_SUCCESS )
             {
                 if ( pDISK_FAT_BUF == pDISK_BASE_BUF )
                 {
-                    memset(pDISK_FAT_BUF,0,CHRV3vSectorSize);     //如果FILE_DATA_BUF与DISK_BASE_BUF合用则必须清除磁盘缓冲区
+                    memset(pDISK_FAT_BUF,0,CHRV3vSectorSize);     //IfFILE_DATA_BUF andDISK_BASE_BUF share the same buffer, the disk buffer must be cleared
                 }
-                DirXramBuf = pDISK_FAT_BUF;                            //文件数据缓冲区
+                DirXramBuf = pDISK_FAT_BUF;                            //File data buffer
                 DirConstData = ".          \x10\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x21\x30\x0\x0\x0\x0\x0\x0..         \x10\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x21\x30\x0\x0\x0\x0\x0\x0";
-                for ( i = 0x40; i != 0; i -- )                         //目录的保留单元,分别指向自身和上级目录
+                for ( i = 0x40; i != 0; i -- )                         //Reserved entries of the directory,pointing to itself and the parent directory respectively
                 {
                     *DirXramBuf = *DirConstData;
                     DirXramBuf ++;
                     DirConstData ++;
                 }
-                *(pDISK_FAT_BUF+0x1A) = ( (uint8_t *)&CHRV3vStartCluster )[3];//自身的起始簇号
+                *(pDISK_FAT_BUF+0x1A) = ( (uint8_t *)&CHRV3vStartCluster )[3];//Its own start cluster number
                 *(pDISK_FAT_BUF+0x1B) = ( (uint8_t *)&CHRV3vStartCluster )[2];
                 *(pDISK_FAT_BUF+0x14) = ( (uint8_t *)&CHRV3vStartCluster )[1];
                 *(pDISK_FAT_BUF+0x15) = ( (uint8_t *)&CHRV3vStartCluster )[0];
-                *(pDISK_FAT_BUF+0x20+0x1A) = ( (uint8_t *)&UpDirCluster )[3];//上级目录的起始簇号
+                *(pDISK_FAT_BUF+0x20+0x1A) = ( (uint8_t *)&UpDirCluster )[3];//Start cluster number of the parent directory
                 *(pDISK_FAT_BUF+0x20+0x1B) = ( (uint8_t *)&UpDirCluster )[2];
                 *(pDISK_FAT_BUF+0x20+0x14) = ( (uint8_t *)&UpDirCluster )[1];
                 *(pDISK_FAT_BUF+0x20+0x15) = ( (uint8_t *)&UpDirCluster )[0];
-//              for ( count = 0x40; count != CHRV3vSectorSizeH*256; count ++ ) {  /* 清空目录区剩余部分 */
+//              for ( count = 0x40; count != CHRV3vSectorSizeH*256; count ++ ) {  /* Clear the remaining part of the directory area */
 //                  *DirXramBuf = 0;
 //                  DirXramBuf ++;
 //              }
                 mCmdParam.Write.mSectorCount = 1;
-                mCmdParam.Write.mDataBuffer = pDISK_FAT_BUF;                //指向文件数据缓冲区的起始地址
-                i = CHRV3FileWrite( );                                      //向文件写入数据
+                mCmdParam.Write.mDataBuffer = pDISK_FAT_BUF;                //Point to the start address of the file data buffer
+                i = CHRV3FileWrite( );                                      //Write data to the file
                 if ( i == ERR_SUCCESS )
                 {
                     DirXramBuf = pDISK_FAT_BUF;
-                    for ( i = 0x40; i != 0; i -- )                          //清空目录区
+                    for ( i = 0x40; i != 0; i -- )                          //Clear the directory area
                     {
                         *DirXramBuf = 0;
                         DirXramBuf ++;
@@ -119,23 +119,23 @@ uint8_t CreateDirectory( void )
                     {
                         if ( pDISK_FAT_BUF == pDISK_BASE_BUF )
                         {
-                            memset(pDISK_FAT_BUF,0,CHRV3vSectorSize);   //如果FILE_DATA_BUF与DISK_BASE_BUF合用则必须清除磁盘缓冲区
+                            memset(pDISK_FAT_BUF,0,CHRV3vSectorSize);   //IfFILE_DATA_BUF andDISK_BASE_BUF share the same buffer, the disk buffer must be cleared
                         }
                         mCmdParam.Write.mSectorCount = 1;
-                        mCmdParam.Write.mDataBuffer = pDISK_FAT_BUF;         //指向文件数据缓冲区的起始地址
-                        i = CHRV3FileWrite( );                               //清空目录的剩余扇区
+                        mCmdParam.Write.mDataBuffer = pDISK_FAT_BUF;         //Point to the start address of the file data buffer
+                        i = CHRV3FileWrite( );                               //Clear the remaining sectors of the directory
                         if ( i != ERR_SUCCESS )
                         {
                             break;
                         }
                     }
-                    if ( j == CHRV3vSecPerClus )                              //成功清空目录
+                    if ( j == CHRV3vSecPerClus )                              //Directory cleared successfully
                     {
-                        mCmdParam.Modify.mFileSize = 0;                       //目录的长度总是0
+                        mCmdParam.Modify.mFileSize = 0;                       //The length of a directory is always0
                         mCmdParam.Modify.mFileDate = 0xFFFF;
                         mCmdParam.Modify.mFileTime = 0xFFFF;
-                        mCmdParam.Modify.mFileAttr = 0x10;                    //置目录属性
-                        i = CHRV3FileModify( );                               //将文件信息修改为目录
+                        mCmdParam.Modify.mFileAttr = 0x10;                    //Set the directory attribute
+                        i = CHRV3FileModify( );                               //Change the file information to a directory
                     }
                 }
             }
@@ -162,32 +162,32 @@ void UDisk_USBH_CreatDirectory( void )
         UDisk_Opeation_Flag = 0;
         printf("CHRV3DiskStatus:%02x\r\n",CHRV3DiskStatus);
         printf( "Create Level 1 Directory /YEAR2004 \r\n" );
-        strcpy( mCmdParam.Create.mPathName, "/YEAR2004" );             //目录名,该目录建在根目录下
-        ret = CreateDirectory( );                                      //新建或者打开目录
+        strcpy( mCmdParam.Create.mPathName, "/YEAR2004" );             //Directory name,this directory is created under the root directory
+        ret = CreateDirectory( );                                      //Create or open the directory
         mStopIfError( ret );
-        /* 目录新建或者打开成功,下面在这个子目录中新建一个演示文件 */
+        /* Directory created or opened successfully,now create a demo file in this subdirectory */
         printf( "Create New File /YEAR2004/DEMO2004.TXT \r\n" );
-        strcpy( mCmdParam.Create.mPathName, "/YEAR2004/DEMO2004.TXT" );//文件名
-        ret = CHRV3FileCreate( );                                      //新建文件并打开,如果文件已经存在则先删除后再新建
+        strcpy( mCmdParam.Create.mPathName, "/YEAR2004/DEMO2004.TXT" );//File name
+        ret = CHRV3FileCreate( );                                      //Create and open the file,if the file already exists, delete it first and then create a new one
         mStopIfError( ret );
         printf( "Write some data to file DEMO2004.TXT \r\n" );
-        i = sprintf( Com_Buffer, "演示文件\xd\xa" );
-        mCmdParam.ByteWrite.mByteCount = i;                            //指定本次写入的字节数,单次读写的长度不能超过MAX_BYTE_IO
-        mCmdParam.ByteWrite.mByteBuffer = Com_Buffer;                  //指向缓冲区
-        ret = CHRV3ByteWrite( );                                       //以字节为单位向文件写入数据,单次读写的长度不能超过MAX_BYTE_IO
+        i = sprintf( Com_Buffer, "Demo file\xd\xa" );
+        mCmdParam.ByteWrite.mByteCount = i;                            //Specify the number of bytes to write this time,a single read/write must not exceedMAX_BYTE_IO
+        mCmdParam.ByteWrite.mByteBuffer = Com_Buffer;                  //Point to the buffer
+        ret = CHRV3ByteWrite( );                                       //Write data to the file in bytes,a single read/write must not exceedMAX_BYTE_IO
         mStopIfError( ret );
         printf( "Close file DEMO2004.TXT \r\n" );
-        mCmdParam.Close.mUpdateLen = 1;                                //自动计算文件长度,以字节为单位写文件,建议让程序库关闭文件以便自动更新文件长度
+        mCmdParam.Close.mUpdateLen = 1;                                //Automatically calculate the file length,for byte-based file writing,it is recommended to let the library close the file so the file length is updated automatically
         ret = CHRV3FileClose( );
         mStopIfError( ret );
-        /* 下面新建二级子目录,方法与前面的一级子目录完全相同 */
+        /* Create a second-level subdirectory below,same method as the first-level subdirectory above */
         printf( "Create Level 2 Directory /YEAR2004/MONTH05 \r\n" );
-        strcpy( mCmdParam.Create.mPathName, "/YEAR2004/MONTH05" );    //目录名,该目录建在YEAR2004子目录下,YEAR2004目录必须事先存在
-        ret = CreateDirectory( );                                     //新建或者打开目录
+        strcpy( mCmdParam.Create.mPathName, "/YEAR2004/MONTH05" );    //Directory name,this directory is created under theYEAR2004subdirectory,YEAR2004the YEAR2004 directory must already exist
+        ret = CreateDirectory( );                                     //Create or open the directory
         mStopIfError( ret );
         printf( "Close\r\n" );
-        mCmdParam.Close.mUpdateLen = 0;                               //对于目录不需要自动更新文件长度
-        ret = CHRV3FileClose( );                                      //关闭目录,目录不需要关闭,关闭只是为了防止下面误操作
+        mCmdParam.Close.mUpdateLen = 0;                               //No automatic file length update is needed for directories
+        ret = CHRV3FileClose( );                                      //Close the directory,directories do not need to be closed,closing here is only to prevent misoperation below
         mStopIfError( ret );
     }
 }

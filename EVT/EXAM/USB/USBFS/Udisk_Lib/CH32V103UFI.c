@@ -6,14 +6,14 @@
  * Description        : USB-flash File Interface for CHRV3.
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  *******************************************************************************/
-/* CHRV3 U盘主机文件系统接口, 支持: FAT12/FAT16/FAT32 */
+/* CHRV3 U disk host file system interface, supports: FAT12/FAT16/FAT32 */
 
-//#define DISK_BASE_BUF_LEN		512	/* 默认的磁盘数据缓冲区大小为512字节(可以选择为2048甚至4096以支持某些大扇区的U盘),为0则禁止在本文件中定义缓冲区并由应用程序在pDISK_BASE_BUF中指定 */
-/* 如果需要复用磁盘数据缓冲区以节约RAM,那么可将DISK_BASE_BUF_LEN定义为0以禁止在本文件中定义缓冲区,而由应用程序在调用CHRV3LibInit之前将与其它程序合用的缓冲区起始地址置入pDISK_BASE_BUF变量 */
+//#define DISK_BASE_BUF_LEN		512	/* The default disk data buffer size is512 bytes((selectable as2048 or even4096 to supportU disks with large sectors),if0, defining the buffer in this file is prohibited; the application specifies it inpDISK_BASE_BUF */
+/* If the disk data buffer needs to be reused to saveRAM,, thenDISK_BASE_BUF_LEN can be defined as0 to disable defining the buffer in this file,, and the application shall, before callingCHRV3LibInit, put the start address of the shared buffer into thepDISK_BASE_BUF variable */
 
-//#define NO_DEFAULT_ACCESS_SECTOR	    1		/* 禁止默认的磁盘扇区读写子程序,下面用自行编写的程序代替它 */
-//#define NO_DEFAULT_DISK_CONNECT		1		/* 禁止默认的检查磁盘连接子程序,下面用自行编写的程序代替它 */
-//#define NO_DEFAULT_FILE_ENUMER		1		/* 禁止默认的文件名枚举回调程序,下面用自行编写的程序代替它 */
+//#define NO_DEFAULT_ACCESS_SECTOR	    1		/* Disable the default disk sector read/write routines,replace them with self-written routines below */
+//#define NO_DEFAULT_DISK_CONNECT		1		/* Disable the default disk connection check routine,replace it with a self-written routine below */
+//#define NO_DEFAULT_FILE_ENUMER		1		/* Disable the default file name enumeration callback routine,replace it with a self-written routine below */
 
 #include "debug.h"
 #include "CHRV3UFI.h"
@@ -105,28 +105,28 @@ UINT8 HubClearPortFeature( UINT8 HubPortIndex, UINT8 FeatureSelt )
 }
 #endif
 
-CMD_PARAM_I	mCmdParam;						/* 命令参数 */
+CMD_PARAM_I	mCmdParam;						/* Command parameters */
 #if		DISK_BASE_BUF_LEN > 0
-//UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((at(BA_RAM+SZ_RAM/2)));	/* 外部RAM的磁盘数据缓冲区,缓冲区长度为一个扇区的长度 */
-UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* 外部RAM的磁盘数据缓冲区,缓冲区长度为一个扇区的长度 */
-//UINT8	DISK_FAT_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* 外部RAM的磁盘FAT数据缓冲区,缓冲区长度为一个扇区的长度 */
+//UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((at(BA_RAM+SZ_RAM/2)));	/* ExternalRAM disk data buffer,, with a length of one sector */
+UINT8	DISK_BASE_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* ExternalRAM disk data buffer,, with a length of one sector */
+//UINT8	DISK_FAT_BUF[ DISK_BASE_BUF_LEN ] __attribute__((aligned (4)));	/* ExternalRAM diskFAT data buffer,, with a length of one sector */
 #endif
 
-/* 以下程序可以根据需要修改 */
-#ifndef	NO_DEFAULT_ACCESS_SECTOR		/* 在应用程序中定义NO_DEFAULT_ACCESS_SECTOR可以禁止默认的磁盘扇区读写子程序,然后用自行编写的程序代替它 */
-//if ( use_external_interface ) // 替换U盘扇区底层读写子程序
+/* The following routines can be modified as needed */
+#ifndef	NO_DEFAULT_ACCESS_SECTOR		/* DefineNO_DEFAULT_ACCESS_SECTOR in the application to disable the default disk sector read/write routines,, then replace them with self-written routines */
+//if ( use_external_interface ) // Replace theU disk sector low-level read/write routines
 //{
-//    CHRV3vSectorSize=512;     // 设置实际的扇区大小,必须是512的倍数,该值是磁盘的扇区大小
-//    CHRV3vSectorSizeB=9;      // 设置实际的扇区大小的位移数,512则对应9,1024对应10,2048对应11
-//    CHRV3DiskStatus=DISK_MOUNTED;  // 强制块设备连接成功(只差分析文件系统)
+//    CHRV3vSectorSize=512;     // Set the actual sector size,it must be a multiple of512,this value is the sector size of the disk
+//    CHRV3vSectorSizeB=9;      // Set the shift count of the actual sector size,512 corresponds to9,1024 corresponds to10,2048 corresponds to11
+//    CHRV3DiskStatus=DISK_MOUNTED;  // Force the block device connection to succeed(only the file system remains to be analyzed)
 //}
 
-UINT8	CHRV3ReadSector( UINT8 SectCount, PUINT8 DataBuf )  /* 从磁盘读取多个扇区的数据到缓冲区中 */
+UINT8	CHRV3ReadSector( UINT8 SectCount, PUINT8 DataBuf )  /* Read multiple sectors of data from the disk into the buffer */
 {
 	UINT8	retry;
-//	if ( use_external_interface ) return( extReadSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* 外部接口 */
-	for( retry = 0; retry < 3; retry ++ ) {  /* 错误重试 */
-		pCBW -> mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB;  /* 数据传输长度 */
+//	if ( use_external_interface ) return( extReadSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* External interface */
+	for( retry = 0; retry < 3; retry ++ ) {  /* Retry on error */
+		pCBW -> mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB;  /* Data transfer length */
 		pCBW -> mCBW_Flag = 0x80;
 		pCBW -> mCBW_LUN = CHRV3vCurrentLun;
 		pCBW -> mCBW_CB_Len = 10;
@@ -140,7 +140,7 @@ UINT8	CHRV3ReadSector( UINT8 SectCount, PUINT8 DataBuf )  /* 从磁盘读取多�
 		pCBW -> mCBW_CB_Buf[ 7 ] = 0x00;
 		pCBW -> mCBW_CB_Buf[ 8 ] = SectCount;
 		pCBW -> mCBW_CB_Buf[ 9 ] = 0x00;
-		CHRV3BulkOnlyCmd( DataBuf );  /* 执行基于BulkOnly协议的命令 */
+		CHRV3BulkOnlyCmd( DataBuf );  /* Execute commands based onBulkOnly protocol */
 		if ( CHRV3IntStatus == ERR_SUCCESS ) {
 			return( ERR_SUCCESS );
 		}
@@ -149,16 +149,16 @@ UINT8	CHRV3ReadSector( UINT8 SectCount, PUINT8 DataBuf )  /* 从磁盘读取多�
 			return( CHRV3IntStatus );
 		}
 	}
-	return( CHRV3IntStatus = ERR_USB_DISK_ERR );  /* 磁盘操作错误 */
+	return( CHRV3IntStatus = ERR_USB_DISK_ERR );  /* Disk operation error */
 }
 
 #ifdef	EN_DISK_WRITE
-UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的多个扇区的数据块写入磁盘 */
+UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* Write the multi-sector data block in the buffer to the disk */
 {
 	UINT8	retry;
-//	if ( use_external_interface ) return( extWriteSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* 外部接口 */
-	for( retry = 0; retry < 3; retry ++ ) {  /* 错误重试 */
-		pCBW -> mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB;  /* 数据传输长度 */
+//	if ( use_external_interface ) return( extWriteSector( CHRV3vLbaCurrent, SectCount, DataBuf ) );  /* External interface */
+	for( retry = 0; retry < 3; retry ++ ) {  /* Retry on error */
+		pCBW -> mCBW_DataLen = (UINT32)SectCount << CHRV3vSectorSizeB;  /* Data transfer length */
 		pCBW -> mCBW_Flag = 0x00;
 		pCBW -> mCBW_LUN = CHRV3vCurrentLun;
 		pCBW -> mCBW_CB_Len = 10;
@@ -172,9 +172,9 @@ UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的
 		pCBW -> mCBW_CB_Buf[ 7 ] = 0x00;
 		pCBW -> mCBW_CB_Buf[ 8 ] = SectCount;
 		pCBW -> mCBW_CB_Buf[ 9 ] = 0x00;
-		CHRV3BulkOnlyCmd( DataBuf );  /* 执行基于BulkOnly协议的命令 */
+		CHRV3BulkOnlyCmd( DataBuf );  /* Execute commands based onBulkOnly protocol */
 		if ( CHRV3IntStatus == ERR_SUCCESS ) {
-			Delay_Us( 200 );  /* 写操作后延时 */
+			Delay_Us( 200 );  /* Delay after write operation */
 			return( ERR_SUCCESS );
 		}
 		CHRV3IntStatus = CHRV3AnalyzeError( retry );
@@ -182,20 +182,20 @@ UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的
 			return( CHRV3IntStatus );
 		}
 	}
-	return( CHRV3IntStatus = ERR_USB_DISK_ERR );  /* 磁盘操作错误 */
+	return( CHRV3IntStatus = ERR_USB_DISK_ERR );  /* Disk operation error */
 }
 #endif
 #endif  // NO_DEFAULT_ACCESS_SECTOR
 
-#ifndef	NO_DEFAULT_DISK_CONNECT			/* 在应用程序中定义NO_DEFAULT_DISK_CONNECT可以禁止默认的检查磁盘连接子程序,然后用自行编写的程序代替它 */
+#ifndef	NO_DEFAULT_DISK_CONNECT			/* DefineNO_DEFAULT_DISK_CONNECT in the application to disable the default disk connection check routine,, then replace it with a self-written routine */
 
 /*
-约定: USB设备地址分配规则(参考USB_DEVICE_ADDR)
-地址值  设备位置
-0x02    内置Root-HUB0下的USB设备或外部HUB
-0x03    内置Root-HUB1下的USB设备或外部HUB
-0x1x    内置Root-HUB0下的外部HUB的端口x下的USB设备,x为1~n
-0x2x    内置Root-HUB1下的外部HUB的端口x下的USB设备,x为1~n
+Convention: USBUSB device address allocation rules(seeUSB_DEVICE_ADDR)
+Address value  device position
+0x02    Built-inRoot-HUB0 subordinateUSB device or external HUBHUB
+0x03    Built-inRoot-HUB1 subordinateUSB device or external HUBHUB
+0x1x    Built-inRoot-HUB0 subordinate externalHUB portx subordinateUSB device,x, x ranges 1~n1~n
+0x2x    Built-inRoot-HUB1 subordinate externalHUB portx subordinateUSB device,x, x ranges 1~n1~n
 */
 
 #define		UHUB_DEV_ADDR	R8_USB_DEV_AD
@@ -205,7 +205,7 @@ UINT8	CHRV3WriteSector( UINT8 SectCount, PUINT8 DataBuf )  /* 将缓冲区中的
 #define		bUMS_ATTACH		RB_UMS_DEV_ATTACH
 #define		bUMS_SUSPEND	RB_UMS_SUSPEND
 
-/* 检查磁盘是否连接 */
+/* Check whether the disk is connected */
 UINT8 CHRV3DiskConnect( void )
 {
 	UINT8	ums, devaddr;
@@ -213,24 +213,24 @@ UINT8 CHRV3DiskConnect( void )
 	ums = UHUB_MIS_STAT;
 	devaddr = UHUB_DEV_ADDR;
 	if ( devaddr == USB_DEVICE_ADDR )
-	{  /* 内置Root-HUB下的USB设备 */
+	{  /* Built-inRoot-HUB subordinateUSB device */
 		if ( ums & bUMS_ATTACH )
-		{  /* 内置Root-HUB下的USB设备存在 */
+		{  /* Built-inRoot-HUB subordinateUSB device present */
 			if ( ( ums & bUMS_SUSPEND ) == 0 )
 			{
-			    /* 内置Root-HUB下的USB设备存在且未插拔 */
-				return( ERR_SUCCESS );  /* USB设备已经连接且未插拔 */
+			    /* Built-inRoot-HUB subordinateUSB device present and not unplugged */
+				return( ERR_SUCCESS );  /* USB device already connected and not unplugged */
 			}
 			else
-			{  /* 内置Root-HUB下的USB设备存在 */
+			{  /* Built-inRoot-HUB subordinateUSB device present */
 //mDiskConnect:
-				CHRV3DiskStatus = DISK_CONNECT;  /* 曾经断开过 */
-				return( ERR_SUCCESS );  /* 外部HUB或USB设备已经连接或者断开后重新连接 */
+				CHRV3DiskStatus = DISK_CONNECT;  /* Was disconnected before */
+				return( ERR_SUCCESS );  /* ExternalHUB orUSB device connected, or reconnected after disconnection */
 			}
 		}
 		else
 		{
-		    /* USB设备断开 */
+		    /* USB device disconnected */
 mDiskDisconn:
 			CHRV3DiskStatus = DISK_DISCONNECT;
 			return( ERR_USB_DISCON );
@@ -243,52 +243,52 @@ mDiskDisconn:
 }
 #endif  // NO_DEFAULT_DISK_CONNECT
 
-#ifndef	NO_DEFAULT_FILE_ENUMER			/* 在应用程序中定义NO_DEFAULT_FILE_ENUMER可以禁止默认的文件名枚举回调程序,然后用自行编写的程序代替它 */
-void xFileNameEnumer( void )			/* 文件名枚举回调子程序 */
+#ifndef	NO_DEFAULT_FILE_ENUMER			/* DefineNO_DEFAULT_FILE_ENUMER in the application to disable the default file name enumeration callback routine,, then replace it with a self-written routine */
+void xFileNameEnumer( void )			/* File name enumeration callback routine */
 {
-/* 如果指定枚举序号CHRV3vFileSize为0xFFFFFFFF后调用FileOpen，那么每搜索到一个文件FileOpen都会调用本回调程序，
-   回调程序xFileNameEnumer返回后，FileOpen递减CHRV3vFileSize并继续枚举直到搜索不到文件或者目录。建议做法是，
-   在调用FileOpen之前定义一个全局变量为0，当FileOpen回调本程序后，本程序由CHRV3vFdtOffset得到结构FAT_DIR_INFO，
-   分析结构中的DIR_Attr以及DIR_Name判断是否为所需文件名或者目录名，记录相关信息，并将全局变量计数增量，
-   当FileOpen返回后，判断返回值如果是ERR_MISS_FILE或ERR_FOUND_NAME都视为操作成功，全局变量为搜索到的有效文件数。
-   如果在本回调程序xFileNameEnumer中将CHRV3vFileSize置为1，那么可以通知FileOpen提前结束搜索。以下是回调程序例子 */
+/* If the specified enumeration indexCHRV3vFileSize is0xFFFFFFFF, callFileOpen afterwards; every time a file is foundFileOpen this callback routine will be called,
+    callback routinexFileNameEnumer after returning,FileOpen decrementsCHRV3vFileSize and enumeration continues until no more files or directories are found. Recommended practice: 
+   Before callingFileOpen, define a global variable as0, whenFileOpen calls back into this routine; fromCHRV3vFdtOffset get the structureFAT_DIR_INFO,
+   AnalyzeDIR_Attr andDIR_Name in the structure to check whether it is the wanted file or directory name; record the info and increment the global counter,
+   WhenFileOpen returns, check the return value: if it isERR_MISS_FILE orERR_FOUND_NAME, treat it as success; the global variable holds the number of valid files found.
+   If, in this callback routine,xFileNameEnumer setsCHRV3vFileSize to1, thenFileOpen can be notified to end the search early. Below is a callback routine example */
 #if		0
 	UINT8			i;
 	UINT16			FileCount;
 	PX_FAT_DIR_INFO	pFileDir;
 	PUINT8			NameBuf;
-	pFileDir = (PX_FAT_DIR_INFO)( pDISK_BASE_BUF + CHRV3vFdtOffset );  /* 当前FDT的起始地址 */
-	FileCount = (UINT16)( 0xFFFFFFFF - CHRV3vFileSize );  /* 当前文件名的枚举序号,CHRV3vFileSize初值是0xFFFFFFFF,找到文件名后递减 */
-	if ( FileCount < sizeof( FILE_DATA_BUF ) / 12 ) {  /* 检查缓冲区是否足够存放,假定每个文件名需占用12个字节存放 */
-		NameBuf = & FILE_DATA_BUF[ FileCount * 12 ];  /* 计算保存当前文件名的缓冲区地址 */
-		for ( i = 0; i < 11; i ++ ) NameBuf[ i ] = pFileDir -> DIR_Name[ i ];  /* 复制文件名,长度为11个字符,未处理空格 */
-//		if ( pFileDir -> DIR_Attr & ATTR_DIRECTORY ) NameBuf[ i ] = 1;  /* 判断是目录名 */
-		NameBuf[ i ] = 0;  /* 文件名结束符 */
+	pFileDir = (PX_FAT_DIR_INFO)( pDISK_BASE_BUF + CHRV3vFdtOffset );  /* CurrentFDT's start address */
+	FileCount = (UINT16)( 0xFFFFFFFF - CHRV3vFileSize );  /* The current enumeration index of the file name,CHRV3vFileSize, initially0xFFFFFFFF,, decremented after a file name is found */
+	if ( FileCount < sizeof( FILE_DATA_BUF ) / 12 ) {  /* Check whether the buffer is large enough to hold,, assuming each file name takes12 bytes */
+		NameBuf = & FILE_DATA_BUF[ FileCount * 12 ];  /* Calculate the buffer address for saving the current file name */
+		for ( i = 0; i < 11; i ++ ) NameBuf[ i ] = pFileDir -> DIR_Name[ i ];  /* Copy the file name,, length11 characters,, spaces not handled */
+//		if ( pFileDir -> DIR_Attr & ATTR_DIRECTORY ) NameBuf[ i ] = 1;  /* Check whether it is a directory name */
+		NameBuf[ i ] = 0;  /* File name terminator */
 	}
 #endif
 }
 #endif  // NO_DEFAULT_FILE_ENUMER
 
-UINT8	CHRV3LibInit( void )  /* 初始化CHRV3程序库,操作成功返回0 */
+UINT8	CHRV3LibInit( void )  /* Initialize theCHRV3 library,; return on successful operation0 */
 {
-	if ( CHRV3GetVer( ) < CHRV3_LIB_VER ) return( 0xFF );  /* 获取当前子程序库的版本号,版本太低则返回错误 */
+	if ( CHRV3GetVer( ) < CHRV3_LIB_VER ) return( 0xFF );  /* Get the version number of the current subroutine library,return an error if the version is too low */
 #if		DISK_BASE_BUF_LEN > 0
-	pDISK_BASE_BUF = & DISK_BASE_BUF[0];  /* 指向外部RAM的磁盘数据缓冲区 */
-	pDISK_FAT_BUF = & DISK_BASE_BUF[0];  /* 指向外部RAM的磁盘FAT数据缓冲区,可以与pDISK_BASE_BUF合用以节约RAM */
-//	pDISK_FAT_BUF = & DISK_FAT_BUF[0];  /* 指向外部RAM的磁盘FAT数据缓冲区,独立于pDISK_BASE_BUF以提高速度 */
-/* 如果希望提高文件存取速度,那么可以在主程序中调用CHRV3LibInit之后,将pDISK_FAT_BUF重新指向另一个独立分配的与pDISK_BASE_BUF同样大小的缓冲区 */
+	pDISK_BASE_BUF = & DISK_BASE_BUF[0];  /* Pointing to the externalRAM disk data buffer */
+	pDISK_FAT_BUF = & DISK_BASE_BUF[0];  /* Pointing to the externalRAM diskFAT data buffer,, can share withpDISK_BASE_BUF to saveRAM */
+//	pDISK_FAT_BUF = & DISK_FAT_BUF[0];  /* Pointing to the externalRAM diskFAT data buffer,, independent ofpDISK_BASE_BUF for higher speed */
+/* To improve file access speed,, callCHRV3LibInit in the main program, then re-,pointpDISK_FAT_BUF to another independently allocated buffer of the same size aspDISK_BASE_BUF */
 #endif
-	CHRV3DiskStatus = DISK_UNKNOWN;  /* 未知状态 */
-	CHRV3vSectorSizeB = 9;  /* 默认的物理磁盘的扇区是512B */
-	CHRV3vSectorSize = 512;  // 默认的物理磁盘的扇区是512B,该值是磁盘的扇区大小
-	CHRV3vStartLba = 0;  /* 默认为自动分析FDD和HDD */
-	CHRV3vPacketSize = 64;  /* USB存储类设备的最大包长度:64@FS,512@HS/SS,由应用程序初始化,枚举U盘后如果是高速或者超速那么及时更新为512 */
-	pTX_DMA_A_REG = (PUINT32)&R16_UH_TX_DMA;  /* 指向发送DMA地址寄存器,由应用程序初始化 */
-	pRX_DMA_A_REG = (PUINT32)&R16_UH_RX_DMA;  /* 指向接收DMA地址寄存器,由应用程序初始化 */
-	pTX_LEN_REG = (PUINT16)&R8_UH_TX_LEN;  /* 指向发送长度寄存器,由应用程序初始化 */
-	pRX_LEN_REG = (PUINT16)&R16_USB_RX_LEN;  /* 指向接收长度寄存器,由应用程序初始化 */
+	CHRV3DiskStatus = DISK_UNKNOWN;  /* Unknown status */
+	CHRV3vSectorSizeB = 9;  /* The sectors of the default physical disk are512B */
+	CHRV3vSectorSize = 512;  // The sectors of the default physical disk are512B,this value is the sector size of the disk
+	CHRV3vStartLba = 0;  /* Automatic analysis by defaultFDD andHDD */
+	CHRV3vPacketSize = 64;  /* USBMaximum packet length of the storage device:64@FS,512@HS/SS,, initialized by the application,, after enumerating theU drive: if high-speed or super-speed, update it to512 */
+	pTX_DMA_A_REG = (PUINT32)&R16_UH_TX_DMA;  /* Pointing to the transmitDMA address register,, initialized by the application */
+	pRX_DMA_A_REG = (PUINT32)&R16_UH_RX_DMA;  /* Pointing to the receiveDMA address register,, initialized by the application */
+	pTX_LEN_REG = (PUINT16)&R8_UH_TX_LEN;  /* Pointing to the transmit length register,, initialized by the application */
+	pRX_LEN_REG = (PUINT16)&R16_USB_RX_LEN;  /* Pointing to the receive length register,, initialized by the application */
 
-//CHRV3vRootPort = 0;  /* USB主机选择(类似Root-hub根集线器选端口) */
+//CHRV3vRootPort = 0;  /* USB host selection( (similar toRoot-hub root hub port selection)) */
 	return( ERR_SUCCESS );
 }
 

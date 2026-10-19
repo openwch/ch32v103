@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.2
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -59,7 +59,7 @@ void Flash_Test(void)
 
     if((WRPR_Value & FLASH_PAGES_TO_BE_PROTECTED) != 0x00)
     {
-        FLASH_ClearFlag(FLASH_FLAG_BSY | FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
+        FLASH_ClearFlag( FLASH_FLAG_EOP | FLASH_FLAG_PGERR | FLASH_FLAG_WRPRTERR);
 
         for(EraseCounter = 0; (EraseCounter < NbrOfPage) && (FLASHStatus == FLASH_COMPLETE); EraseCounter++)
         {
@@ -73,7 +73,7 @@ void Flash_Test(void)
         }
 
         Address = PAGE_WRITE_START_ADDR;
-        printf("Erase Cheking...\r\n");
+        printf("Erase Checking...\r\n");
         while((Address < PAGE_WRITE_END_ADDR) && (MemoryEraseStatus != FAILED))
         {
             if((*(__IO uint16_t *)Address) != 0xFFFF)
@@ -94,7 +94,7 @@ void Flash_Test(void)
         }
 
         Address = PAGE_WRITE_START_ADDR;
-        printf("Programing...\r\n");
+        printf("Programming...\r\n");
         while((Address < PAGE_WRITE_END_ADDR) && (FLASHStatus == FLASH_COMPLETE))
         {
             FLASHStatus = FLASH_ProgramHalfWord(Address, Data);
@@ -208,12 +208,16 @@ int main(void)
     SystemCoreClockUpdate();
     Delay_Init();
     USART_Printf_Init(115200);
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    printf("SystemClk:%u\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     printf("Flash Program Test\r\n");
 
+    __disable_irq();
     Flash_Test();
     Flash_Test_Fast();
+    __enable_irq();
 
-    while(1);
+    while(1)
+    {
+    }
 }

@@ -407,7 +407,10 @@ void KB_Scan_Handle( void )
                             memcpy( &KB_Data_Pack[ j ], &KB_Data_Pack[ j + 1 ], ( 8 - j - 1 ) );
                             KB_Data_Pack[ 7 ] = 0;
                         }
-                        key_cnt--;
+                        if( key_cnt )
+                        {
+                            key_cnt--;
+                        }
                     }
                     else                                            // Key release
                     {

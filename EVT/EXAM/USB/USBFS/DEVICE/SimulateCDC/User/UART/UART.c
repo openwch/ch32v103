@@ -85,7 +85,6 @@ void UART2_CfgInit( uint32_t baudrate, uint8_t stopbits, uint8_t parity )
 {
     USART_InitTypeDef USART_InitStructure = {0};
     GPIO_InitTypeDef  GPIO_InitStructure = {0};
-    uint16_t dat = dat;
 
     /* delete contains in ( ... )  */
     /* First set the serial port introduction to output high then close the TE and RE of CTLR1 register (note that USARTx->CTLR1 register setting 9 bits has a limit) */
