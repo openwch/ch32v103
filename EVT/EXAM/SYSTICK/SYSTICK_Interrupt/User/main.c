@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.1
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -32,9 +32,9 @@ void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
  *
  * @return  none
  */
-void SYSTICK_Init_Config(u_int64_t ticks)
+void SYSTICK_Init_Config(uint64_t ticks)
 {
-    SysTick->CTLR = 0x0000;//关闭系统计数器
+    SysTick->CTLR = 0x0000;
 
     SysTick->CNTL0 = 0;
     SysTick->CNTL1 = 0;
@@ -90,7 +90,6 @@ int main(void)
  */
 void SysTick_Handler(void)
    {
-    printf("welcome to WCH\r\n");
     SysTick->CNTL0 = 0;
     SysTick->CNTL1 = 0;
     SysTick->CNTL2 = 0;
@@ -102,6 +101,7 @@ void SysTick_Handler(void)
     SysTick->CNTH3 = 0;
 
     counter++;
+    #if 0
     printf("Counter:%d\r\n",counter);
-
+    #endif
    }

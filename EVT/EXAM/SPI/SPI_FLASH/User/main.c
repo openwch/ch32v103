@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.1
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -300,6 +300,11 @@ void SPI_Flash_Write_Page(u8 *pBuffer, u32 WriteAddr, u16 size)
 {
     u16 i;
 
+    if(size > 256)
+    {
+        return;
+    }
+
     SPI_FLASH_Write_Enable();
     GPIO_WriteBit(GPIOA, GPIO_Pin_2, 0);
     SPI1_ReadWriteByte(W25X_PageProgram);
@@ -488,7 +493,7 @@ void SPI_Flash_WAKEUP(void)
  */
 int main(void)
 {
-    u8  datap[SIZE];
+    u8  datap[SIZE + 1] = {0};
     u16 Flash_Model;
 
     SystemCoreClockUpdate();

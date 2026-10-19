@@ -42,7 +42,7 @@ void LED1_BLINK_INIT(void)
 int main(void)
 {
     SystemCoreClockUpdate();
-    rt_kprintf("\r\n MCU: CH32V103C8T6\r\n");
+    rt_kprintf("\r\n MCU: CH32V103C8T\r\n");
     rt_kprintf(" SysClk: %dHz\r\n", SystemCoreClock);
     rt_kprintf("ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
     rt_kprintf(" www.wch.cn\r\n");

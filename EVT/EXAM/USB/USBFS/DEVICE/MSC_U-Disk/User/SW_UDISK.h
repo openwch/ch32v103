@@ -9,6 +9,9 @@
  * Attention: This software (modified or not) and binary are used for 
  * microcontroller manufactured by Nanjing Qinheng Microelectronics.
  *******************************************************************************/
+#ifndef __SW_UDISK_H
+#define __SW_UDISK_H
+
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -149,4 +152,6 @@ extern void UDISK_Down_OnePack( uint8_t *pbuf, uint16_t packlen );
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

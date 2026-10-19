@@ -103,7 +103,7 @@ int main(void)
     printf("SystemClk:%d\r\n", SystemCoreClock);
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
-    TIM1_OutCompare_Init(100, 48000 - 1, 50);
+    TIM1_OutCompare_Init(100-1, 48000 - 1, 50);
 
     while(1)
         ;

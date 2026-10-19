@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : ch32v10x_tim.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/06
+ * Version            : V1.0.1
+ * Date               : 2025/08/06
  * Description        : This file provides all the TIM firmware functions.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -545,17 +545,16 @@ void TIM_ITConfig(TIM_TypeDef *TIMx, uint16_t TIM_IT, FunctionalState NewState)
  *
  * @brief   Configures the TIMx event to be generate by software.
  *
- * @param   TIMx - where x can be 1 to 4 to select the TIM peripheral.
- *          TIM_IT - specifies the TIM interrupts sources to be enabled or disabled.
- *            TIM_IT_Update - TIM update Interrupt source.
- *            TIM_IT_CC1 - TIM Capture Compare 1 Interrupt source.
- *            TIM_IT_CC2 - TIM Capture Compare 2 Interrupt source
- *            TIM_IT_CC3 - TIM Capture Compare 3 Interrupt source.
- *            TIM_IT_CC4 - TIM Capture Compare 4 Interrupt source.
- *            TIM_IT_COM - TIM Commutation Interrupt source.
- *            TIM_IT_Trigger - TIM Trigger Interrupt source.
- *            TIM_IT_Break - TIM Break Interrupt source.
- *          NewState - ENABLE or DISABLE.
+ * @param   TIMx - where x can be 1 to 4 to general Event.
+ *          TIM_EventSource 
+ *            TIM_EventSource_Update - Update Event.
+ *            TIM_EventSource_CC1 - TIM Capture Compare 1 Event.
+ *            TIM_EventSource_CC2 - TIM Capture Compare 2 Event.
+ *            TIM_EventSource_CC3 - TIM Capture Compare 3 Event.
+ *            TIM_EventSource_CC4 - TIM Capture Compare 4 Event.
+ *            TIM_EventSource_COM - TIM Commutation Event.
+ *            TIM_EventSource_Trigger - TIM Trigger Event.
+ *            TIM_EventSource_Break - TIM Break Event.
  *
  * @return  none
  */
@@ -676,8 +675,6 @@ void TIM_ITRxExternalClockConfig(TIM_TypeDef *TIMx, uint16_t TIM_InputTriggerSou
  *          TIM_ICPolarity - specifies the TIx Polarity.
  *             TIM_ICPolarity_Rising.
  *             TIM_ICPolarity_Falling.
- *             TIM_DMA_COM - TIM Commutation DMA source.
- *             TIM_DMA_Trigger - TIM Trigger DMA source.
  *          ICFilter - specifies the filter value.
  *             This parameter must be a value between 0x0 and 0xF.
  *
@@ -2110,7 +2107,7 @@ void TIM_ClearFlag(TIM_TypeDef *TIMx, uint16_t TIM_FLAG)
  *            TIM_IT_Trigger - TIM Trigger Interrupt source.
  *            TIM_IT_Break - TIM Break Interrupt source.
  *
- * @return  none
+ * @return  SET or RESET
  */
 ITStatus TIM_GetITStatus(TIM_TypeDef *TIMx, uint16_t TIM_IT)
 {

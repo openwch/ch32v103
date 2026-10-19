@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2020/04/30
+ * Version            : V1.0.2
+ * Date               : 2026/10/16
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -57,12 +57,13 @@ void ADC_Function_Init(void)
     ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
     ADC_InitStructure.ADC_ScanConvMode = DISABLE;
     ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
-    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigInjecConv_T1_CC4;
+    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
     ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
     ADC_InitStructure.ADC_NbrOfChannel = 1;
     ADC_Init(ADC1, &ADC_InitStructure);
 
     ADC_InjectedSequencerLengthConfig(ADC1, 3);
+    ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_CC4);
     ADC_InjectedChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_239Cycles5);
     ADC_InjectedChannelConfig(ADC1, ADC_Channel_3, 2, ADC_SampleTime_239Cycles5);
     ADC_InjectedChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_239Cycles5);
@@ -80,7 +81,7 @@ void ADC_Function_Init(void)
 }
 
 /*********************************************************************
- * @fn      TIM1_PWM_In
+ * @fn      TIM1_PWM_Init
  *
  * @brief   Initializes TIM1 PWM output.
  *
@@ -90,18 +91,15 @@ void ADC_Function_Init(void)
  *
  * @return  none
  */
-void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
+void TIM1_PWM_Init( u16 arr, u16 psc, u16 ccp )
 {
-    GPIO_InitTypeDef        GPIO_InitStructure = {0};
+    
     TIM_OCInitTypeDef       TIM_OCInitStructure = {0};
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure = {0};
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_TIM1, ENABLE);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 
     TIM_TimeBaseInitStructure.TIM_Period = arr;
     TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
@@ -190,14 +188,13 @@ int main(void)
     ADC_Function_Init();
     printf("CalibrattionValue:%d\n", Calibrattion_Val);
 
-    TIM1_PWM_In(1000, 48000 - 1, 500);
+    TIM1_PWM_Init( 1000-1, 48000 - 1, 500 );
 
     while(1)
     {
-        while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC));
-        ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
-        while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_JEOC));
-        ADC_ClearFlag(ADC1, ADC_FLAG_JEOC);
+ 
+        while( !ADC_GetFlagStatus( ADC1, ADC_FLAG_JEOC ) );
+        ADC_ClearFlag( ADC1, ADC_FLAG_JEOC );
 
         printf("ADC Discontinuous injected group conversion...\r\n");
         printf("%04d\r\n", Get_ConversionVal_3_3V(ADC1->IDATAR1));

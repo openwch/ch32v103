@@ -1,9 +1,9 @@
 ;/********************************** (C) COPYRIGHT *******************************
 ;* File Name          : startup_ch32v10x.s
 ;* Author             : WCH
-;* Version            : V1.0.1
-;* Date               : 2024/01/30
-;* Description        : CH32V10x vector table for eclipse toolchain.
+;* Version            : V1.0.2
+;* Date               : 2025/10/21
+;* Description        : Startup File
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
 ;* Attention: This software (modified or not) and binary are used for 
@@ -197,9 +197,9 @@ handle_reset:
 .option	norelax 
 	la gp, __global_pointer$
 .option	pop 
-1:
+
 	la sp, _eusrstack 
-2:
+
 /* Load data section from flash to RAM */
 	la a0, _data_lma
 	la a1, _data_vma

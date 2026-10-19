@@ -551,7 +551,7 @@ void GPIO_IPD_Unused(void)
     chip =  *( uint32_t * )0x1FFFF884 & (~0x000000F0);
     switch(chip)
     {
-        case 0x25004102:     //CH32V103C8T6
+        case 0x25004102:     //CH32V103C8T
         {
             GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0|GPIO_Pin_1\
                                           |GPIO_Pin_2|GPIO_Pin_3\

@@ -2,7 +2,7 @@
  * File Name          : ch32v10x_it.c
  * Author             : WCH
  * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Date               : 2026/10/16
  * Description        : Main Interrupt Service Routines.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -13,7 +13,6 @@
 
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void HardFault_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
-void EXTI0_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*********************************************************************
  * @fn      NMI_Handler
@@ -41,21 +40,5 @@ void HardFault_Handler(void)
     NVIC_SystemReset();
     while(1)
     {
-    }
-}
-
-/*********************************************************************
- * @fn      EXTI0_IRQHandler
- *
- * @brief   This function handles EXTI0 Handler.
- *
- * @return  none
- */
-void EXTI0_IRQHandler(void)
-{
-    if(EXTI_GetITStatus(EXTI_Line0) != RESET)
-    {
-        printf("EXTI0 Wake_up\r\n");
-        EXTI_ClearITPendingBit(EXTI_Line0); /* Clear Flag */
     }
 }

@@ -152,6 +152,7 @@ __attribute__( ( always_inline ) ) RV_STATIC_INLINE void __enable_irq()
 __attribute__( ( always_inline ) ) RV_STATIC_INLINE void __disable_irq()
 {
   __asm volatile ("csrc mstatus, %0" : : "r" (0x88) );
+  __asm volatile ("fence.i");
 }
 
 /*********************************************************************
@@ -197,6 +198,7 @@ __attribute__( ( always_inline ) ) RV_STATIC_INLINE void NVIC_DisableIRQ(IRQn_Ty
   NVIC->ITHRESDR = 0x10;
   NVIC->IRER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));
   NVIC->ITHRESDR = t;
+  __asm volatile ("fence.i");
 }
 
 /*********************************************************************

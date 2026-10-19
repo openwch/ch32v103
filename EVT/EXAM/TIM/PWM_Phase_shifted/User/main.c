@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/11/20
+ * Version            : V1.0.1
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -56,7 +56,7 @@ void TIM1_Phase_shift_Init1( void )
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
     TIM_OCInitStructure.TIM_Pulse = 0;
     TIM_OC1Init( TIM1, &TIM_OCInitStructure );
-    TIM_OCInitStructure.TIM_Pulse = 50;//Phase shift 90
+    TIM_OCInitStructure.TIM_Pulse = 50;
     TIM_OC3Init( TIM1, &TIM_OCInitStructure );
 
     TIM_CtrlPWMOutputs(TIM1, ENABLE );
@@ -98,7 +98,7 @@ void TIM1_Phase_shift_Init2( void )
     TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
     TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
     TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-    TIM_OCInitStructure.TIM_Pulse = 25;//Phase shift 90
+    TIM_OCInitStructure.TIM_Pulse = 25;
     TIM_OC1Init( TIM1, &TIM_OCInitStructure );
     TIM_OCInitStructure.TIM_Pulse = 25;
     TIM_OC1Init( TIM2, &TIM_OCInitStructure );

@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
 * File Name          : main.c
 * Author             : WCH
-* Version            : V1.0.0
-* Date               : 2024/01/05
+* Version            : V1.0.2
+* Date               : 2026/10/16
 * Description        : Main program body.
 *********************************************************************************
 * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -23,7 +23,8 @@
 
 /* Global Variable */
 s16 Calibrattion_Val = 0;
-
+vu16 ADC_val;
+vu8 IntResponse = 0;
 /*********************************************************************
  * @fn      ADC_Function_Init
  *
@@ -49,12 +50,13 @@ void ADC_Function_Init(void)
     ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;
     ADC_InitStructure.ADC_ScanConvMode = DISABLE;
     ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
-    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigInjecConv_T2_CC1;
+    ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
     ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
     ADC_InitStructure.ADC_NbrOfChannel = 1;
     ADC_Init(ADC1, &ADC_InitStructure);
 
     ADC_InjectedSequencerLengthConfig(ADC1, 1);
+    ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1);
     ADC_InjectedChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_239Cycles5);
     ADC_ExternalTrigInjectedConvCmd(ADC1, ENABLE);
 
@@ -67,7 +69,6 @@ void ADC_Function_Init(void)
     ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE);
     ADC_Cmd(ADC1, ENABLE);
 
-
     ADC_ResetCalibration(ADC1);
     while(ADC_GetResetCalibrationStatus(ADC1));
     ADC_StartCalibration(ADC1);
@@ -77,26 +78,21 @@ void ADC_Function_Init(void)
 }
 
 /*********************************************************************
- * @fn      TIM1_PWM_In
+ * @fn      TIM2_PWM_Init
  *
  * @brief   Initializes PWM.
  *
  * @return  none
  */
 
-void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
+void TIM2_PWM_Init(u16 arr, u16 psc, u16 ccp)
 {
     GPIO_InitTypeDef        GPIO_InitStructure = {0};
     TIM_OCInitTypeDef       TIM_OCInitStructure = {0};
     TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure = {0};
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA| RCC_APB2Periph_TIM1, ENABLE);
+ 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     TIM_TimeBaseInitStructure.TIM_Period = arr;
     TIM_TimeBaseInitStructure.TIM_Prescaler = psc;
@@ -116,8 +112,9 @@ void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
     TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
     TIM_Cmd(TIM2, ENABLE);
 }
+
 /*********************************************************************
- * @fn      Get_ConversionVal1
+ * @fn      Get_ConversionVal
  *
  * @brief   Get Conversion Value.
  *
@@ -127,7 +124,7 @@ void TIM1_PWM_In(u16 arr, u16 psc, u16 ccp)
  */
 u16 Get_ConversionVal(s16 val)
 {
-    if((val + Calibrattion_Val) < 0|| val==0)
+    if((val + Calibrattion_Val) < 0 || val==0)
         return 0;
     if((Calibrattion_Val + val) > 4095 || val==4095)
         return 4095;
@@ -146,12 +143,19 @@ int main(void)
     SystemCoreClockUpdate();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
-
     ADC_Function_Init();
     printf("CalibrattionValue:%d\n", Calibrattion_Val);
-    TIM1_PWM_In(7200,1000-1,3600);
+    TIM2_PWM_Init(7200-1,1000-1,3600);
 
-    while(1);
+    while(1)
+		{
+		if(IntResponse == 1)
+        {
+           printf("ADC Extline trigger conversion...\r\n"); 
+           printf("JADC%04d\r\n", Get_ConversionVal(ADC_val));
+           IntResponse = 0;
+        }
+		}
 }
 
 void ADC1_2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -165,14 +169,13 @@ void ADC1_2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
  */
 void ADC1_2_IRQHandler()
 {
-    u16 ADC_val;
 
     if(ADC_GetITStatus(ADC1, ADC_IT_JEOC))
     {
-        printf("ADC Extline trigger conversion...\r\n");
+			
         ADC_val = ADC_GetInjectedConversionValue(ADC1, ADC_InjectedChannel_1);
-
-        printf("JADC %04d\r\n", Get_ConversionVal(ADC_val));
+		IntResponse=1;
+			
     }
 
     ADC_ClearITPendingBit(ADC1, ADC_IT_JEOC);

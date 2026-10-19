@@ -79,7 +79,7 @@ uint8_t  const  UDISK_Rd_Format_Capacity[ ] =
     ( MY_UDISK_SIZE >> 16 ) & 0xFF,
     ( MY_UDISK_SIZE >> 8 ) & 0xFF,
     ( MY_UDISK_SIZE ) & 0xFF,
-    0x02,
+    0x00,
     ( DEF_CFG_DISK_SEC_SIZE >> 16 ) & 0xFF,             /* Number of Blocks */
     ( DEF_CFG_DISK_SEC_SIZE >> 8 ) & 0xFF,
     ( DEF_CFG_DISK_SEC_SIZE ) & 0xFF,

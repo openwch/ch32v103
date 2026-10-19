@@ -1,8 +1,8 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
  * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2024/01/05
+ * Version            : V1.0.1
+ * Date               : 2026/10/15
  * Description        : Main program body.
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -21,7 +21,7 @@
 #include "debug.h"
 
 /* Global Variable */
-s16 Calibrattion_Val = 0;
+vs16 Calibration_Val = 0;
 
 /*********************************************************************
  * @fn      ADC_Function_Init
@@ -52,7 +52,7 @@ void ADC_Function_Init(void)
     while(ADC_GetResetCalibrationStatus(ADC1));
     ADC_StartCalibration(ADC1);
     while(ADC_GetCalibrationStatus(ADC1));
-    Calibrattion_Val = Get_CalibrationValue(ADC1);
+    Calibration_Val = Get_CalibrationValue(ADC1);
 
     ADC_TempSensorVrefintCmd(ENABLE);
 }
@@ -123,6 +123,7 @@ u16 Get_ADC_Val(u8 ch)
  *            ADC_Channel_16 - ADC Channel16 selected.
  *            ADC_Channel_17 - ADC Channel17 selected.
  *
+ *            times - convert times 0x1-0xff.
  * @return  val - The Data conversion value.
  */
 u16 Get_ADC_Average(u8 ch, u8 times)
@@ -153,16 +154,16 @@ u16 Get_ADC_Average(u8 ch, u8 times)
 u16 Get_ConversionVal_3_3V(s16 val)
 {
     int32_t y;
-    y = 6 * (val + Calibrattion_Val) / 1000 - 12;
+    y = 6 * (val + Calibration_Val) / 1000 - 12;
     if(val == 0 || val == 4095)
         return val;
     else
     {
-        if((val + Calibrattion_Val - y) < 0)
+        if((val + Calibration_Val - y) < 0)
             return 0;
-        if((Calibrattion_Val + val - y) > 4095||val==4095)
+        if((Calibration_Val + val - y) > 4095||val==4095)
             return 4095;
-        return (val + Calibrattion_Val);
+        return (val + Calibration_Val);
     }
 }
 
@@ -178,16 +179,16 @@ u16 Get_ConversionVal_3_3V(s16 val)
 u16 Get_ConversionVal_5V(s16 val)
 {
     int32_t y;
-    y = 4 * (val + Calibrattion_Val) / 1000 - 8;
+    y = 4 * (val + Calibration_Val) / 1000 - 8;
     if(val == 0 || val == 4095)
         return val;
     else
     {
-        if((val + Calibrattion_Val - y) < 0)
+        if((val + Calibration_Val - y) < 0)
             return 0;
-        if((Calibrattion_Val + val - y) > 4095||val==4095)
+        if((Calibration_Val + val - y) > 4095||val==4095)
             return 4095;
-        return (val + Calibrattion_Val);
+        return (val + Calibration_Val);
     }
 }
 
@@ -210,7 +211,7 @@ int main(void)
     printf( "ChipID:%08x\r\n", DBGMCU_GetCHIPID() );
 
     ADC_Function_Init();
-    printf("CalibrattionValue:%d\n", Calibrattion_Val);
+    printf("CalibrattionValue:%d\n", Calibration_Val);
 
     while(1)
     {
@@ -222,7 +223,7 @@ int main(void)
 
         val_mv = (ADC_val * 3300 / 4096);
 
-        printf("mv-T-%d,%0d\n", val_mv, TempSensor_Volt_To_Temper(val_mv));
+        printf("mv-T-%d,%d\n", val_mv, TempSensor_Volt_To_Temper(val_mv));
 
         Delay_Ms(2);
     }

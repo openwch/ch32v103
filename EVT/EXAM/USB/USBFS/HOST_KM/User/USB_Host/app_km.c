@@ -325,7 +325,7 @@ uint8_t KM_AnalyzeConfigDesc( uint8_t index, uint8_t ep0_size )
     uint8_t  num, innum, outnum;
 
     num = 0;
-    for( i = 0; i < ( Com_Buf[ 2 ] + ( (uint16_t)Com_Buf[ 3 ] << 8 ) ); )
+    for( i = 0; ( i < DEF_COM_BUF_LEN ) && ( i < ( Com_Buf[ 2 ] + ( (uint16_t)Com_Buf[ 3 ] << 8 ) ) ); )
     {
         if( Com_Buf[ i + 1 ] == DEF_DECR_CONFIG )
         {
@@ -818,7 +818,7 @@ uint8_t HUB_AnalyzeConfigDesc( uint8_t index )
     uint8_t  s = ERR_SUCCESS;
     uint16_t i;
 
-    for( i = 0; i < ( Com_Buf[ 2 ] + ( (uint16_t)Com_Buf[ 3 ] << 8 ) ); )
+    for( i = 0; ( i < DEF_COM_BUF_LEN ) && ( i < ( Com_Buf[ 2 ] + ( (uint16_t)Com_Buf[ 3 ] << 8 ) ) ); )
     {
         if( Com_Buf[ i + 1 ] == DEF_DECR_CONFIG )
         {
@@ -1575,7 +1575,7 @@ void USBH_MainDeal( void )
                     /* Get endpoint data based on the interval time of the device */
                     if( HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] >= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] )
                     {
-                        HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] %= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ];
+                        HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] %= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] ? HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] : 1;
 
                         /* Get endpoint data */
                         s = USBFSH_GetEndpData( HostCtl[ index ].Interface[ intf_num ].InEndpAddr[ in_num ], 
@@ -1660,7 +1660,7 @@ void USBH_MainDeal( void )
             /* Query port status change */
             if( HostCtl[ index ].Interface[ 0 ].InEndpTimeCount[ 0 ] >= HostCtl[ index ].Interface[ 0 ].InEndpInterval[ 0 ] )
             {
-                HostCtl[ index ].Interface[ 0 ].InEndpTimeCount[ 0 ] %= HostCtl[ index ].Interface[ 0 ].InEndpInterval[ 0 ];
+                HostCtl[ index ].Interface[ 0 ].InEndpTimeCount[ 0 ] %= HostCtl[ index ].Interface[ 0 ].InEndpInterval[ 0 ] ? HostCtl[ index ].Interface[ 0 ].InEndpInterval[ 0 ] : 1;
 
                 /* Select HUB port */
                 USBFSH_SetSelfAddr( RootHubDev.bAddress );
@@ -1784,7 +1784,7 @@ void USBH_MainDeal( void )
                                 /* Get endpoint data based on the interval time of the device */
                                 if( HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] >= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] )
                                 {
-                                    HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] %= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ];
+                                    HostCtl[ index ].Interface[ intf_num ].InEndpTimeCount[ in_num ] %= HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] ? HostCtl[ index ].Interface[ intf_num ].InEndpInterval[ in_num ] : 1;
 
                                     /* Select HUB device port */
                                     USBFSH_SetSelfAddr( RootHubDev.Device[ hub_port ].bAddress );

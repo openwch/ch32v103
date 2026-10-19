@@ -92,8 +92,8 @@ void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState)
  *
  * @return Device identifier.
  *          ChipID List-
- *	CH32V103C8T6-0x25004102
- * 	CH32V103R8T6-0x2500410F
+ *	CH32V103C8T-0x25004102
+ * 	CH32V103R8T-0x2500410F
  */
 uint32_t DBGMCU_GetCHIPID( void )
 {

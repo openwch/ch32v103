@@ -54,9 +54,12 @@ void HardFault_Handler(void)
 void SW_Handler(void)
 {
     //jump  UserCode
+    __disable_irq();
     __asm("li  a6, 0x5000");
     __asm("jr  a6");
-    while(1);
+    while(1)
+    {
+    }
 
 }
 
